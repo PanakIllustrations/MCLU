@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "com.tumult.mclu.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "mclu.mixin-refmap.json",
+  "mixins": [
+    "EntityMixin",
+    "LivingEntityMixin",
+    "CombatRulesMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
