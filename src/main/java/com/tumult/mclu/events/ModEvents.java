@@ -14,7 +14,6 @@ import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.level.NoteBlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -59,7 +58,7 @@ public class ModEvents {
         public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
             if (event.getEntity() instanceof ServerPlayer player) {
                 double maxArmorValue = player.getArmorValue();
-                player.getAttribute(CustomAttributes.CURRENT_ARMOR.get()).setBaseValue(maxArmorValue);
+                player.getAttribute(CustomAttributes.ARMOR_CURRENT.get()).setBaseValue(maxArmorValue);
             }
         }
 
@@ -67,16 +66,16 @@ public class ModEvents {
         @SubscribeEvent
         public static void onPlayerDamage(LivingDamageEvent event) {
             if (event.getEntity() instanceof Player player) {
-                double currentArmorValue = player.getAttributeValue(CustomAttributes.CURRENT_ARMOR.get());
+                double currentArmorValue = player.getAttributeValue(CustomAttributes.ARMOR_CURRENT.get());
                 float damageTaken = event.getAmount();
 
                 double newArmorValue = currentArmorValue - damageTaken;
                 newArmorValue = Math.max(newArmorValue, 0); // Clamp the value to a minimum of 0
 
-                AttributeInstance armorAttribute = player.getAttribute(CustomAttributes.CURRENT_ARMOR.get());
+                AttributeInstance armorAttribute = player.getAttribute(CustomAttributes.ARMOR_CURRENT.get());
                 if (armorAttribute != null) {
                     armorAttribute.setBaseValue(newArmorValue);
-                    player.getAttribute(CustomAttributes.CURRENT_ARMOR.get()).setBaseValue(0);
+                    player.getAttribute(CustomAttributes.ARMOR_CURRENT.get()).setBaseValue(0);
                 }
             }
         }
@@ -85,7 +84,7 @@ public class ModEvents {
         public static void onPlayerDeath(LivingDeathEvent event) {
             if (event.getEntity() instanceof Player player) {
                 UUID playerId = player.getUUID();
-                int currentArmorValue = (int) player.getAttributeValue(CustomAttributes.CURRENT_ARMOR.get());
+                int currentArmorValue = (int) player.getAttributeValue(CustomAttributes.ARMOR_CURRENT.get());
                 playerCurrentArmor.put(playerId, currentArmorValue); // Store the armor value
             }
         }
@@ -98,7 +97,7 @@ public class ModEvents {
 
             player.getServer().execute(() -> {
                 player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(8.0);
-                player.getAttribute(CustomAttributes.CURRENT_ARMOR.get()).setBaseValue(currentArmorValue);
+                player.getAttribute(CustomAttributes.ARMOR_CURRENT.get()).setBaseValue(currentArmorValue);
                 // Player is spawned without armor, so current armor must be loaded by value stored on death
             });
         }

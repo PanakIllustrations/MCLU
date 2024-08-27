@@ -29,8 +29,7 @@ public class MCLU
     //});
     public MCLU() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        /ATTRIBUTES.register(modEventBus);
-        CustomAttributes.ATTRIBUTES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        CustomAttributes.ATTRIBUTES.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
