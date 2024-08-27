@@ -29,7 +29,7 @@ public class MCLU
     //});
     public MCLU() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        /ATTRIBUTES.register(modEventBus);
+        //ATTRIBUTES.register(modEventBus);
         CustomAttributes.ATTRIBUTES.register(FMLJavaModLoadingContext.get().getModEventBus());
         modEventBus.addListener(this::commonSetup);
 

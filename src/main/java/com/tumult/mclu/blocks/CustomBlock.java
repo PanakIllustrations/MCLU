@@ -9,13 +9,13 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 import javax.annotation.Nullable;
 
-public class CustomBlock extends Block {
-    public CustomBlock(Properties properties) {
+public class CustomBlock {
+    /*public CustomBlock(Properties properties) {
         super(properties);
     }
 
     @Nullable
-    @Override
+    //@Override
     public BlockEntity newBlockEntity (BlockPos pos, BlockState state) {
         return new RotatingBlockEntity(pos, state);
     }
@@ -24,5 +24,5 @@ public class CustomBlock extends Block {
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
-
+*/
 }
