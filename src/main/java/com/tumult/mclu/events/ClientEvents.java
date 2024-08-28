@@ -33,6 +33,9 @@ public class ClientEvents {
                 overlayId.equals(VanillaGuiOverlay.HELMET.id())) {
                 event.setCanceled(true); // Cancel the event to prevent rendering
             }
+            if (overlayId.equals(VanillaGuiOverlay.HOTBAR.id())) {
+
+            }
         }
     }
 

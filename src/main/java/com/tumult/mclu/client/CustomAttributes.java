@@ -18,14 +18,16 @@ import com.tumult.mclu.MCLU;
 public class CustomAttributes {
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, MCLU.MODID);
     // RangedAttribute(string name, double default, double minimum, double maximum)
-    public static final RegistryObject<Attribute> ARMOR_CURRENT = ATTRIBUTES.register("armor_current",
-            () -> new RangedAttribute("attribute.mclu.armor", 0.0D, 0.0D, 64.0D).setSyncable(true));
+    public static final RegistryObject<Attribute> CUSTOM_ARMOR_CURRENT = ATTRIBUTES.register("custom_armor_current",
+            () -> new RangedAttribute("attribute.mclu.armor_current", 0.0D, 0.0D, 64.0D).setSyncable(true));
+    public static final RegistryObject<Attribute> CUSTOM_HEALTH_MAX = ATTRIBUTES.register("custom_health_max",
+            () -> new RangedAttribute("attribute.mclu.custom_health_max", 4.0D, 4.0D, 64.0D).setSyncable(true));
     public static final RegistryObject<Attribute> IMAGINATION_CURRENT = ATTRIBUTES.register("imagination_current",
             () -> new RangedAttribute("attribute.mclu.current_imagination", 6.0D, 0.0D, 64.0D).setSyncable(true));
     public static final RegistryObject<Attribute> IMAGINATION_MAX = ATTRIBUTES.register("imagination_max",
             () -> new RangedAttribute("attribute.mclu.max_imagination", 6.0D, 0.0D, 64.0D).setSyncable(true));
     public static final RegistryObject<Attribute> U_SCORE_CURRENT = ATTRIBUTES.register("u_score_current",
-            () -> new RangedAttribute("attribute.mclu.current_u_score", 0.0D, 0.0D, 100.0D).setSyncable(true));
+            () -> new RangedAttribute("attribute.mclu.u_score_current", 0.0D, 0.0D, 100.0D).setSyncable(true));
     public static final RegistryObject<Attribute> U_SCORE_NEEDED = ATTRIBUTES.register("u_score_needed",
             () -> new RangedAttribute("attribute.mclu.u_score_needed", 100.0D, 1.0D, 1000000.0D).setSyncable(true));
     public static final RegistryObject<Attribute> U_LEVEL = ATTRIBUTES.register("u_level",
@@ -34,7 +36,8 @@ public class CustomAttributes {
             () -> new RangedAttribute("attribute.mclu.u_coin", 0.0D, 0.0D, 99999999.0D).setSyncable(true));
     @SubscribeEvent
     public static void addEntityAttributes(EntityAttributeModificationEvent event) {
-        event.add(EntityType.PLAYER, ARMOR_CURRENT.get());
+        event.add(EntityType.PLAYER, CUSTOM_ARMOR_CURRENT.get());
+        event.add(EntityType.PLAYER, CUSTOM_HEALTH_MAX.get());
         event.add(EntityType.PLAYER, IMAGINATION_CURRENT.get());
         event.add(EntityType.PLAYER, IMAGINATION_MAX.get());
         event.add(EntityType.PLAYER, U_SCORE_CURRENT.get());

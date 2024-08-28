@@ -2,6 +2,8 @@ package com.tumult.mclu.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.tumult.mclu.events.ClientEvents;
+import com.tumult.mclu.events.ModEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.resources.ResourceLocation;
@@ -25,8 +27,8 @@ public class CustomAttributeHudOverlay {
     }
 
     public enum HealthState {
-        HEALED(179),
-        DAMAGED(183);
+        HEALED(19),
+        DAMAGED(15);
 
         private final int stateValue;
 
@@ -63,8 +65,8 @@ public class CustomAttributeHudOverlay {
 
         Color baseColor;
         boolean hasIcon = true;
-        int iconX = 187;
-        int iconY;
+        int iconX;
+        int iconY = 7;
 
         int xOffset = 0;
         int yOffset = 0;
@@ -94,7 +96,7 @@ public class CustomAttributeHudOverlay {
     private static final HudState armorHudState = new HudState();
     private static final HudState imaginationHudState = new HudState();
     private static final HudState uLevelHudState = new HudState();
-    private static final int tickDelay = 4;
+    private static final int tickDelay = 5;
     private static final int R = 16;
     private static final int G = 8;
     private static final int B = 0;
@@ -107,7 +109,10 @@ public class CustomAttributeHudOverlay {
             healthHudState.currentValue = (int) player.getHealth();
             healthHudState.maxValue = (int) player.getMaxHealth();
             healthHudState.baseColor = new Color(0xbb1313);
-            healthHudState.iconY = 8;
+            healthHudState.currentBarWidth = healthHudState.currentValue * 8;
+            healthHudState.previousBarWidth = healthHudState.previousValue * 8;
+            healthHudState.maxBarWidth = healthHudState.maxValue * 8;
+            healthHudState.iconX = 0;
             handleHudOverlay(healthHudState, guiGraphics);
             renderAdditionalElements(healthHudState, guiGraphics);
         }
@@ -119,13 +124,16 @@ public class CustomAttributeHudOverlay {
             armorHudState.maxValue = player.getArmorValue();
             if (armorHudState.maxValue > 0) {
                 armorHudState.screenX = screenWidth / 2 - 92;
-                armorHudState.screenY = 38;
+                armorHudState.screenY = 37;
                 armorHudState.baseColor = new Color(0x696a70);
-                armorHudState.yOffset = -4;
-                armorHudState.iconY = 14;
-                armorHudState.currentValue = (int) player.getAttributeValue(CustomAttributes.ARMOR_CURRENT.get());
+                armorHudState.currentBarWidth = armorHudState.currentValue * 8;
+                armorHudState.previousBarWidth = armorHudState.previousValue * 8;
+                armorHudState.maxBarWidth = armorHudState.maxValue * 8;
+                armorHudState.yOffset = -3;
+                armorHudState.iconX = 7;
+                armorHudState.currentValue = (int) player.getAttributeValue(CustomAttributes.CUSTOM_ARMOR_CURRENT.get());
                 handleHudOverlay(armorHudState, guiGraphics);
-                renderAdditionalElements(healthHudState, guiGraphics);
+                renderAdditionalElements(armorHudState, guiGraphics);
             }
         }
     };
@@ -137,6 +145,9 @@ public class CustomAttributeHudOverlay {
             imaginationHudState.screenY = screenHeight - 38;
             imaginationHudState.currentValue = (int) player.getAttributeValue(CustomAttributes.IMAGINATION_CURRENT.get());
             imaginationHudState.maxValue = (int) player.getAttributeValue(CustomAttributes.IMAGINATION_MAX.get());
+            imaginationHudState.currentBarWidth = imaginationHudState.currentValue * 8;
+            imaginationHudState.previousBarWidth = imaginationHudState.previousValue * 8;
+            imaginationHudState.maxBarWidth = imaginationHudState.maxValue * 8;
             imaginationHudState.baseColor = new Color(0x50b2f9);
             imaginationHudState.hasIcon = false;
             handleHudOverlay(imaginationHudState, guiGraphics);
@@ -149,11 +160,20 @@ public class CustomAttributeHudOverlay {
         if (player != null && !player.isCreative()) {
             uLevelHudState.screenX = screenWidth / 2 - 46;
             uLevelHudState.screenY = 22;
+
             uLevelHudState.currentValue = (int) player.getAttributeValue(CustomAttributes.U_SCORE_CURRENT.get());
             uLevelHudState.maxValue = (int) player.getAttributeValue(CustomAttributes.U_SCORE_NEEDED.get());
+            uLevelHudState.maxBarWidth = 10 * 8;
+            uLevelHudState.previousBarWidth = (int)((float) uLevelHudState.maxBarWidth * ((float) uLevelHudState.currentValue / (float) uLevelHudState.maxValue));
+            uLevelHudState.currentBarWidth = uLevelHudState.previousBarWidth;
+
             uLevelHudState.baseColor = new Color(0xf5c648);
             uLevelHudState.hasIcon = false;
-            handleHudOverlay(armorHudState, guiGraphics);
+
+            handleHudOverlay(uLevelHudState, guiGraphics);
+            for (int i = 0; i < 9; i++) {
+                guiGraphics.blit(MOD_ICONS, uLevelHudState.screenX + 9 + i * 8 , uLevelHudState.screenY + 3, 14, 7, 1, 1);
+            }
         }
     };
 
@@ -161,20 +181,17 @@ public class CustomAttributeHudOverlay {
         if (hudState.previousValue == 0) {
             resetHudState(hudState);
         }
-        hudState.currentBarWidth = hudState.currentValue * 8;
-        hudState.previousBarWidth = hudState.previousValue * 8;
-        hudState.maxBarWidth = hudState.maxValue * 8;
         // Render the bar container
         renderBarContainer(hudState, guiGraphics);
-
         // Handle state transitions
         if (hudState.animationState == AnimationState.IDLE && hudState.previousValue > 0) {
-            if (hudState.currentValue < hudState.previousValue) {
+            if (hudState.currentValue > hudState.previousValue | !ModEvents.ModBusEvents.isHealthInitialized) {
+                // value increased
+                ModEvents.ModBusEvents.isHealthInitialized = true;
+                initiateStateTransition(hudState, true);
+            } else if (hudState.currentValue < hudState.previousValue) {
                 // value reduced
                 initiateStateTransition(hudState, false);
-            } else if (hudState.currentValue > hudState.previousValue) {
-                // value increased
-                initiateStateTransition(hudState, true);
             } else {
                 hudState.animationState = AnimationState.IDLE;
                 // value remained the same
@@ -193,17 +210,21 @@ public class CustomAttributeHudOverlay {
     }
 
     private static void renderBarContainer(HudState hudState, GuiGraphics guiGraphics) {
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        guiGraphics.blit(MOD_ICONS, hudState.screenX, hudState.screenY, 0, 0, hudState.maxBarWidth + 1, 7);
-        guiGraphics.blit(MOD_ICONS, hudState.screenX + hudState.maxBarWidth + 1, hudState.screenY, 180, 0, 2, 7);
+        RenderSystem.setShaderColor(0.16f, 0.16f, 0.16f, 0.5f);
+        guiGraphics.blit(MOD_ICONS, hudState.screenX, hudState.screenY, 0, 0, hudState.maxBarWidth, 7);
+        guiGraphics.blit(MOD_ICONS, hudState.screenX + hudState.maxBarWidth, hudState.screenY, 19, 7, 4, 7);
     }
 
     private static void renderAdditionalElements(HudState hudState, GuiGraphics guiGraphics) {
         PoseStack poseStack = guiGraphics.pose();
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         // Draw max value
+        poseStack.pushPose();
+        poseStack.scale(0.5F, 0.5F, 0.5F);
         Font font = Minecraft.getInstance().font;
         String maxValueText = String.format("%d", hudState.maxValue);
-        guiGraphics.drawString(font, maxValueText, hudState.screenX + (hudState.maxBarWidth) + 5, hudState.screenY, 0xafaeac, false);
+        guiGraphics.drawString(font, maxValueText, (hudState.screenX + (hudState.maxBarWidth)) * 2 - 2, hudState.screenY * 2 + 4, 0xafaeac, false);
+        poseStack.popPose();
         // Draw large current value
         String currentValueText = String.format("%d", hudState.currentValue);
         int valueTextWidth = font.width(currentValueText);
@@ -213,8 +234,7 @@ public class CustomAttributeHudOverlay {
         poseStack.popPose();
         // Draw value icon
         if (hudState.hasIcon) {
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            guiGraphics.blit(MOD_ICONS, hudState.screenX + 4, hudState.screenY + 2, hudState.iconX, hudState.iconY, 7, 4);
+            guiGraphics.blit(MOD_ICONS, hudState.screenX + 4, hudState.screenY + 3, hudState.iconX, hudState.iconY, 7, 4);
         }
     }
 
@@ -241,7 +261,7 @@ public class CustomAttributeHudOverlay {
                         hudState.getColor("red"),
                         hudState.getColor("green"),
                         hudState.getColor("blue"), 1.0f);
-                guiGraphics.blit(MOD_ICONS, x, y, 0, 7, hudState.currentBarWidth, 7); // Health bar shaft
+                guiGraphics.blit(MOD_ICONS, x, y, 0, 0, hudState.currentBarWidth, 7); // Health bar shaft
                 if (hudState.currentValue > 0) {
                     guiGraphics.blit(MOD_ICONS, x + hudState.currentBarWidth, y, hudState.previousState.getStateValue(), 7, 4, 7); // Final damage state with dithered cap
                 }
@@ -252,7 +272,7 @@ public class CustomAttributeHudOverlay {
                         screenChannel(hudState.getColor("green"), 0.72f),
                         screenChannel(hudState.getColor("blue"), 0.72f), 1.0f);
                 guiGraphics.blit(MOD_ICONS, x, y, 0, 7, hudState.previousBarWidth, 7); // Health bar shaft
-                guiGraphics.blit(MOD_ICONS, x + hudState.previousBarWidth, y, hudState.previousState.getStateValue(), 7, 4, 7); // Dithered cap for damage
+                guiGraphics.blit(MOD_ICONS, x + hudState.previousBarWidth, y, hudState.previousState.getStateValue(), 6, 4, 6); // Dithered cap for damage
                 if (hudState.tickCounter >= tickDelay) {
                     hudState.tickCounter = 0;
                     hudState.animationState = AnimationState.ANTICIPATION;
@@ -264,7 +284,7 @@ public class CustomAttributeHudOverlay {
                         screenChannel(hudState.getColor("green"), 0.72f),
                         screenChannel(hudState.getColor("blue"), 0.72f), 1.0f);
                 int anticipationWidth = hudState.currentValue != hudState.maxValue ? hudState.anticipationWidth : hudState.previousBarWidth;
-                guiGraphics.blit(MOD_ICONS, x, y, 0, 7, anticipationWidth, 7); // Health bar shaft
+                guiGraphics.blit(MOD_ICONS, x, y, 0, 0, anticipationWidth, 7); // Health bar shaft
                 guiGraphics.blit(MOD_ICONS, x + anticipationWidth, y, hudState.previousState.getStateValue(), 7, 4, 7); // Dithered cap for bounce
 
                 if (hudState.tickCounter >= tickDelay) {
@@ -280,7 +300,7 @@ public class CustomAttributeHudOverlay {
                         screenChannel(hudState.getColor("red"), 0.38f),
                         screenChannel(hudState.getColor("green"), 0.38f),
                         screenChannel(hudState.getColor("blue"), 0.38f), 1.0f);
-                guiGraphics.blit(MOD_ICONS, x, y, 0, 7, hudState.interpolationWidth, 7); // Health bar shaft
+                guiGraphics.blit(MOD_ICONS, x, y, 0, 0, hudState.interpolationWidth, 7); // Health bar shaft
                 guiGraphics.blit(MOD_ICONS, x + hudState.interpolationWidth, y, hudState.currentState.getStateValue(), 7, 4, 7); // Dithered cap for bounce
                 if (hudState.tickCounter >= tickDelay) {
                     hudState.tickCounter = 0;
@@ -293,7 +313,7 @@ public class CustomAttributeHudOverlay {
                         hudState.getColor("green"),
                         hudState.getColor("blue"), 1.0f);
                 int followThroughWidth = hudState.currentValue != hudState.maxValue ? hudState.followThroughWidth : hudState.currentBarWidth;
-                guiGraphics.blit(MOD_ICONS, x, y, 0, 7, followThroughWidth, 7); // Health bar shaft
+                guiGraphics.blit(MOD_ICONS, x, y, 0, 0, followThroughWidth, 7); // Health bar shaft
                 if (hudState.currentValue > 0) {
                     guiGraphics.blit(MOD_ICONS, x + followThroughWidth, y, hudState.currentState.getStateValue(), 7, 4, 7); // Final damage state with dithered cap
                 }
