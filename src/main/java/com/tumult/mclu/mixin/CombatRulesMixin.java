@@ -16,6 +16,8 @@ public class CombatRulesMixin {
      */
     @Overwrite
     public static float getDamageAfterAbsorb(float baseDamage, float armor, float toughness) {
+        return baseDamage;
+        /*
         Player player = Minecraft.getInstance().player;
         double currentArmorValue = player.getAttribute(CustomAttributes.ARMOR_CURRENT.get()).getValue();
         double damageAbsorbedByArmor = 0.0D;
@@ -28,6 +30,10 @@ public class CombatRulesMixin {
                 player.playSound(SoundEvents.ITEM_BREAK, 1.0F, 1.0F);
             }
         }
+        if (damageAbsorbedByArmor >= baseDamage) {
+            return 0.0F;
+        }
         return (float)(baseDamage - damageAbsorbedByArmor);
+        */
     }
 }
