@@ -44,7 +44,6 @@ public class CustomAttributeHudOverlay {
     }
 
     private static class HudState {
-        PoseStack poseStack;
         HealthState previousState = HealthState.HEALED;
         HealthState currentState = HealthState.HEALED;
         AnimationState animationState = AnimationState.IDLE;
@@ -64,7 +63,7 @@ public class CustomAttributeHudOverlay {
 
         Color baseColor;
         boolean hasIcon = true;
-        int iconX = 188;
+        int iconX = 187;
         int iconY;
 
         int xOffset = 0;
@@ -123,12 +122,10 @@ public class CustomAttributeHudOverlay {
                 armorHudState.screenY = 38;
                 armorHudState.baseColor = new Color(0x696a70);
                 armorHudState.yOffset = -4;
-                armorHudState.iconY = 15;
+                armorHudState.iconY = 14;
                 armorHudState.currentValue = (int) player.getAttributeValue(CustomAttributes.ARMOR_CURRENT.get());
+                handleHudOverlay(armorHudState, guiGraphics);
                 renderAdditionalElements(healthHudState, guiGraphics);
-                if (armorHudState.currentValue > 0) {
-                    handleHudOverlay(armorHudState, guiGraphics);
-                }
             }
         }
     };
@@ -202,7 +199,7 @@ public class CustomAttributeHudOverlay {
     }
 
     private static void renderAdditionalElements(HudState hudState, GuiGraphics guiGraphics) {
-        healthHudState.poseStack = new PoseStack();
+        PoseStack poseStack = guiGraphics.pose();
         // Draw max value
         Font font = Minecraft.getInstance().font;
         String maxValueText = String.format("%d", hudState.maxValue);
@@ -210,10 +207,10 @@ public class CustomAttributeHudOverlay {
         // Draw large current value
         String currentValueText = String.format("%d", hudState.currentValue);
         int valueTextWidth = font.width(currentValueText);
-        hudState.poseStack.pushPose();
-        hudState.poseStack.scale(2.0F, 2.0F, 2.0F);
+        poseStack.pushPose();
+        poseStack.scale(2.0F, 2.0F, 2.0F);
         guiGraphics.drawString(font, currentValueText, hudState.screenX / 2 - valueTextWidth + hudState.xOffset, hudState.screenY / 2 + hudState.yOffset, hudState.getColorInt(), false);
-        hudState.poseStack.popPose();
+        poseStack.popPose();
         // Draw value icon
         if (hudState.hasIcon) {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -221,21 +218,9 @@ public class CustomAttributeHudOverlay {
         }
     }
 
-    private static Color screenColor(Color baseColor, float opacity) {
-        float screen_alpha = 1 - opacity;
-        float r = 255 - (255 - baseColor.getRed()) * screen_alpha;
-        float g = 255 - (255 - baseColor.getGreen()) * screen_alpha;
-        float b = 255 - (255 - baseColor.getBlue()) * screen_alpha;
-        return new Color(r, g, b);
-    }
-
     private static float screenChannel(float baseChannel, float opacity) {
         float screen_alpha = 1 - opacity;
         return (1 - (1 - baseChannel) * screen_alpha);
-    }
-
-    private static int RGB(int red, int green, int blue) {
-        return (red << R) | (green << G) | (blue << B);
     }
 
     private static void initiateStateTransition(HudState hudState, boolean isHealed) {
@@ -247,6 +232,7 @@ public class CustomAttributeHudOverlay {
     }
 
     private static void handleAnimationState(HudState hudState, GuiGraphics guiGraphics) {
+
         int x = hudState.screenX;
         int y = hudState.screenY;
         switch (hudState.animationState) {
@@ -256,7 +242,9 @@ public class CustomAttributeHudOverlay {
                         hudState.getColor("green"),
                         hudState.getColor("blue"), 1.0f);
                 guiGraphics.blit(MOD_ICONS, x, y, 0, 7, hudState.currentBarWidth, 7); // Health bar shaft
-                guiGraphics.blit(MOD_ICONS, x + hudState.currentBarWidth, y, hudState.previousState.getStateValue(), 7, 4, 7); // Final damage state with dithered cap
+                if (hudState.currentValue > 0) {
+                    guiGraphics.blit(MOD_ICONS, x + hudState.currentBarWidth, y, hudState.previousState.getStateValue(), 7, 4, 7); // Final damage state with dithered cap
+                }
                 break;
             case FLASH_DELAY:
                 RenderSystem.setShaderColor(
@@ -306,8 +294,9 @@ public class CustomAttributeHudOverlay {
                         hudState.getColor("blue"), 1.0f);
                 int followThroughWidth = hudState.currentValue != hudState.maxValue ? hudState.followThroughWidth : hudState.currentBarWidth;
                 guiGraphics.blit(MOD_ICONS, x, y, 0, 7, followThroughWidth, 7); // Health bar shaft
-                guiGraphics.blit(MOD_ICONS, x + followThroughWidth, y, hudState.currentState.getStateValue(), 7, 4, 7); // Final damage state with dithered cap
-
+                if (hudState.currentValue > 0) {
+                    guiGraphics.blit(MOD_ICONS, x + followThroughWidth, y, hudState.currentState.getStateValue(), 7, 4, 7); // Final damage state with dithered cap
+                }
                 if (hudState.tickCounter >= tickDelay) {
                     hudState.tickCounter = 0;
                     hudState.animationState = AnimationState.IDLE;
