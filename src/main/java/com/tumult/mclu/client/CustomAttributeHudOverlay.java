@@ -27,19 +27,10 @@ public class CustomAttributeHudOverlay {
     }
 
     public enum HealthState {
-        HEALED(19),
-        DAMAGED(15);
-
+        HEALED(19), DAMAGED(15);
         private final int stateValue;
-
-        HealthState(int stateValue) {
-            this.stateValue = stateValue;
-        }
-
-        public int getStateValue() {
-            return stateValue;
-        }
-
+        HealthState(int stateValue) { this.stateValue = stateValue; }
+        public int getStateValue() { return stateValue; }
         public static HealthState toggleState(HealthState currentState) {
             return currentState == HEALED ? DAMAGED : HEALED;
         }
@@ -65,6 +56,7 @@ public class CustomAttributeHudOverlay {
 
         Color baseColor;
         boolean hasIcon = true;
+        boolean drawValues = true;
         int iconX;
         int iconY = 7;
 
@@ -74,10 +66,7 @@ public class CustomAttributeHudOverlay {
         int screenY;
 
         public int getColorInt() {
-            int red = baseColor.getRed();
-            int green = baseColor.getGreen();
-            int blue = baseColor.getBlue();
-            return (red << R) | (green << G) | (blue << B);
+            return baseColor.getRGB();
         }
 
         public float getColor(String color) {
@@ -90,6 +79,12 @@ public class CustomAttributeHudOverlay {
             }
             return 0;
         }
+
+        public void updateWidths() {
+            this.currentBarWidth = this.currentValue * 8;
+            this.previousBarWidth = this.previousValue * 8;
+            this.maxBarWidth = this.maxValue * 8;
+        }
     }
 
     private static final HudState healthHudState = new HudState();
@@ -97,9 +92,6 @@ public class CustomAttributeHudOverlay {
     private static final HudState imaginationHudState = new HudState();
     private static final HudState uLevelHudState = new HudState();
     private static final int tickDelay = 5;
-    private static final int R = 16;
-    private static final int G = 8;
-    private static final int B = 0;
 
     public static final IGuiOverlay CUSTOM_HEALTH_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Player player = Minecraft.getInstance().player;
@@ -138,6 +130,26 @@ public class CustomAttributeHudOverlay {
         }
     };
 
+    public static final IGuiOverlay U_LEVEL_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
+        Player player = Minecraft.getInstance().player;
+        if (player != null && !player.isCreative()) {
+            uLevelHudState.screenX = screenWidth / 2 - 46;
+            uLevelHudState.screenY = 22;
+            uLevelHudState.currentValue = (int) player.getAttributeValue(CustomAttributes.U_SCORE_CURRENT.get());
+            uLevelHudState.maxValue = (int) player.getAttributeValue(CustomAttributes.U_SCORE_NEEDED.get());
+            uLevelHudState.maxBarWidth = 10 * 8;
+            uLevelHudState.previousBarWidth = (int)((float) uLevelHudState.maxBarWidth * ((float) uLevelHudState.currentValue / (float) uLevelHudState.maxValue));
+            uLevelHudState.currentBarWidth = uLevelHudState.previousBarWidth;
+            uLevelHudState.baseColor = new Color(0xf5c648);
+            uLevelHudState.hasIcon = false;
+            uLevelHudState.drawValues = false;
+            handleHudOverlay(uLevelHudState, guiGraphics);
+            for (int i = 0; i < 9; i++) {
+                guiGraphics.blit(MOD_ICONS, uLevelHudState.screenX + 9 + i * 8 , uLevelHudState.screenY + 3, 14, 7, 1, 1);
+            }
+        }
+    };
+
     public static final IGuiOverlay IMAGINATION_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Player player = Minecraft.getInstance().player;
         if (player != null && !player.isCreative()) {
@@ -155,35 +167,12 @@ public class CustomAttributeHudOverlay {
         }
     };
 
-    public static final IGuiOverlay U_LEVEL_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        Player player = Minecraft.getInstance().player;
-        if (player != null && !player.isCreative()) {
-            uLevelHudState.screenX = screenWidth / 2 - 46;
-            uLevelHudState.screenY = 22;
-
-            uLevelHudState.currentValue = (int) player.getAttributeValue(CustomAttributes.U_SCORE_CURRENT.get());
-            uLevelHudState.maxValue = (int) player.getAttributeValue(CustomAttributes.U_SCORE_NEEDED.get());
-            uLevelHudState.maxBarWidth = 10 * 8;
-            uLevelHudState.previousBarWidth = (int)((float) uLevelHudState.maxBarWidth * ((float) uLevelHudState.currentValue / (float) uLevelHudState.maxValue));
-            uLevelHudState.currentBarWidth = uLevelHudState.previousBarWidth;
-
-            uLevelHudState.baseColor = new Color(0xf5c648);
-            uLevelHudState.hasIcon = false;
-
-            handleHudOverlay(uLevelHudState, guiGraphics);
-            for (int i = 0; i < 9; i++) {
-                guiGraphics.blit(MOD_ICONS, uLevelHudState.screenX + 9 + i * 8 , uLevelHudState.screenY + 3, 14, 7, 1, 1);
-            }
-        }
-    };
-
     private static void handleHudOverlay(HudState hudState, GuiGraphics guiGraphics) {
         if (hudState.previousValue == 0) {
             resetHudState(hudState);
         }
-        // Render the bar container
         renderBarContainer(hudState, guiGraphics);
-        // Handle state transitions
+
         if (hudState.animationState == AnimationState.IDLE && hudState.previousValue > 0) {
             if (hudState.currentValue > hudState.previousValue | !ModEvents.ModBusEvents.isHealthInitialized) {
                 // value increased
@@ -199,8 +188,8 @@ public class CustomAttributeHudOverlay {
         }
         hudState.tickCounter++;
 
-        // State machine for animation handling
         handleAnimationState(hudState, guiGraphics);
+        renderAdditionalElements(hudState, guiGraphics);
     }
 
     private static void resetHudState(HudState hudState) {
@@ -213,29 +202,6 @@ public class CustomAttributeHudOverlay {
         RenderSystem.setShaderColor(0.16f, 0.16f, 0.16f, 0.5f);
         guiGraphics.blit(MOD_ICONS, hudState.screenX, hudState.screenY, 0, 0, hudState.maxBarWidth, 7);
         guiGraphics.blit(MOD_ICONS, hudState.screenX + hudState.maxBarWidth, hudState.screenY, 19, 7, 4, 7);
-    }
-
-    private static void renderAdditionalElements(HudState hudState, GuiGraphics guiGraphics) {
-        PoseStack poseStack = guiGraphics.pose();
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        // Draw max value
-        poseStack.pushPose();
-        poseStack.scale(0.5F, 0.5F, 0.5F);
-        Font font = Minecraft.getInstance().font;
-        String maxValueText = String.format("%d", hudState.maxValue);
-        guiGraphics.drawString(font, maxValueText, (hudState.screenX + (hudState.maxBarWidth)) * 2 - 2, hudState.screenY * 2 + 4, 0xafaeac, false);
-        poseStack.popPose();
-        // Draw large current value
-        String currentValueText = String.format("%d", hudState.currentValue);
-        int valueTextWidth = font.width(currentValueText);
-        poseStack.pushPose();
-        poseStack.scale(2.0F, 2.0F, 2.0F);
-        guiGraphics.drawString(font, currentValueText, hudState.screenX / 2 - valueTextWidth + hudState.xOffset, hudState.screenY / 2 + hudState.yOffset, hudState.getColorInt(), false);
-        poseStack.popPose();
-        // Draw value icon
-        if (hudState.hasIcon) {
-            guiGraphics.blit(MOD_ICONS, hudState.screenX + 4, hudState.screenY + 3, hudState.iconX, hudState.iconY, 7, 4);
-        }
     }
 
     private static float screenChannel(float baseChannel, float opacity) {
@@ -332,6 +298,35 @@ public class CustomAttributeHudOverlay {
         }
         if (hudState.animationState == AnimationState.IDLE) {
             hudState.previousValue = hudState.currentValue;
+        }
+    }
+
+    private static void renderAdditionalElements(HudState hudState, GuiGraphics guiGraphics) {
+        if (hudState.drawValues) {
+            PoseStack poseStack = guiGraphics.pose();
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+            // Draw max value
+            poseStack.pushPose();
+            poseStack.scale(0.5F, 0.5F, 0.5F);
+            Font font = Minecraft.getInstance().font;
+            guiGraphics.drawString(font, String.format("%d", hudState.maxValue),
+                    (hudState.screenX + (hudState.maxBarWidth)) * 2 - 2,
+                    hudState.screenY * 2 + 4,
+                    0xafaeac, false);
+            poseStack.popPose();
+            // Draw large current value
+            poseStack.pushPose();
+            poseStack.scale(2.0F, 2.0F, 2.0F);
+            guiGraphics.drawString(font, String.format("%d", hudState.currentValue),
+                    hudState.screenX / 2 - font.width(String.format("%d", hudState.currentValue)) + hudState.xOffset,
+                    hudState.screenY / 2 + hudState.yOffset,
+                    hudState.getColorInt(), false);
+            poseStack.popPose();
+        }
+
+        // Draw value icon
+        if (hudState.hasIcon) {
+            guiGraphics.blit(MOD_ICONS, hudState.screenX + 4, hudState.screenY + 3, hudState.iconX, hudState.iconY, 7, 4);
         }
     }
 }
