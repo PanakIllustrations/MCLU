@@ -79,12 +79,6 @@ public class CustomAttributeHudOverlay {
             }
             return 0;
         }
-
-        public void updateWidths() {
-            this.currentBarWidth = this.currentValue * 8;
-            this.previousBarWidth = this.previousValue * 8;
-            this.maxBarWidth = this.maxValue * 8;
-        }
     }
 
     private static final HudState healthHudState = new HudState();
@@ -96,15 +90,12 @@ public class CustomAttributeHudOverlay {
     public static final IGuiOverlay CUSTOM_HEALTH_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Player player = Minecraft.getInstance().player;
         if (player != null && !player.isCreative()) {
-            healthHudState.screenX = screenWidth / 2 - 92;
-            healthHudState.screenY = 46;
-            healthHudState.currentValue = (int) player.getHealth();
-            healthHudState.maxValue = (int) player.getMaxHealth();
-            healthHudState.baseColor = new Color(0xbb1313);
-            healthHudState.currentBarWidth = healthHudState.currentValue * 8;
-            healthHudState.previousBarWidth = healthHudState.previousValue * 8;
-            healthHudState.maxBarWidth = healthHudState.maxValue * 8;
+            minimumHudStateSetup(healthHudState,
+                    screenWidth / 2 - 92, 46,
+                    (int) player.getHealth(), (int) player.getMaxHealth(),
+                    new Color(0xbb1313), true);
             healthHudState.iconX = 0;
+            healthHudState.iconY = 7;
             handleHudOverlay(healthHudState, guiGraphics);
             renderAdditionalElements(healthHudState, guiGraphics);
         }
@@ -113,17 +104,16 @@ public class CustomAttributeHudOverlay {
     public static final IGuiOverlay CUSTOM_ARMOR_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Player player = Minecraft.getInstance().player;
         if (player != null && !player.isCreative()) {
-            armorHudState.maxValue = player.getArmorValue();
-            if (armorHudState.maxValue > 0) {
-                armorHudState.screenX = screenWidth / 2 - 92;
-                armorHudState.screenY = 37;
-                armorHudState.baseColor = new Color(0x696a70);
-                armorHudState.currentBarWidth = armorHudState.currentValue * 8;
-                armorHudState.previousBarWidth = armorHudState.previousValue * 8;
-                armorHudState.maxBarWidth = armorHudState.maxValue * 8;
+            int maxValue = player.getArmorValue();
+            if (maxValue > 0) {
+                int currentValue = (int) player.getAttributeValue(CustomAttributes.CUSTOM_ARMOR_CURRENT.get());
+                minimumHudStateSetup(armorHudState,
+                        screenWidth / 2 - 92, 37,
+                        currentValue, maxValue,
+                        new Color(0x696a70), true);
                 armorHudState.yOffset = -3;
                 armorHudState.iconX = 7;
-                armorHudState.currentValue = (int) player.getAttributeValue(CustomAttributes.CUSTOM_ARMOR_CURRENT.get());
+                healthHudState.iconY = 7;
                 handleHudOverlay(armorHudState, guiGraphics);
                 renderAdditionalElements(armorHudState, guiGraphics);
             }
@@ -133,16 +123,18 @@ public class CustomAttributeHudOverlay {
     public static final IGuiOverlay U_LEVEL_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Player player = Minecraft.getInstance().player;
         if (player != null && !player.isCreative()) {
-            uLevelHudState.screenX = screenWidth / 2 - 46;
-            uLevelHudState.screenY = 22;
-            uLevelHudState.currentValue = (int) player.getAttributeValue(CustomAttributes.U_SCORE_CURRENT.get());
-            uLevelHudState.maxValue = (int) player.getAttributeValue(CustomAttributes.U_SCORE_NEEDED.get());
+            int currentValue = (int) player.getAttributeValue(CustomAttributes.U_SCORE_CURRENT.get());
+            int maxValue = (int) player.getAttributeValue(CustomAttributes.U_SCORE_NEEDED.get());
+            minimumHudStateSetup(uLevelHudState,
+                    screenWidth / 2 - 46,  22,
+                    currentValue, maxValue,
+                    new Color(0xf5c648), false);
+            uLevelHudState.hasIcon = false;
+            uLevelHudState.drawValues = false;
             uLevelHudState.maxBarWidth = 10 * 8;
             uLevelHudState.previousBarWidth = (int)((float) uLevelHudState.maxBarWidth * ((float) uLevelHudState.currentValue / (float) uLevelHudState.maxValue));
             uLevelHudState.currentBarWidth = uLevelHudState.previousBarWidth;
-            uLevelHudState.baseColor = new Color(0xf5c648);
-            uLevelHudState.hasIcon = false;
-            uLevelHudState.drawValues = false;
+
             handleHudOverlay(uLevelHudState, guiGraphics);
             for (int i = 0; i < 9; i++) {
                 guiGraphics.blit(MOD_ICONS, uLevelHudState.screenX + 9 + i * 8 , uLevelHudState.screenY + 3, 14, 7, 1, 1);
@@ -153,14 +145,11 @@ public class CustomAttributeHudOverlay {
     public static final IGuiOverlay IMAGINATION_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Player player = Minecraft.getInstance().player;
         if (player != null && !player.isCreative()) {
-            imaginationHudState.screenX = screenWidth / 2 - 92;
-            imaginationHudState.screenY = screenHeight - 38;
-            imaginationHudState.currentValue = (int) player.getAttributeValue(CustomAttributes.IMAGINATION_CURRENT.get());
-            imaginationHudState.maxValue = (int) player.getAttributeValue(CustomAttributes.IMAGINATION_MAX.get());
-            imaginationHudState.currentBarWidth = imaginationHudState.currentValue * 8;
-            imaginationHudState.previousBarWidth = imaginationHudState.previousValue * 8;
-            imaginationHudState.maxBarWidth = imaginationHudState.maxValue * 8;
-            imaginationHudState.baseColor = new Color(0x50b2f9);
+            minimumHudStateSetup(imaginationHudState,
+                    screenWidth / 2 - 92, screenHeight - 38,
+                    (int) player.getAttributeValue(CustomAttributes.IMAGINATION_CURRENT.get()),
+                    (int) player.getAttributeValue(CustomAttributes.IMAGINATION_MAX.get()),
+                    new Color(0x50b2f9), true);
             imaginationHudState.hasIcon = false;
             handleHudOverlay(imaginationHudState, guiGraphics);
             renderAdditionalElements(imaginationHudState, guiGraphics);
@@ -196,6 +185,20 @@ public class CustomAttributeHudOverlay {
         hudState.previousState = HealthState.HEALED;
         hudState.currentState = HealthState.HEALED;
         hudState.animationState = AnimationState.IDLE;
+    }
+
+    private static void minimumHudStateSetup(HudState hudState, int screenX, int screenY, int currentValue, int maxValue, Color baseColor, boolean standardBarWidths) {
+        hudState.screenX = screenX;
+        hudState.screenY = screenY;
+        hudState.currentValue = currentValue;
+        hudState.maxValue = maxValue;
+        hudState.baseColor = baseColor;
+        if (standardBarWidths) {
+            hudState.previousBarWidth = hudState.previousValue * 8;
+            hudState.currentBarWidth = currentValue * 8;
+            hudState.maxBarWidth = maxValue * 8;
+        }
+
     }
 
     private static void renderBarContainer(HudState hudState, GuiGraphics guiGraphics) {
