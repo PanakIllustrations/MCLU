@@ -1,10 +1,9 @@
 package com.tumult.mclu.events;
 
-import com.tumult.mclu.client.CustomAttributes;
-import com.tumult.mclu.client.ModifyPlayerHealth;
+import com.tumult.mclu.client.gui.CustomAttributes;
+import com.tumult.mclu.client.gui.ModifyPlayerHealth;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;

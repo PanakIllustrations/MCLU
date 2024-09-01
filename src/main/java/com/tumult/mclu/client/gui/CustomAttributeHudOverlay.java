@@ -1,8 +1,7 @@
-package com.tumult.mclu.client;
+package com.tumult.mclu.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.tumult.mclu.events.ClientEvents;
 import com.tumult.mclu.events.ModEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -156,6 +155,20 @@ public class CustomAttributeHudOverlay {
         }
     };
 
+    public static final IGuiOverlay TEST_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
+        Player player = Minecraft.getInstance().player;
+        if (player != null && !player.isCreative()) {
+            //RenderSystem.setShaderColor(0f, 0f, 1f, 1f);
+            //guiGraphics.blit(MOD_ICONS, screenWidth / 2, screenHeight / 2, 10, 0, 0, 7, 7, 255, 255);
+            //RenderSystem.setShaderColor(0f, 1f, 0f, 1f);
+            //guiGraphics.blit(MOD_ICONS, screenWidth / 2, screenHeight / 2 - 5, 10, 0, 0, 7, 7, 255, 255);
+            //RenderSystem.setShaderColor(1f, 0f, 0f, 1f);
+            //guiGraphics.blit(MOD_ICONS, screenWidth / 2, screenHeight / 2 - 10, 0, 0, 0, 7, 7, 255, 255);
+        }
+    };
+
+
+
     private static void handleHudOverlay(HudState hudState, GuiGraphics guiGraphics) {
         if (hudState.previousValue == 0) {
             resetHudState(hudState);
@@ -202,7 +215,7 @@ public class CustomAttributeHudOverlay {
     }
 
     private static void renderBarContainer(HudState hudState, GuiGraphics guiGraphics) {
-        RenderSystem.setShaderColor(0.16f, 0.16f, 0.16f, 0.5f);
+        RenderSystem.setShaderColor(0.16f, 0.16f, 0.16f, 1f);
         guiGraphics.blit(MOD_ICONS, hudState.screenX, hudState.screenY, 0, 0, hudState.maxBarWidth, 7);
         guiGraphics.blit(MOD_ICONS, hudState.screenX + hudState.maxBarWidth, hudState.screenY, 19, 7, 4, 7);
     }

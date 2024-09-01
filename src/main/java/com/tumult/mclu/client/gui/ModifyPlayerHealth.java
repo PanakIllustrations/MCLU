@@ -1,11 +1,4 @@
-package com.tumult.mclu.client;
-
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-
-import java.util.UUID;
+package com.tumult.mclu.client.gui;
 
 public class ModifyPlayerHealth {
     /* Make new AttributeModifier Instance

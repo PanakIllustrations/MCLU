@@ -1,10 +1,6 @@
 package com.tumult.mclu.mixin;
 
-import com.tumult.mclu.client.CustomAttributes;
-import net.minecraft.client.Minecraft;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.CombatRules;
-import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 

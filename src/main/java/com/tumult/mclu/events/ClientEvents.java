@@ -1,11 +1,8 @@
 package com.tumult.mclu.events;
 
-import com.tumult.mclu.client.CustomAttributeHudOverlay;
-import com.tumult.mclu.client.CustomAttributes;
-import net.minecraft.client.Minecraft;
+import com.tumult.mclu.client.gui.CustomAttributeHudOverlay;
+import com.tumult.mclu.client.gui.widgets.AttributeWidget;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;

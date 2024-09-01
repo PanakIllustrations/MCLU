@@ -1,6 +1,6 @@
 package com.tumult.mclu;
 
-import com.tumult.mclu.client.CustomAttributes;
+import com.tumult.mclu.client.gui.CustomAttributes;
 import com.tumult.mclu.events.ModEvents;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

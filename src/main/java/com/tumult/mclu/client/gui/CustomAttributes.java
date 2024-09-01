@@ -1,4 +1,4 @@
-package com.tumult.mclu.client;
+package com.tumult.mclu.client.gui;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
