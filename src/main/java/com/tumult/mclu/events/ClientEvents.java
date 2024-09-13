@@ -1,7 +1,6 @@
 package com.tumult.mclu.events;
 
 import com.tumult.mclu.client.gui.CustomAttributeHudOverlay;
-import com.tumult.mclu.client.gui.widgets.AttributeWidget;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -11,8 +10,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import com.tumult.mclu.MCLU;
-
-
+/**
+ * @author: [lehjr](https://github.com/lehjr/MachineMusePowersuits/commits?author=lehjr)
+ * @Source: [MachineMusePowersuits](https://github.com/lehjr/MachineMusePowersuits/tree/1.20.1-Forge)
+ * @DateCopied: 9/7/2024
+ */
 public class ClientEvents {
 
     @Mod.EventBusSubscriber(modid = MCLU.MODID, value = Dist.CLIENT)
@@ -40,6 +42,7 @@ public class ClientEvents {
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
+            event.registerAboveAll("test", CustomAttributeHudOverlay.TEST_HUD);
             event.registerAboveAll("armor", CustomAttributeHudOverlay.CUSTOM_ARMOR_HUD);
             event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
             event.registerAboveAll("imagination", CustomAttributeHudOverlay.IMAGINATION_HUD);

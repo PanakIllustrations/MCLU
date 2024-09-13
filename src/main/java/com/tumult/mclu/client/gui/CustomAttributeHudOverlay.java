@@ -16,6 +16,7 @@ import java.util.Objects;
 
 public class CustomAttributeHudOverlay {
     private static final ResourceLocation MOD_ICONS = new ResourceLocation("minecraft", "textures/gui/mod_icons.png");
+    private static final ResourceLocation SLIDER = new ResourceLocation("minecraft", "textures/gui/slider.png");
 
     public enum AnimationState {
         IDLE,
@@ -158,12 +159,44 @@ public class CustomAttributeHudOverlay {
     public static final IGuiOverlay TEST_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Player player = Minecraft.getInstance().player;
         if (player != null && !player.isCreative()) {
-            //RenderSystem.setShaderColor(0f, 0f, 1f, 1f);
-            //guiGraphics.blit(MOD_ICONS, screenWidth / 2, screenHeight / 2, 10, 0, 0, 7, 7, 255, 255);
-            //RenderSystem.setShaderColor(0f, 1f, 0f, 1f);
-            //guiGraphics.blit(MOD_ICONS, screenWidth / 2, screenHeight / 2 - 5, 10, 0, 0, 7, 7, 255, 255);
-            //RenderSystem.setShaderColor(1f, 0f, 0f, 1f);
-            //guiGraphics.blit(MOD_ICONS, screenWidth / 2, screenHeight / 2 - 10, 0, 0, 0, 7, 7, 255, 255);
+            // Coordinates where the frame should appear on the screen.
+            int xPosition = 50;
+            int yPosition = 70;
+
+            // The size of the area that you want to cover with the frame.
+            int frameWidth = 80;
+            int frameHeight = 7;
+
+            // Padding or slice sizes for each part of the frame.
+            int leftPadding = 2;  // Width of the left side (fixed)
+            int topPadding = 2;   // Height of the top side (fixed)
+            int rightPadding = 4; // Width of the right side (fixed)
+            int bottomPadding = 2;// Height of the bottom side (fixed)
+
+            // Original size of the image (full size of the texture).
+            int textureWidth = 8;
+            int textureHeight = 7;
+
+            // The starting x and y coordinates in the texture (where the frame's texture begins).
+            int textureX = 0;
+            int textureY = 14; // 16 and 20
+
+            RenderSystem.setShaderColor(0.16f, 0.16f, 0.16f, 0.5f);
+            //containers
+            guiGraphics.blitNineSliced(MOD_ICONS, xPosition, yPosition, frameWidth, frameHeight + 2,
+                    leftPadding, topPadding, rightPadding, bottomPadding,
+                    textureWidth, textureHeight, textureX, textureY);
+            guiGraphics.blitNineSliced(MOD_ICONS, xPosition, yPosition + 20, frameWidth, frameHeight + 4,
+                    leftPadding, topPadding, rightPadding, bottomPadding,
+                    textureWidth, textureHeight, textureX, textureY);
+            //color
+            RenderSystem.setShaderColor(187f / 255, 19f / 255, 19f / 255, 1f);
+            guiGraphics.blitNineSliced(MOD_ICONS, xPosition, yPosition, frameWidth - 10, frameHeight + 2,
+                    leftPadding, topPadding, rightPadding, bottomPadding,
+                    textureWidth, textureHeight, textureX, textureY);
+            guiGraphics.blitNineSliced(MOD_ICONS, xPosition, yPosition + 20, frameWidth - 40, frameHeight + 4,
+                    leftPadding, topPadding, rightPadding, bottomPadding,
+                    textureWidth, textureHeight, textureX, textureY + 7);
         }
     };
 
