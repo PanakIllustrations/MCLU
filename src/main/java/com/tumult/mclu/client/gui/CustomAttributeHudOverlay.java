@@ -2,6 +2,7 @@ package com.tumult.mclu.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.tumult.mclu.MCLU;
 import com.tumult.mclu.events.ModEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -15,8 +16,8 @@ import java.awt.*;
 import java.util.Objects;
 
 public class CustomAttributeHudOverlay {
-    private static final ResourceLocation MOD_ICONS = new ResourceLocation("minecraft", "textures/gui/mod_icons.png");
-    private static final ResourceLocation SLIDER = new ResourceLocation("minecraft", "textures/gui/slider.png");
+    private static final ResourceLocation MOD_ICONS = new ResourceLocation(MCLU.MODID, "textures/gui/mod_icons.png");
+    private static final ResourceLocation SLIDER = new ResourceLocation(MCLU.MODID, "textures/gui/slider.png");
 
     public enum AnimationState {
         IDLE,
