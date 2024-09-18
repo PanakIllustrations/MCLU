@@ -1,5 +1,6 @@
 package com.tumult.mclu.client.gui.frame;
 
+import com.mojang.blaze3d.vertex.*;
 import com.tumult.mclu.MCLU;
 import com.tumult.mclu.client.gui.GuiIcon;
 import com.tumult.mclu.client.gui.ScreenUtils;
@@ -9,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -26,8 +28,8 @@ public class GuiCursor {
     private double clampedMouseY;
     private double screenMouseX;
     private double screenMouseY;
-    private DoubleBuffer xpos;
-    private DoubleBuffer ypos;
+    private DoubleBuffer xPos;
+    private DoubleBuffer yPos;
 
 
     private final GuiIcon cursorIcon;
@@ -38,9 +40,9 @@ public class GuiCursor {
         this.clampedMouseY = 0;
         this.screenMouseX = 0;
         this.screenMouseY = 0;
-        this.cursorIcon = new GuiIcon(new ResourceLocation(MCLU.MODID, "textures/gui/mouse_cursor.png"), 9, 17, 0, 0, 32);
-        this.xpos = null;
-        this.ypos = null;
+        this.cursorIcon = new GuiIcon(new ResourceLocation(MCLU.MODID, "textures/gui/mouse_cursor.png"), 9, 17, 0, 0, 32, 32);
+        this.xPos = null;
+        this.yPos = null;
        }
 
     public boolean isCursorVisible() {
@@ -62,15 +64,15 @@ public class GuiCursor {
     public void getMousePosition() {
         Minecraft mc = Minecraft.getInstance();
         long window = mc.getWindow().getWindow();
-        double guiScaleFactor = mc.getWindow().getGuiScale() / 2;
+        double guiScaleFactor = mc.getWindow().getGuiScale();
         try (MemoryStack stack = MemoryStack.stackPush()) {
             // Allocate DoubleBuffers to store X and Y positions
-            xpos = stack.mallocDouble(1);
-            ypos = stack.mallocDouble(1);
-            GLFW.glfwGetCursorPos(window, xpos, ypos);
+            xPos = stack.mallocDouble(1);
+            yPos = stack.mallocDouble(1);
+            GLFW.glfwGetCursorPos(window, xPos, yPos);
 
-            screenMouseX = xpos.get(0) / guiScaleFactor;
-            screenMouseY = ypos.get(0) / guiScaleFactor;
+            screenMouseX = xPos.get(0) / guiScaleFactor;
+            screenMouseY = yPos.get(0) / guiScaleFactor;
 
             // Access the cursor position from the buffers
             this.clampedMouseX = Math.max(0, Math.min(screenMouseX, mc.getWindow().getWidth()));
@@ -81,14 +83,6 @@ public class GuiCursor {
             System.out.println("Mouse Y: " + clampedMouseY);
         }
     }
-    public void drawCursor(GuiGraphics guiGraphics) {
-        int mouseX = (int) clampedMouseX;
-        int mouseY = (int) clampedMouseY;
-        int zLevel = 255;
-
-        cursorIcon.draw(guiGraphics, mouseX, mouseY, zLevel);
-    }
-
 
     public static final IGuiOverlay CURSOR_ICON = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Minecraft mc = Minecraft.getInstance();
@@ -101,4 +95,8 @@ public class GuiCursor {
             guiCursor.drawCursor(guiGraphics);
         }
     };
+
+    public void drawCursor(GuiGraphics guiGraphics) {
+        cursorIcon.draw(guiGraphics, (int) clampedMouseX, (int) clampedMouseY, 255);
+    }
 }

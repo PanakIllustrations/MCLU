@@ -2,20 +2,11 @@ package com.tumult.mclu.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.tumult.mclu.MCLU;
-import com.tumult.mclu.client.gui.frame.GuiCursor;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import org.joml.Matrix4f;
-
-import java.awt.*;
 
 /*
 blit(ResourceLocation location, int screenPosX, int screenPosY, int zLevel, float iconPosX, float iconPosY, int iconWidth, int iconHeight, int textureWidth, int textureHeight);
@@ -26,30 +17,27 @@ blit(ResourceLocation location, int screenPosX, int screenPosY, float iconPosX, 
 */
 
 public class GuiIcon {
-    ResourceLocation location;
+    private final ResourceLocation location;
     private final int iconPosX;
     private final int iconPosY;
     private final int iconWidth;
     private final int iconHeight;
-    private final int textureScale;
+    private final int textureWidth;
+    private final int textureHeight;
 
-    public GuiIcon(ResourceLocation location, int iconWidth, int iconHeight, int iconPosX, int iconPosY, int textureScale) {
+    public GuiIcon(ResourceLocation location, int iconWidth, int iconHeight, int iconPosX, int iconPosY, int textureWidth, int textureHeight) {
         this.location = location;
         this.iconPosX = iconPosX;
         this.iconPosY = iconPosY;
         this.iconWidth = iconWidth;
         this.iconHeight = iconHeight;
-        this.textureScale = textureScale;
+        this.textureWidth = textureWidth;
+        this.textureHeight = textureHeight;
     }
 
     public void draw(GuiGraphics guiGraphics, int screenPosX, int screenPosY, int zLevel) {
-        ShaderInstance oldShader = RenderSystem.getShader();
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-        RenderSystem.enableBlend();
 
-        guiGraphics.blit(location, screenPosX, screenPosY, zLevel, (float) iconPosX, (float) iconPosY, iconWidth, iconHeight, textureScale, textureScale);
-
-        RenderSystem.disableBlend();
-        RenderSystem.setShader(() -> oldShader);
+        guiGraphics.blit(location, screenPosX, screenPosY, zLevel ,iconPosX, iconPosY, iconWidth, iconHeight, textureWidth, textureHeight);
     }
 }
+
