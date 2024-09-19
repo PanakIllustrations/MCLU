@@ -1,10 +1,9 @@
 package com.tumult.mclu.events;
 
-import com.tumult.mclu.client.gui.CustomAttributeHudOverlay;
-import com.tumult.mclu.client.gui.GuiIcon;
+import com.tumult.mclu.client.gui.screens.CustomAttributeHudOverlay;
 import com.tumult.mclu.client.gui.Keybindings;
-import com.tumult.mclu.client.gui.frame.GuiCursor;
-import net.minecraft.client.Camera;
+import com.tumult.mclu.client.gui.icons.GuiCursor;
+import com.tumult.mclu.client.gui.screens.GuiHUD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -15,16 +14,10 @@ import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import com.tumult.mclu.MCLU;
-import org.joml.Quaterniond;
-import org.joml.Quaternionf;
-
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
 
 public class ClientEvents {
     public static final GuiCursor guiCursor = new GuiCursor();
@@ -94,12 +87,12 @@ public class ClientEvents {
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAboveAll("cursor", GuiCursor.CURSOR_ICON);
-            //event.registerAboveAll("test", CustomAttributeHudOverlay.TEST_HUD);
+            event.registerAboveAll("backpack", GuiHUD.BACKPACK_ICON);
             event.registerAboveAll("armor", CustomAttributeHudOverlay.CUSTOM_ARMOR_HUD);
             event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
             event.registerAboveAll("imagination", CustomAttributeHudOverlay.IMAGINATION_HUD);
             event.registerAboveAll("u_level", CustomAttributeHudOverlay.U_LEVEL_HUD);
+            event.registerAboveAll("cursor", GuiCursor.CURSOR_ICON);
         }
 
         @SubscribeEvent

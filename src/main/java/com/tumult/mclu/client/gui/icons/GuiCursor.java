@@ -1,26 +1,16 @@
-package com.tumult.mclu.client.gui.frame;
+package com.tumult.mclu.client.gui.icons;
 
-import com.mojang.blaze3d.vertex.*;
 import com.tumult.mclu.MCLU;
-import com.tumult.mclu.client.gui.GuiIcon;
-import com.tumult.mclu.client.gui.ScreenUtils;
 import com.tumult.mclu.events.ClientEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import org.joml.Matrix4f;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryStack;
 
-import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
-import java.awt.Toolkit;
-import java.awt.Dimension;
-import java.nio.IntBuffer;
 
 public class GuiCursor {
     private boolean isCursorVisible;
@@ -30,7 +20,6 @@ public class GuiCursor {
     private double screenMouseY;
     private DoubleBuffer xPos;
     private DoubleBuffer yPos;
-
 
     private final GuiIcon cursorIcon;
 
@@ -64,7 +53,7 @@ public class GuiCursor {
     public void getMousePosition() {
         Minecraft mc = Minecraft.getInstance();
         long window = mc.getWindow().getWindow();
-        double guiScaleFactor = mc.getWindow().getGuiScale();
+        double guiScaleFactor = mc.getWindow().getGuiScale() * 2;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             // Allocate DoubleBuffers to store X and Y positions
             xPos = stack.mallocDouble(1);
@@ -75,12 +64,12 @@ public class GuiCursor {
             screenMouseY = yPos.get(0) / guiScaleFactor;
 
             // Access the cursor position from the buffers
-            this.clampedMouseX = Math.max(0, Math.min(screenMouseX, mc.getWindow().getWidth()));
-            this.clampedMouseY = Math.max(0, Math.min(screenMouseY, mc.getWindow().getHeight()));
+            this.clampedMouseX = Math.max(0, (Math.min(screenMouseX, mc.getWindow().getWidth() / guiScaleFactor) - 1));
+            this.clampedMouseY = Math.max(0, (Math.min(screenMouseY, mc.getWindow().getHeight() / guiScaleFactor) - 1));
 
             // Print the cursor coordinates
-            System.out.println("Mouse X: " + clampedMouseX);
-            System.out.println("Mouse Y: " + clampedMouseY);
+            //System.out.println("Mouse X: " + clampedMouseX);
+            //System.out.println("Mouse Y: " + clampedMouseY);
         }
     }
 
@@ -97,6 +86,13 @@ public class GuiCursor {
     };
 
     public void drawCursor(GuiGraphics guiGraphics) {
-        cursorIcon.draw(guiGraphics, (int) clampedMouseX, (int) clampedMouseY, 255);
+        cursorIcon.draw(guiGraphics, clampedMouseX, clampedMouseY, 255);
+    }
+
+    public double getMouseX() {
+        return clampedMouseX;
+    }
+    public double getMouseY() {
+        return clampedMouseY;
     }
 }

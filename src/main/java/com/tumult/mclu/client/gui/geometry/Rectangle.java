@@ -7,7 +7,6 @@ public class Rectangle {
     public Rectangle(double left, double top, double right, double bottom) {
         this(new Vector2DPoint(left, top), new Vector2DPoint(right, bottom));
     }
-
     public Rectangle(Vector2DPoint nwCorner, Vector2DPoint whSides) {
         this.nwCorner = nwCorner;
         this.whSides = whSides;
@@ -32,7 +31,6 @@ public class Rectangle {
     public double getHeight() {
         return whSides.getY();
     }
-
     public Vector2DPoint getNwCorner() {
         return nwCorner;
     }
@@ -77,9 +75,6 @@ public class Rectangle {
     }
 
     // utility
-    public boolean containsPoint(double x, double y) {
-        return x > getLeft() && x < getRight() && y > getTop() && y < getBottom();
-    }
     public void moveBy(double x, double y) {
         this.moveBy(new Vector2DPoint(x, y));
     }

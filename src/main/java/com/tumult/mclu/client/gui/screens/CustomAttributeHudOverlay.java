@@ -1,8 +1,9 @@
-package com.tumult.mclu.client.gui;
+package com.tumult.mclu.client.gui.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tumult.mclu.MCLU;
+import com.tumult.mclu.client.gui.CustomAttributes;
 import com.tumult.mclu.events.ModEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
