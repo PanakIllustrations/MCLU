@@ -1,5 +1,6 @@
 package com.tumult.mclu.client.gui;
 
+import com.tumult.mclu.McluConstants;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
@@ -14,9 +15,9 @@ import net.minecraftforge.fml.common.Mod;
 import com.tumult.mclu.MCLU;
 
 
-@Mod.EventBusSubscriber(modid = MCLU.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = McluConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CustomAttributes {
-    public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, MCLU.MODID);
+    public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, McluConstants.MOD_ID);
     // RangedAttribute(string name, double default, double minimum, double maximum)
     public static final RegistryObject<Attribute> CUSTOM_ARMOR_CURRENT = ATTRIBUTES.register("custom_armor_current",
             () -> new RangedAttribute("attribute.mclu.armor_current", 0.0D, 0.0D, 64.0D).setSyncable(true));

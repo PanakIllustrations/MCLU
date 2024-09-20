@@ -12,10 +12,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SpriteUploader extends TextureAtlasHolder {
-    static final ResourceLocation GUI_ATLAS = new ResourceLocation(McluConstants.MOD_ID, "gui");
+    public static final ResourceLocation MOD_ICONS_ATLAS = new ResourceLocation(McluConstants.MOD_ID, "textures/atlas/mod_icons.png");
+    public static final ResourceLocation GUI_ATLAS = new ResourceLocation("minecraft", "textures/atlas/gui.png");
 
-    SpriteUploader(TextureManager textureManager) {
-        super(Minecraft.getInstance().getTextureManager(), McluConstants.MOD_ICONS_ATLAS, GUI_ATLAS);
+    public SpriteUploader(TextureManager textureManager) {
+        super(textureManager, MOD_ICONS_ATLAS, GUI_ATLAS);
     }
 
     @Override

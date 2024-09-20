@@ -21,15 +21,15 @@ public class GuiCursor {
     private DoubleBuffer xPos;
     private DoubleBuffer yPos;
 
-    private final GuiIcon cursorIcon;
+    private final GuiSprite.DrawableSprite cursorIcon;
 
-    public GuiCursor() {
+    public GuiCursor(GuiSprite guiSprite) {
         this.isCursorVisible = false;
         this.clampedMouseX = 0;
         this.clampedMouseY = 0;
         this.screenMouseX = 0;
         this.screenMouseY = 0;
-        this.cursorIcon = new GuiIcon(new ResourceLocation(MCLU.MODID, "textures/gui/mouse_cursor.png"), 9, 17, 0, 0, 32, 32);
+        this.cursorIcon = guiSprite.mouseCursor;
         this.xPos = null;
         this.yPos = null;
        }
@@ -77,7 +77,7 @@ public class GuiCursor {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
 
-        GuiCursor guiCursor = ClientEvents.guiCursor;
+        GuiCursor guiCursor = IconUtils.getCursor();
 
         if (player != null && guiCursor.isCursorVisible()) {
             guiCursor.getMousePosition();

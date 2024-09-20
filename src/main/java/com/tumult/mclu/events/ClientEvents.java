@@ -1,11 +1,17 @@
 package com.tumult.mclu.events;
 
+import com.tumult.mclu.McluConstants;
+import com.tumult.mclu.client.gui.icons.GuiSprite;
+import com.tumult.mclu.client.gui.icons.IconUtils;
+import com.tumult.mclu.client.gui.icons.SpriteUploader;
 import com.tumult.mclu.client.gui.screens.CustomAttributeHudOverlay;
 import com.tumult.mclu.client.gui.Keybindings;
 import com.tumult.mclu.client.gui.icons.GuiCursor;
 import com.tumult.mclu.client.gui.screens.GuiHUD;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.FallbackResourceManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -20,10 +26,9 @@ import net.minecraftforge.fml.common.Mod;
 import com.tumult.mclu.MCLU;
 
 public class ClientEvents {
-    public static final GuiCursor guiCursor = new GuiCursor();
     private static boolean wasKeyPressedLastTick = false;
 
-    @Mod.EventBusSubscriber(modid = MCLU.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = McluConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
     public static class ClientForgeEvents {
         // Forge-specific client-side event handlers here
         @SubscribeEvent
@@ -42,10 +47,7 @@ public class ClientEvents {
 
             }
         }
-
-        public static GuiCursor getGuiCursor() {
-            return guiCursor;
-        }
+        private static GuiCursor guiCursor = IconUtils.getCursor();
         private static float yaw = 0.0F;
         private static float pitch = 0.0F;
 
@@ -55,6 +57,7 @@ public class ClientEvents {
             Player player = mc.player;
 
             if (player != null) {
+
                 boolean isKeyPressed = Keybindings.INSTANCE.RELEASE_MOUSE.isDown();
 
                 if (isKeyPressed && !wasKeyPressedLastTick){
@@ -83,11 +86,11 @@ public class ClientEvents {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = MCLU.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = McluConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAboveAll("backpack", GuiHUD.BACKPACK_ICON);
+            //event.registerAboveAll("backpack", GuiHUD.BACKPACK_ICON);
             event.registerAboveAll("armor", CustomAttributeHudOverlay.CUSTOM_ARMOR_HUD);
             event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
             event.registerAboveAll("imagination", CustomAttributeHudOverlay.IMAGINATION_HUD);

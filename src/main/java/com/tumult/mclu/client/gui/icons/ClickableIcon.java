@@ -4,8 +4,8 @@ import com.tumult.mclu.client.gui.geometry.Rectangle;
 import com.tumult.mclu.client.gui.frame.ClickableFrame;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class ClickableIcon extends ClickableFrame {
-    private final GuiIcon guiIcon;
+public class ClickableIcon {
+    /*private final GuiIcon guiIcon;
     private boolean contains = false;
 
     public ClickableIcon(double left, double top, double right, double bottom, GuiIcon guiIcon) {
@@ -50,5 +50,5 @@ public class ClickableIcon extends ClickableFrame {
     @Override
     public void setActive(boolean active) {
         super.setActive(active);
-    }
+    }*/
 }

@@ -6,7 +6,6 @@ import com.tumult.mclu.McluConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
@@ -19,31 +18,33 @@ blit(ResourceLocation location, int left, int right, int top, int bottom, int zL
 blit(ResourceLocation location, int screenPosX, int screenPosY, float iconPosX, float iconPosY, int iconWidth, int iconHeight, int textureWidth, int textureHeight);
 */
 
-public class GuiIcon {
-    private final SpriteUploader spriteUploader;
-    private final DrawableIcon mouseCursor;
+public class GuiSprite {
+    public final SpriteUploader spriteUploader;
+    public final DrawableSprite mouseCursor;
+    public final DrawableSprite backpack;
 
-    public GuiIcon(SpriteUploader spriteUploader) {
+    public GuiSprite(SpriteUploader spriteUploader) {
         this.spriteUploader = spriteUploader;
-        this.mouseCursor = registerIcon("mousecursor", 9, 17);
+        this.mouseCursor = registerIcon("mouse_cursor", 9, 17);
+        this.backpack = registerIcon("backpack", 16, 16);
     }
 
-    private DrawableIcon registerIcon(String name, int width, int height) {
+    private DrawableSprite registerIcon(String name, int width, int height) {
         ResourceLocation location = new ResourceLocation(McluConstants.MOD_ID, name);
-        return new DrawableIcon(location, width, height);
+        return new DrawableSprite(location, width, height);
     }
 
     public SpriteUploader getSpriteUploader() {
         return spriteUploader;
     }
 
-    public class DrawableIcon {
+    public class DrawableSprite {
 
         final ResourceLocation location;
         private final int width;
         private final int height;
 
-        protected DrawableIcon(ResourceLocation locationIn, int iconWidth, int iconHeight) {
+        protected DrawableSprite(ResourceLocation locationIn, int iconWidth, int iconHeight) {
             this.location = locationIn;
             this.width = iconWidth;
             this.height = iconHeight;
@@ -66,7 +67,7 @@ public class GuiIcon {
         }
 
         public void draw(GuiGraphics guiGraphics, int screenPosX, int screenPosY, float zLevel) {
-            draw(guiGraphics, (double) screenPosX, (double) screenPosY, zLevel, 0, 0, 0, 0);
+            draw(guiGraphics, screenPosX, screenPosY, zLevel, 0, 0, 0, 0);
         }
 
         public void draw(GuiGraphics guiGraphics, double xOffset, double yOffset, float zLevel, double maskTop, double maskBottom, double maskLeft, double maskRight) {
@@ -120,7 +121,6 @@ public class GuiIcon {
 
 
 /*
-
     private final float iconPosX;
     private final float iconPosY;
     public final float iconWidth;
