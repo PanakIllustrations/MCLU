@@ -3,6 +3,7 @@ package com.tumult.mclu.client.gui.icons;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.tumult.mclu.McluConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -10,20 +11,14 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 
-/*
-blit(ResourceLocation location, int screenPosX, int screenPosY, int zLevel, float iconPosX, float iconPosY, int iconWidth, int iconHeight, int textureWidth, int textureHeight);
-blit(ResourceLocation location, int screenPosX, int screenPosY, int iconPosX, int iconPosY, int iconWidth, int iconHeight);
-blit(ResourceLocation location, int screenPosX, int screenPosY, int iconWidth1, int iconHeight1, float iconPosX, float iconPosY, int iconWidth2, int iconHeight2, int textureWidth, int textureHeight);
-blit(ResourceLocation location, int left, int right, int top, int bottom, int zLevel, int iconWidth2, int iconHeight2, float iconPosX, float iconPosY, int textureWidth, int textureHeight);
-blit(ResourceLocation location, int screenPosX, int screenPosY, float iconPosX, float iconPosY, int iconWidth, int iconHeight, int textureWidth, int textureHeight);
-*/
 
-public class GuiSprite {
+
+public class GuiIcons {
     public final SpriteUploader spriteUploader;
     public final DrawableSprite mouseCursor;
     public final DrawableSprite backpack;
 
-    public GuiSprite(SpriteUploader spriteUploader) {
+    public GuiIcons(SpriteUploader spriteUploader) {
         this.spriteUploader = spriteUploader;
         this.mouseCursor = registerIcon("mouse_cursor", 9, 17);
         this.backpack = registerIcon("backpack", 16, 16);
@@ -31,7 +26,7 @@ public class GuiSprite {
 
     private DrawableSprite registerIcon(String name, int width, int height) {
         ResourceLocation location = new ResourceLocation(McluConstants.MOD_ID, name);
-        return new DrawableSprite(location, width, height);
+        return new DrawableSprite(location, width, height, spriteUploader);
     }
 
     public SpriteUploader getSpriteUploader() {
@@ -43,11 +38,13 @@ public class GuiSprite {
         final ResourceLocation location;
         private final int width;
         private final int height;
+        private final SpriteUploader spriteUploader;
 
-        protected DrawableSprite(ResourceLocation locationIn, int iconWidth, int iconHeight) {
+        protected DrawableSprite(ResourceLocation locationIn, int iconWidth, int iconHeight, SpriteUploader spriteUploader) {
             this.location = locationIn;
             this.width = iconWidth;
             this.height = iconHeight;
+            this.spriteUploader = spriteUploader;
         }
 
         public TextureAtlasSprite getSprite() {
@@ -60,26 +57,19 @@ public class GuiSprite {
 
         public int getHeight() {
             return height;
+
         }
 
         public void draw(GuiGraphics guiGraphics, double screenPosX, double screenPosY, float zLevel) {
             draw(guiGraphics, screenPosX, screenPosY, zLevel, 0, 0, 0, 0);
         }
 
-        public void draw(GuiGraphics guiGraphics, int screenPosX, int screenPosY, float zLevel) {
-            draw(guiGraphics, screenPosX, screenPosY, zLevel, 0, 0, 0, 0);
-        }
-
         public void draw(GuiGraphics guiGraphics, double xOffset, double yOffset, float zLevel, double maskTop, double maskBottom, double maskLeft, double maskRight) {
             double textureWidth = this.width;
             double textureHeight = this.height;
-            TextureAtlasSprite icon = getSprite();
 
-            ShaderInstance oldShader = RenderSystem.getShader();
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, McluConstants.MOD_ICONS_ATLAS);
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
+            Minecraft.getInstance().getTextureManager().bindForSetup(spriteUploader.getAtlas().location());
+            TextureAtlasSprite icon = spriteUploader.getSprite(location);
 
             double left = xOffset + maskLeft;
             double top = yOffset + maskTop;
@@ -94,14 +84,22 @@ public class GuiSprite {
             float maxU = (float) (icon.getU1() - uSize * (maskRight / textureWidth));
             float maxV = (float) (icon.getV1() - vSize * (maskBottom / textureHeight));
 
+            ShaderInstance oldShader = RenderSystem.getShader();
             guiGraphics.pose().pushPose();
-            guiGraphics.pose().translate(xOffset, yOffset, zLevel);
-            innerBlit(guiGraphics.pose().last().pose(), left, right, top, bottom, zLevel, minU, maxU, minV, maxV);
-            guiGraphics.pose().popPose();
+            guiGraphics.pose().translate(0, 0, zLevel);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, McluConstants.LOCATION_GUI_TEXTURE_ATLAS);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+
+            innerBlit(guiGraphics.pose().last().pose(),
+                    left, right, top, bottom, zLevel,
+                    minU, maxU, minV, maxV);
 
             RenderSystem.disableBlend();
             RenderSystem.enableDepthTest();
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+            guiGraphics.pose().popPose();
             RenderSystem.setShader(() -> oldShader);
         }
     }
@@ -117,6 +115,8 @@ public class GuiSprite {
 
         BufferUploader.drawWithShader(bufferBuilder.end());
     }
+
+
 }
 
 

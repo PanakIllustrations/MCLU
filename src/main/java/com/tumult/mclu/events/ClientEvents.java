@@ -1,29 +1,24 @@
 package com.tumult.mclu.events;
 
 import com.tumult.mclu.McluConstants;
-import com.tumult.mclu.client.gui.icons.GuiSprite;
+import com.tumult.mclu.client.gui.icons.GuiIcons;
 import com.tumult.mclu.client.gui.icons.IconUtils;
-import com.tumult.mclu.client.gui.icons.SpriteUploader;
 import com.tumult.mclu.client.gui.screens.CustomAttributeHudOverlay;
 import com.tumult.mclu.client.gui.Keybindings;
 import com.tumult.mclu.client.gui.icons.GuiCursor;
 import com.tumult.mclu.client.gui.screens.GuiHUD;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.FallbackResourceManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import com.tumult.mclu.MCLU;
+import java.util.Objects;
 
 public class ClientEvents {
     private static boolean wasKeyPressedLastTick = false;
@@ -47,7 +42,7 @@ public class ClientEvents {
 
             }
         }
-        private static GuiCursor guiCursor = IconUtils.getCursor();
+        //private static GuiCursor guiCursor = IconUtils.getCursor();
         private static float yaw = 0.0F;
         private static float pitch = 0.0F;
 
@@ -55,9 +50,8 @@ public class ClientEvents {
         public static void onClientTick(TickEvent.ClientTickEvent event) {
             Minecraft mc = Minecraft.getInstance();
             Player player = mc.player;
-
+            /*
             if (player != null) {
-
                 boolean isKeyPressed = Keybindings.INSTANCE.RELEASE_MOUSE.isDown();
 
                 if (isKeyPressed && !wasKeyPressedLastTick){
@@ -71,18 +65,18 @@ public class ClientEvents {
                 }
 
                 wasKeyPressedLastTick = isKeyPressed;
-            }
+            }*/
         }
 
         @SubscribeEvent
         public static void clientViewportEvent(ViewportEvent event) {
             Minecraft mc = Minecraft.getInstance();
             Player player = mc.player;
-
+            /*
             if (player != null && guiCursor.isCursorVisible()) {
                 event.getCamera().getEntity().setYRot(pitch);
                 event.getCamera().getEntity().setXRot(yaw);
-            }
+            }*/
         }
     }
 
@@ -90,7 +84,7 @@ public class ClientEvents {
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            //event.registerAboveAll("backpack", GuiHUD.BACKPACK_ICON);
+            event.registerAboveAll("backpack", GuiHUD.BACKPACK_ICON);
             event.registerAboveAll("armor", CustomAttributeHudOverlay.CUSTOM_ARMOR_HUD);
             event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
             event.registerAboveAll("imagination", CustomAttributeHudOverlay.IMAGINATION_HUD);
@@ -103,5 +97,11 @@ public class ClientEvents {
             event.register(Keybindings.INSTANCE.RELEASE_MOUSE);
         }
 
+        @SubscribeEvent
+        public static void onRegisterReloadListenerEvent(RegisterClientReloadListenersEvent event) {
+            GuiIcons icon = IconUtils.INSTANCE.getIcon();
+            System.out.println("reload listener " + Objects.isNull(icon.getSpriteUploader()));
+            event.registerReloadListener(icon.getSpriteUploader());
+        }
     }
 }
