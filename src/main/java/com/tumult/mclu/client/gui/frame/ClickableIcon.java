@@ -4,22 +4,19 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.tumult.mclu.client.gui.geometry.Rectangle;
 import com.tumult.mclu.client.gui.geometry.Vector2DPoint;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ClickableFrame extends Rectangle {
+public class ClickableIcon extends Rectangle {
     boolean isActive = true;
     boolean isVisible = true;
 
-    public ClickableFrame(Vector2DPoint nwCorner, Vector2DPoint seCorner) {
+    public ClickableIcon(Vector2DPoint nwCorner, Vector2DPoint seCorner) {
         super(nwCorner, seCorner);
     }
 
-    public ClickableFrame(double left, double top, double right, double bottom) {
+    public ClickableIcon(double left, double top, double right, double bottom) {
         super(left, top, right, bottom);
     }
 

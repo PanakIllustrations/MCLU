@@ -1,5 +1,6 @@
 package com.tumult.mclu.events;
 
+import com.tumult.mclu.McluConstants;
 import com.tumult.mclu.client.gui.CustomAttributes;
 import com.tumult.mclu.client.gui.ModifyPlayerHealth;
 import net.minecraft.server.level.ServerLevel;
@@ -26,7 +27,7 @@ import java.util.UUID;
 
 public class ModEvents {
 
-    @Mod.EventBusSubscriber(modid = MCLU.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    @Mod.EventBusSubscriber(modid = McluConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class ModBusEvents {
         public static boolean isHealthInitialized = false;
         private static final ModifyPlayerHealth modifyPlayerHealth = new ModifyPlayerHealth();

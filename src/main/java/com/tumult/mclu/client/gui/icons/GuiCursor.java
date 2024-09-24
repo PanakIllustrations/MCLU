@@ -21,7 +21,7 @@ public class GuiCursor {
     private DoubleBuffer xPos;
     private DoubleBuffer yPos;
 
-    private final GuiIcon cursorIcon;
+    //private final GuiIcon cursorIcon;
 
     public GuiCursor() {
         this.isCursorVisible = false;
@@ -29,7 +29,7 @@ public class GuiCursor {
         this.clampedMouseY = 0;
         this.screenMouseX = 0;
         this.screenMouseY = 0;
-        this.cursorIcon = new GuiIcon(new ResourceLocation(MCLU.MODID, "textures/gui/mouse_cursor.png"), 9, 17, 0, 0, 32, 32);
+        //this.cursorIcon = new GuiIcon(new ResourceLocation(MCLU.MODID, "textures/gui/mouse_cursor.png"), 9, 17, 0, 0, 32, 32);
         this.xPos = null;
         this.yPos = null;
        }
@@ -77,16 +77,16 @@ public class GuiCursor {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
 
-        GuiCursor guiCursor = ClientEvents.guiCursor;
+        //GuiCursor guiCursor = ClientEvents.guiCursor;
 
-        if (player != null && guiCursor.isCursorVisible()) {
-            guiCursor.getMousePosition();
-            guiCursor.drawCursor(guiGraphics);
-        }
+        //if (player != null && guiCursor.isCursorVisible()) {
+           // guiCursor.getMousePosition();
+            //guiCursor.drawCursor(guiGraphics);
+        //}
     };
 
     public void drawCursor(GuiGraphics guiGraphics) {
-        cursorIcon.draw(guiGraphics, clampedMouseX, clampedMouseY, 255);
+        //cursorIcon.draw(guiGraphics, clampedMouseX, clampedMouseY, 255);
     }
 
     public double getMouseX() {

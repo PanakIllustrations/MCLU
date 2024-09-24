@@ -1,5 +1,7 @@
 package com.tumult.mclu.events;
 
+import com.tumult.mclu.McluConstants;
+import com.tumult.mclu.client.gui.icons.GuiIcon;
 import com.tumult.mclu.client.gui.screens.CustomAttributeHudOverlay;
 import com.tumult.mclu.client.gui.Keybindings;
 import com.tumult.mclu.client.gui.icons.GuiCursor;
@@ -8,22 +10,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import com.tumult.mclu.MCLU;
+import java.util.Objects;
 
 public class ClientEvents {
     public static final GuiCursor guiCursor = new GuiCursor();
     private static boolean wasKeyPressedLastTick = false;
 
-    @Mod.EventBusSubscriber(modid = MCLU.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = McluConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
     public static class ClientForgeEvents {
         // Forge-specific client-side event handlers here
         @SubscribeEvent
@@ -83,7 +82,7 @@ public class ClientEvents {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = MCLU.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = McluConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
@@ -99,6 +98,5 @@ public class ClientEvents {
         public static void registerKeys(RegisterKeyMappingsEvent event) {
             event.register(Keybindings.INSTANCE.RELEASE_MOUSE);
         }
-
     }
 }

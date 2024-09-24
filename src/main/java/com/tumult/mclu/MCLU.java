@@ -14,10 +14,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-@Mod(MCLU.MODID)
+@Mod(McluConstants.MOD_ID)
 public class MCLU
 {
-    public static final String MODID = "mclu";
     private static final Logger LOGGER = LogManager.getLogger();
 
     //public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, MODID);
@@ -41,7 +40,7 @@ public class MCLU
         // Common setup code
     }
 
-    @Mod.EventBusSubscriber(modid = MCLU.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(modid = McluConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
