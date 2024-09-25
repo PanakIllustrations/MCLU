@@ -35,7 +35,8 @@ public class ClientEvents {
                 overlayId.equals(VanillaGuiOverlay.FOOD_LEVEL.id()) ||
                 overlayId.equals(VanillaGuiOverlay.AIR_LEVEL.id()) ||
                 overlayId.equals(VanillaGuiOverlay.CHAT_PANEL.id()) ||
-                overlayId.equals(VanillaGuiOverlay.HELMET.id())) {
+                overlayId.equals(VanillaGuiOverlay.HELMET.id()) ||
+                overlayId.equals(VanillaGuiOverlay.JUMP_BAR.id())) {
                 event.setCanceled(true); // Cancel the event to prevent rendering
             }
             if (overlayId.equals(VanillaGuiOverlay.HOTBAR.id())) {
@@ -50,33 +51,31 @@ public class ClientEvents {
         public static void onClientTick(TickEvent.ClientTickEvent event) {
             Minecraft mc = Minecraft.getInstance();
             Player player = mc.player;
-            /*
             if (player != null) {
                 boolean isKeyPressed = Keybindings.INSTANCE.RELEASE_MOUSE.isDown();
 
                 if (isKeyPressed && !wasKeyPressedLastTick){
                     Keybindings.INSTANCE.RELEASE_MOUSE.consumeClick();
-                    guiCursor.toggleCursorVisible();
+                    GuiCursor.toggleCursorVisible();
                 }
 
-                if (!guiCursor.isCursorVisible()) {
+                if (!GuiCursor.isCursorVisible()) {
                     yaw = mc.player.getViewXRot(1.0f);
                     pitch = mc.player.getViewYRot(1.0f);
                 }
 
                 wasKeyPressedLastTick = isKeyPressed;
-            }*/
+            }
         }
 
         @SubscribeEvent
         public static void clientViewportEvent(ViewportEvent event) {
             Minecraft mc = Minecraft.getInstance();
             Player player = mc.player;
-            /*
-            if (player != null && guiCursor.isCursorVisible()) {
+            if (player != null && GuiCursor.isCursorVisible()) {
                 event.getCamera().getEntity().setYRot(pitch);
                 event.getCamera().getEntity().setXRot(yaw);
-            }*/
+            }
         }
     }
 
@@ -84,24 +83,16 @@ public class ClientEvents {
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAboveAll("backpack", GuiHUD.BACKPACK_ICON);
+            event.registerAboveAll("gui_hud", GuiHUD.GUI_HUD);
             event.registerAboveAll("armor", CustomAttributeHudOverlay.CUSTOM_ARMOR_HUD);
             event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
             event.registerAboveAll("imagination", CustomAttributeHudOverlay.IMAGINATION_HUD);
             event.registerAboveAll("u_level", CustomAttributeHudOverlay.U_LEVEL_HUD);
-            event.registerAboveAll("cursor", GuiCursor.CURSOR_ICON);
         }
 
         @SubscribeEvent
         public static void registerKeys(RegisterKeyMappingsEvent event) {
             event.register(Keybindings.INSTANCE.RELEASE_MOUSE);
-        }
-
-        @SubscribeEvent
-        public static void onRegisterReloadListenerEvent(RegisterClientReloadListenersEvent event) {
-            GuiIcons icon = IconUtils.INSTANCE.getIcon();
-            System.out.println("reload listener " + Objects.isNull(icon.getSpriteUploader()));
-            event.registerReloadListener(icon.getSpriteUploader());
         }
     }
 }

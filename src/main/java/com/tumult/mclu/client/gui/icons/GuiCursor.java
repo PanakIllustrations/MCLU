@@ -1,98 +1,66 @@
 package com.tumult.mclu.client.gui.icons;
 
 import com.tumult.mclu.MCLU;
+import com.tumult.mclu.client.gui.frame.DrawableRect;
 import com.tumult.mclu.events.ClientEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import org.joml.Vector2d;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.DoubleBuffer;
 
 public class GuiCursor {
-    private boolean isCursorVisible;
-    private double clampedMouseX;
-    private double clampedMouseY;
-    private double screenMouseX;
-    private double screenMouseY;
-    private DoubleBuffer xPos;
-    private DoubleBuffer yPos;
+    private static boolean isCursorVisible;
+    private static Vector2d clampedMousePos;
 
-    //private final GuiSprite.DrawableSprite cursorIcon;
+    public static Vector2d getMousePos() {
+        updateMousePosition();
+        return clampedMousePos;
+    }
 
-    public GuiCursor() {
-        this.isCursorVisible = false;
-        this.clampedMouseX = 0;
-        this.clampedMouseY = 0;
-        this.screenMouseX = 0;
-        this.screenMouseY = 0;
-        //this.cursorIcon = guiSprite.mouseCursor;
-        this.xPos = null;
-        this.yPos = null;
-       }
+    public static void updateMousePosition() {
+        if (isCursorVisible) {
+            Minecraft mc = Minecraft.getInstance();
+            long window = mc.getWindow().getWindow();
+            double guiScaleFactor = mc.getWindow().getGuiScale();
+            try (MemoryStack stack = MemoryStack.stackPush()) {
+                DoubleBuffer xPos = stack.mallocDouble(1);
+                DoubleBuffer yPos = stack.mallocDouble(1);
+                GLFW.glfwGetCursorPos(window, xPos, yPos);
 
-    public boolean isCursorVisible() {
+                // Update screenMousePos and clampedMousePos based on current mouse position
+                double screenMouseX = xPos.get(0) / guiScaleFactor;
+                double screenMouseY = yPos.get(0) / guiScaleFactor;
+
+                Vector2d windowDimensions = new Vector2d(mc.getWindow().getWidth(), mc.getWindow().getHeight());
+
+                // Clamp the mouse position within the window bounds
+                clampedMousePos = new Vector2d(
+                        Math.max(0, Math.min(screenMouseX, windowDimensions.x / guiScaleFactor - 1)),
+                        Math.max(0, Math.min(screenMouseY, windowDimensions.y / guiScaleFactor - 1))
+                );
+            }
+        }
+    }
+
+    public static boolean isCursorVisible() {
         return isCursorVisible;
     }
 
-    public void toggleCursorVisible() {
-        this.isCursorVisible = !this.isCursorVisible;
+    public static void toggleCursorVisible() {
+        isCursorVisible = !isCursorVisible;
         long window = Minecraft.getInstance().getWindow().getWindow();
         if (isCursorVisible) {
             System.out.println("Cursor is now visible");
-            GLFW.glfwSetInputMode(window,GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
+            GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
         } else {
             System.out.println("Cursor is now hidden");
-            GLFW.glfwSetInputMode(window,GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+            GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
         }
-    }
-
-    public void getMousePosition() {
-        Minecraft mc = Minecraft.getInstance();
-        long window = mc.getWindow().getWindow();
-        double guiScaleFactor = mc.getWindow().getGuiScale() * 2;
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            // Allocate DoubleBuffers to store X and Y positions
-            xPos = stack.mallocDouble(1);
-            yPos = stack.mallocDouble(1);
-            GLFW.glfwGetCursorPos(window, xPos, yPos);
-
-            screenMouseX = xPos.get(0) / guiScaleFactor;
-            screenMouseY = yPos.get(0) / guiScaleFactor;
-
-            // Access the cursor position from the buffers
-            this.clampedMouseX = Math.max(0, (Math.min(screenMouseX, mc.getWindow().getWidth() / guiScaleFactor) - 1));
-            this.clampedMouseY = Math.max(0, (Math.min(screenMouseY, mc.getWindow().getHeight() / guiScaleFactor) - 1));
-
-            // Print the cursor coordinates
-            //System.out.println("Mouse X: " + clampedMouseX);
-            //System.out.println("Mouse Y: " + clampedMouseY);
-        }
-    }
-
-    public static final IGuiOverlay CURSOR_ICON = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        Minecraft mc = Minecraft.getInstance();
-        Player player = mc.player;
-
-        /* GuiCursor guiCursor = IconUtils.getCursor();
-
-        if (player != null && guiCursor.isCursorVisible()) {
-            guiCursor.getMousePosition();
-            guiCursor.drawCursor(guiGraphics);
-        }*/
-    };
-
-    public void drawCursor(GuiGraphics guiGraphics) {
-        //cursorIcon.draw(guiGraphics, clampedMouseX, clampedMouseY, 255);
-    }
-
-    public double getMouseX() {
-        return clampedMouseX;
-    }
-    public double getMouseY() {
-        return clampedMouseY;
     }
 }

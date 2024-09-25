@@ -1,7 +1,6 @@
 package com.tumult.mclu.client.gui.icons;
 
 import com.tumult.mclu.client.gui.geometry.Rectangle;
-import com.tumult.mclu.client.gui.frame.ClickableFrame;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class ClickableIcon {

@@ -1,28 +1,42 @@
 package com.tumult.mclu.client.gui.screens;
 
-import com.tumult.mclu.McluConstants;
-import com.tumult.mclu.client.gui.icons.GuiIcons;
+import com.tumult.mclu.client.gui.frame.DrawableRect;
+import com.tumult.mclu.client.gui.icons.GuiCursor;
 import com.tumult.mclu.client.gui.icons.IconUtils;
-import com.tumult.mclu.client.gui.icons.SpriteUploader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import org.joml.Vector2d;
 
 public class GuiHUD {
-    public static final IGuiOverlay BACKPACK_ICON = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
+    private static Vector2d position;
+    public static final IGuiOverlay GUI_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
 
-        int x = screenWidth / 2;
-        int y = screenHeight / 2;
-
         if (player != null) {
-            IconUtils.INSTANCE.getIcon().backpack.draw(guiGraphics ,x, y, 0);
+            position = new Vector2d((double) screenWidth / 2 + 94, (double) screenHeight - (2 + 16));
+            DrawableRect backpack = IconUtils.getIcon().backpack;
+            DrawableRect map = IconUtils.getIcon().map;
+            DrawableRect passport = IconUtils.getIcon().passport;
+            DrawableRect cursor = IconUtils.getIcon().mouse_cursor;
+
+            //backpack.setRightOfThis(map);
+            //map.setRightOfThis(passport);
+
+            backpack.draw(guiGraphics, position);
+            passport.draw(guiGraphics, position.add(18, 0));
+            map.draw(guiGraphics, position.add(16, 0));
+
+            if (GuiCursor.isCursorVisible()) {
+                cursor.draw(guiGraphics, GuiCursor.getMousePos()); // Draw the cursor at the clamped mouse position
+            }
         }
+
+
+
+        // Only draw the cursor if the player exists and the cursor is set to be visible
+
     };
 }
 /*

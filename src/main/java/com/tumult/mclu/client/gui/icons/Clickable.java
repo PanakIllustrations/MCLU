@@ -1,14 +1,7 @@
 package com.tumult.mclu.client.gui.icons;
 
-import com.mojang.blaze3d.platform.InputConstants;
-import com.tumult.mclu.client.gui.geometry.Rectangle;
-import com.tumult.mclu.client.gui.geometry.Vector2DPoint;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.client.sounds.SoundManager;
-import net.minecraft.sounds.SoundEvents;
-
 public class Clickable {
+    /*
     public final ClickableIcon backpack;
     public final ClickableIcon map;
     public final ClickableIcon passport;
@@ -108,5 +101,5 @@ public class Clickable {
             // Handle the mouse release event
             System.out.println("Mouse button released!");
         }
-    }
+    }*/
 }

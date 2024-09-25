@@ -1,110 +1,134 @@
 package com.tumult.mclu.client.gui.geometry;
 
-import com.tumult.mclu.client.gui.frame.DrawableIcon;
 
-public class Rectangle {
-    protected Vector2DPoint nwCorner;
-    protected Vector2DPoint whSides;
+import org.joml.Vector4d;
+import org.joml.Vector2d;
+
+public class Rectangle extends Vector4d {
     protected Rectangle rightOfThis;
     protected Rectangle leftOfThis;
     protected Rectangle aboveThis;
     protected Rectangle belowThis;
+    protected Vector4d margin = new Vector4d().zero();
 
-    public Rectangle(DrawableIcon icon) {
-        this(new Vector2DPoint(0, 0), new Vector2DPoint(icon.getIconWidth(), icon.getIconHeight()));
+    public boolean isMoving = false;
+
+    public Rectangle(double x, double y, double width, double height) {
+        super(x, y, width, height);
     }
-    public Rectangle(double left, double top, double width, double height) {
-        this(new Vector2DPoint(left, top), new Vector2DPoint(width, height));
+    public Rectangle(Vector2d nwCorner, Vector2d whSides) {
+        this(nwCorner.x, nwCorner.y, whSides.x, whSides.y);
     }
-    public Rectangle(Vector2DPoint nwCorner, Vector2DPoint whSides) {
-        this.nwCorner = nwCorner;
-        this.whSides = whSides;
+    public Rectangle(Vector2d whSides) {
+        this(0, 0, whSides.x, whSides.y);
     }
 
-    // getters
-    public double getTop() {
-        return nwCorner.getY();
-    }
-    public double getBottom() {
-        return getTop() + whSides.getY();
-    }
     public double getLeft() {
-        return nwCorner.getX();
-    }
-    public double getRight() {
-        return getLeft() + whSides.getX();
-    }
-    public double getWidth() {
-        return whSides.getX();
-    }
-    public double getHeight() {
-        return whSides.getY();
-    }
-    public Vector2DPoint getNwCorner() {
-        return nwCorner;
-    }
-    public Vector2DPoint getWhSides() {
-        return whSides;
-    }
-    public Rectangle getRightOfThis() {
-        return rightOfThis;
-    }
-    public Rectangle getLeftOfThis() {
-        return leftOfThis;
-    }
-    public Rectangle getBelowThis() {
-        return belowThis;
-    }
-    public Rectangle getAboveThis() {
-        return aboveThis;
+        if (leftOfThis != null && !isMoving) {
+            // Update this rectangle's x position based on the left neighbor's right edge and the margin
+            this.x = leftOfThis.getLeft()
+                    + leftOfThis.getWidth()  // Right edge of the left neighbor
+                    + Math.max(leftOfThis.getRightMargin(), this.getLeftMargin());
+        }
+        return this.x;
     }
 
-    // setters
-    public void setWhSides(double w, double h) {
-        setWhSides(new Vector2DPoint(w, h));
+    public double getRight() {
+        double right = this.x + this.getWidth();  // This rectangle's right edge
+        if (rightOfThis != null && !isMoving) {
+            // Update the right edge if necessary
+            double requiredRightEdge = rightOfThis.x - rightOfThis.getLeftMargin();
+            if (right > requiredRightEdge) {
+                // Adjust this rectangle's position to fit within the margins
+                this.x = rightOfThis.x - rightOfThis.getLeftMargin() - this.getWidth();
+                right = this.x + this.getWidth();  // Recalculate the right edge
+            }
+        }
+        return right;
     }
-    public void setWhSides(Vector2DPoint whSides) {
-        this.whSides = whSides;
+
+    public double getTop() {
+        if (aboveThis != null && !isMoving) {
+            // Update this rectangle's y position based on the top neighbor's bottom edge and margin
+            this.y = aboveThis.getTop()
+                    + aboveThis.getHeight()  // Bottom edge of the top neighbor
+                    + Math.max(aboveThis.getBottomMargin(), this.getTopMargin());
+        }
+        return this.y;
     }
-    public void setLeft(double left) {
-        this.nwCorner.setX(left);
+
+    public double getBottom() {
+        double bottom = this.y + this.getHeight();  // Calculate this rectangle's bottom edge
+        if (belowThis != null && !isMoving) {
+            // Set this rectangle as the top neighbor of the one below
+            // Update the bottom edge if necessary
+            double requiredBottomEdge = belowThis.y - belowThis.getTopMargin();
+            if (bottom > requiredBottomEdge) {
+                // Adjust this rectangle's position to fit within the margins
+                this.y = belowThis.y - belowThis.getTopMargin() - this.getHeight();
+                bottom = this.y + this.getHeight();  // Recalculate the bottom edge
+            }
+        }
+        return bottom;
     }
-    public void setRight(double right) {
-        this.nwCorner.setX(right);
+
+    public void setRightOfThis(Rectangle r) {
+        this.rightOfThis = r;
+    }
+    public void setLeftOfThis(Rectangle r) {
+        this.leftOfThis = r;
+    }
+    public void setAboveThis(Rectangle r) {
+        this.aboveThis = r;
+    }
+    public void setBelowThis(Rectangle r) {
+        this.belowThis = r;
+    }
+
+    public void moveTo(Vector2d d){
+        this.x = d.x;
+        this.y = d.y;
+    }
+    public void moveBy(Vector2d d){
+        this.x += d.x;
+        this.y += d.y;
+    }
+
+    // getters for clarification
+    public double getWidth(){
+        return z;
+    }
+    public double getHeight(){
+        return w;
     }
     public void setWidth(double width) {
-        this.whSides.setX(width);
+        this.z = width;
     }
     public void setHeight(double height) {
-        this.whSides.setY(height);
+        this.w = height;
+    }
+    public double getLeftMargin(){
+        return margin.x;
+    }
+    public double getTopMargin(){
+        return margin.y;
+    }
+    public double getRightMargin(){
+        return margin.z;
+    }
+    public double getBottomMargin(){
+        return margin.w;
     }
 
-    public void setRightOfThis(Rectangle rightOfThis) {
-        this.rightOfThis = rightOfThis;
+    public Vector2d getNwCorner(){
+        return new Vector2d(this.x,this.y);
     }
-    public void setLeftOfThis(Rectangle leftOfThis) {
-        this.leftOfThis = leftOfThis;
-    }
-    public void setAboveThis(Rectangle aboveThis) {
-        this.aboveThis = aboveThis;
-    }
-    public void setBelowThis(Rectangle belowThis) {
-        this.belowThis = belowThis;
+    public Vector2d getWhSides(){
+        return new Vector2d(this.getWidth(),this.getHeight());
     }
 
-    // utility
-    public void moveTo(double x, double y) {
-        this.moveTo(new Vector2DPoint(x, y));
-    }
-    public void moveTo(Vector2DPoint position) {
-        this.nwCorner = position;
-    }
-
-    public void moveBy(double x, double y) {
-        this.moveBy(new Vector2DPoint(x, y));
-    }
-    public void moveBy(Vector2DPoint amount) {
-        this.nwCorner = getNwCorner().add(amount);
+    public Rectangle divide(Vector2d scalar) {
+        return new Rectangle(getNwCorner().div(scalar), getWhSides().div(scalar));
     }
 
 }
