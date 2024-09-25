@@ -6,11 +6,21 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public enum IconUtils {
     INSTANCE;
+
     private GuiIcon icon;
+    private Clickable clickable;
+
     public GuiIcon getIcon() {
-        if (INSTANCE.icon == null) {
-            INSTANCE.icon = new GuiIcon();
+        if (icon == null) {
+            icon = new GuiIcon();
         }
-        return INSTANCE.icon;
+        return icon;
+    }
+
+    public Clickable getClickable() {
+        if (clickable == null) {
+            clickable = new Clickable();
+        }
+        return clickable;
     }
 }

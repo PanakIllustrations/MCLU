@@ -1,49 +1,61 @@
 package com.tumult.mclu.client.gui.geometry;
 
-public class Vector2DPoint {
-    public double x;
-    public double y;
+public class Vector2DPoint implements IVector2TPoint<Double> {
+    private double x;
+    private double y;
 
     public Vector2DPoint(double x, double y) {
         this.x = x;
         this.y = y;
     }
-    public Vector2DPoint(Vector2DPoint point) {
-        this(point.x, point.y);
-    }
-    double getX(){
+
+    @Override
+    public Double getX() {
         return x;
     }
-    double getY(){
+
+    @Override
+    public Double getY() {
         return y;
     }
 
-    void setX(double x) {
+    @Override
+    public void setX(Double x) {
         this.x = x;
     }
-    void setY(double y) {
+
+    @Override
+    public void setY(Double y) {
         this.y = y;
     }
 
-    public Vector2DPoint add(Vector2DPoint point) {
-        return new Vector2DPoint(x + point.x, y + point.y);
+    @Override
+    public IVector2TPoint<Double> add(IVector2TPoint<Double> point) {
+        return new Vector2DPoint(x + point.getX(), y + point.getY());
     }
-    public Vector2DPoint subtract(Vector2DPoint point) {
-        return new Vector2DPoint(x - point.x, y - point.y);
+
+    @Override
+    public IVector2TPoint<Double> subtract(IVector2TPoint<Double> point) {
+        return new Vector2DPoint(x - point.getX(), y - point.getY());
     }
-    public Vector2DPoint multiply(double factor) {
+
+    @Override
+    public IVector2TPoint<Double> multiply(Double factor) {
         return new Vector2DPoint(x * factor, y * factor);
     }
-    public Vector2DPoint divide(double factor) {
+
+    @Override
+    public IVector2TPoint<Double> divide(Double factor) {
         return new Vector2DPoint(x / factor, y / factor);
     }
-    public Vector2DPoint normalize() {
-        return new Vector2DPoint(x / x, y / y);
-    }
-    public Vector2DPoint clone() {
-        return new Vector2DPoint(x * x, y * y);
-    }
-    public Vector2DPoint interpolate(Vector2DPoint target, double factor) {
+
+    @Override
+    public IVector2TPoint<Double> interpolate(IVector2TPoint<Double> target, double factor) {
         return new Vector2DPoint((this.getX() + target.getX()) / factor, (this.getY() + target.getY()) / factor);
+    }
+
+    public IVector2TPoint<Double> normalize() {
+        double magnitude = Math.sqrt(x * x + y * y);
+        return new Vector2DPoint(x / magnitude, y / magnitude);
     }
 }

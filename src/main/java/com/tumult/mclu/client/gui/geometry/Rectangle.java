@@ -1,15 +1,20 @@
 package com.tumult.mclu.client.gui.geometry;
 
+import com.tumult.mclu.client.gui.frame.DrawableIcon;
+
 public class Rectangle {
-    Vector2DPoint nwCorner;
-    Vector2DPoint whSides;
+    protected Vector2DPoint nwCorner;
+    protected Vector2DPoint whSides;
     protected Rectangle rightOfThis;
     protected Rectangle leftOfThis;
     protected Rectangle aboveThis;
     protected Rectangle belowThis;
 
-    public Rectangle(double left, double top, double right, double bottom) {
-        this(new Vector2DPoint(left, top), new Vector2DPoint(right, bottom));
+    public Rectangle(DrawableIcon icon) {
+        this(new Vector2DPoint(0, 0), new Vector2DPoint(icon.getIconWidth(), icon.getIconHeight()));
+    }
+    public Rectangle(double left, double top, double width, double height) {
+        this(new Vector2DPoint(left, top), new Vector2DPoint(width, height));
     }
     public Rectangle(Vector2DPoint nwCorner, Vector2DPoint whSides) {
         this.nwCorner = nwCorner;
@@ -55,16 +60,8 @@ public class Rectangle {
     }
 
     // setters
-    public void setNwCorner(double x, double y) {
-        this.nwCorner.setX(x);
-        this.nwCorner.setY(y);
-    }
-    public void setNwCorner(Vector2DPoint nwCorner) {
-        this.nwCorner = nwCorner;
-    }
     public void setWhSides(double w, double h) {
-        this.whSides.setX(w);
-        this.whSides.setY(h);
+        setWhSides(new Vector2DPoint(w, h));
     }
     public void setWhSides(Vector2DPoint whSides) {
         this.whSides = whSides;
@@ -96,11 +93,18 @@ public class Rectangle {
     }
 
     // utility
+    public void moveTo(double x, double y) {
+        this.moveTo(new Vector2DPoint(x, y));
+    }
+    public void moveTo(Vector2DPoint position) {
+        this.nwCorner = position;
+    }
+
     public void moveBy(double x, double y) {
         this.moveBy(new Vector2DPoint(x, y));
     }
     public void moveBy(Vector2DPoint amount) {
-        setNwCorner(getNwCorner().add(amount));
+        this.nwCorner = getNwCorner().add(amount);
     }
 
 }

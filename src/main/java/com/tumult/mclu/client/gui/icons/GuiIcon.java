@@ -3,14 +3,11 @@ package com.tumult.mclu.client.gui.icons;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.tumult.mclu.McluConstants;
-import com.tumult.mclu.client.gui.frame.ClickableIcon;
 import com.tumult.mclu.client.gui.geometry.Vector2DPoint;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 
 import java.awt.*;
 
