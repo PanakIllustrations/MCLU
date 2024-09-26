@@ -1,6 +1,7 @@
 package com.tumult.mclu.client.gui.screens;
 
-import com.tumult.mclu.client.gui.frame.DrawableRect;
+import com.tumult.mclu.client.gui.icons.ClickableIcon;
+import com.tumult.mclu.client.gui.icons.DrawableIcon;
 import com.tumult.mclu.client.gui.icons.GuiCursor;
 import com.tumult.mclu.client.gui.icons.IconUtils;
 import net.minecraft.client.Minecraft;
@@ -16,10 +17,10 @@ public class GuiHUD {
 
         if (player != null) {
             position = new Vector2d((double) screenWidth / 2 + 94, (double) screenHeight - (2 + 16));
-            DrawableRect backpack = IconUtils.getIcon().backpack;
-            DrawableRect map = IconUtils.getIcon().map;
-            DrawableRect passport = IconUtils.getIcon().passport;
-            DrawableRect cursor = IconUtils.getIcon().mouse_cursor;
+            DrawableIcon backpack = IconUtils.getIcon().backpack;
+            DrawableIcon map = IconUtils.getIcon().map;
+            DrawableIcon passport = IconUtils.getIcon().passport;
+            DrawableIcon cursor = IconUtils.getIcon().mouse_cursor;
 
             //backpack.setRightOfThis(map);
             //map.setRightOfThis(passport);

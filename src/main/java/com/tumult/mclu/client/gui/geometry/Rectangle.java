@@ -13,6 +13,9 @@ public class Rectangle extends Vector4d {
 
     public boolean isMoving = false;
 
+    public Rectangle() {
+        super(new Vector4d().zero());
+    }
     public Rectangle(double x, double y, double width, double height) {
         super(x, y, width, height);
     }
@@ -22,6 +25,7 @@ public class Rectangle extends Vector4d {
     public Rectangle(Vector2d whSides) {
         this(0, 0, whSides.x, whSides.y);
     }
+
 
     public double getLeft() {
         if (leftOfThis != null && !isMoving) {

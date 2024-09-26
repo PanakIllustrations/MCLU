@@ -1,13 +1,6 @@
 package com.tumult.mclu.client.gui.icons;
 
-import com.tumult.mclu.MCLU;
-import com.tumult.mclu.client.gui.frame.DrawableRect;
-import com.tumult.mclu.events.ClientEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import org.joml.Vector2d;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.MemoryStack;
@@ -16,7 +9,7 @@ import java.nio.DoubleBuffer;
 
 public class GuiCursor {
     private static boolean isCursorVisible;
-    private static Vector2d clampedMousePos;
+    public static Vector2d clampedMousePos;
 
     public static Vector2d getMousePos() {
         updateMousePosition();

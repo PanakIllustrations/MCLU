@@ -1,4 +1,4 @@
-package com.tumult.mclu.client.gui.frame;
+package com.tumult.mclu.client.gui.icons;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -11,20 +11,30 @@ import org.joml.Vector2d;
 
 import java.awt.*;
 
-public class DrawableRect extends Rectangle {
+public class DrawableIcon extends Rectangle {
     private final ResourceLocation resourceLocation;
     private final Vector2d textureDimensions;
     private Vector2d textureOffset;
+    private Vector2d iconDimensions;
 
     private float zLevel = 0;
     private Color color = Color.WHITE;
 
-    public DrawableRect(ResourceLocation resourceLocation, Vector2d iconDimensions, Vector2d textureDimensions) {
+    public DrawableIcon(DrawableIcon icon) {
+        super(icon.iconDimensions);
+        this.resourceLocation = icon.resourceLocation;
+        this.textureDimensions = icon.textureDimensions;
+    }
+
+    public DrawableIcon(ResourceLocation resourceLocation, Vector2d iconDimensions, Vector2d textureDimensions) {
         super(iconDimensions);
+        this.iconDimensions = iconDimensions;
         this.resourceLocation = resourceLocation;
         this.textureDimensions = textureDimensions;
         this.textureOffset = new Vector2d(0, 0);
     }
+
+
     public void setColor(Color color) {
         this.color = color;
     }
