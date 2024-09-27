@@ -1,8 +1,5 @@
 package com.tumult.mclu.client.gui.icons;
 
-import com.tumult.mclu.client.gui.geometry.Rectangle;
-import net.minecraft.client.gui.GuiGraphics;
-
 public class ClickableIcon {
     /*private final GuiIcon guiIcon;
     private boolean contains = false;

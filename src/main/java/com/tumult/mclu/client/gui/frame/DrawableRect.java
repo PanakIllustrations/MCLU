@@ -2,7 +2,6 @@ package com.tumult.mclu.client.gui.frame;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.tumult.mclu.client.gui.geometry.Rectangle;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -11,7 +10,7 @@ import org.joml.Vector2d;
 
 import java.awt.*;
 
-public class DrawableRect extends Rectangle {
+public class DrawableRect {
     private final ResourceLocation resourceLocation;
     private final Vector2d textureDimensions;
     private Vector2d textureOffset;
@@ -73,7 +72,7 @@ public class DrawableRect extends Rectangle {
         innerBlit(guiGraphics.pose().last().pose(), screenXY);
     }
     private void innerBlit(Matrix4f matrix4f, Rectangle screenXY) {
-        Rectangle textureUV = new Rectangle(textureOffset.x, textureOffset.y, this.getWidth(), this.getHeight()).divide(textureDimensions);
+        Rectangle textureUV = new Rectangle(textureOffset.x, textureOffset.y, this.getWidth(), this.getHeight()).normalize(textureDimensions);
         innerBlit(matrix4f,
                 (float) screenXY.getLeft(), (float) screenXY.getRight(),
                 (float) screenXY.getTop(), (float) screenXY.getBottom(), zLevel,
