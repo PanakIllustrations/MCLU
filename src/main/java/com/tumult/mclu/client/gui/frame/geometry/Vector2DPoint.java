@@ -1,4 +1,7 @@
-package com.tumult.mclu.client.gui.geometry;
+package com.tumult.mclu.client.gui.frame.geometry;
+
+
+import org.joml.Vector4d;
 
 public class Vector2DPoint {
     public double x;
@@ -9,9 +12,11 @@ public class Vector2DPoint {
         this.x = x;
         this.y = y;
     }
+
     public Vector2DPoint(Vector2DPoint v) {
         this(v.x, v.y);
     }
+    public Vector2DPoint() { this(new Vector2DPoint(0, 0)); }
     // getters
     public double x() {
         return x;
@@ -20,6 +25,7 @@ public class Vector2DPoint {
         return y;
     }
     // setters
+    public void set(double x, double y) {this.x = x; this.y = y;}
     public void setX(double x) {
         this.x = x;
     }
@@ -55,5 +61,11 @@ public class Vector2DPoint {
     // geographic
     public Vector2DPoint mid(Vector2DPoint v) {
         return new Vector2DPoint((this.x() + v.x()) / 2, (this.y() + v.y()) / 2);
+    }
+    public boolean isNearX(double x, double threshold) {
+        return false;
+    }
+    public boolean isNearY(double y, double threshold) {
+        return false;
     }
 }

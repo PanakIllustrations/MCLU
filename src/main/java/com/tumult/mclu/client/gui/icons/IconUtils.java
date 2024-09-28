@@ -4,19 +4,12 @@ public enum IconUtils {
     INSTANCE;
 
     private static GuiIcons icon;
-    private static Clickable clickable;
+    private static UIComponent UIComponent;
 
     public static GuiIcons getIcon() {
         if (icon == null) {
             icon = new GuiIcons();
         }
         return icon;
-    }
-
-    public Clickable getClickable() {
-        if (clickable == null) {
-            clickable = new Clickable();
-        }
-        return clickable;
     }
 }

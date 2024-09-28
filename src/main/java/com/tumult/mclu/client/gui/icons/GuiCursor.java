@@ -1,13 +1,7 @@
 package com.tumult.mclu.client.gui.icons;
 
-import com.tumult.mclu.MCLU;
-import com.tumult.mclu.client.gui.frame.DrawableRect;
-import com.tumult.mclu.events.ClientEvents;
+import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import org.joml.Vector2d;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.MemoryStack;
@@ -16,9 +10,10 @@ import java.nio.DoubleBuffer;
 
 public class GuiCursor {
     private static boolean isCursorVisible;
-    private static Vector2d clampedMousePos;
+    private static Vector2DPoint clampedMousePos;
+    private static int tickCounter = 0;
 
-    public static Vector2d getMousePos() {
+    public static Vector2DPoint getMousePos() {
         updateMousePosition();
         return clampedMousePos;
     }
@@ -27,7 +22,7 @@ public class GuiCursor {
         if (isCursorVisible) {
             Minecraft mc = Minecraft.getInstance();
             long window = mc.getWindow().getWindow();
-            double guiScaleFactor = mc.getWindow().getGuiScale();
+            double guiScaleFactor = mc.getWindow().getGuiScale() / 2;
             try (MemoryStack stack = MemoryStack.stackPush()) {
                 DoubleBuffer xPos = stack.mallocDouble(1);
                 DoubleBuffer yPos = stack.mallocDouble(1);
@@ -37,13 +32,18 @@ public class GuiCursor {
                 double screenMouseX = xPos.get(0) / guiScaleFactor;
                 double screenMouseY = yPos.get(0) / guiScaleFactor;
 
-                Vector2d windowDimensions = new Vector2d(mc.getWindow().getWidth(), mc.getWindow().getHeight());
+                Vector2DPoint windowDimensions = new Vector2DPoint(mc.getWindow().getWidth(), mc.getWindow().getHeight());
 
                 // Clamp the mouse position within the window bounds
-                clampedMousePos = new Vector2d(
+                clampedMousePos = new Vector2DPoint(
                         Math.max(0, Math.min(screenMouseX, windowDimensions.x / guiScaleFactor - 1)),
                         Math.max(0, Math.min(screenMouseY, windowDimensions.y / guiScaleFactor - 1))
                 );
+                if (tickCounter > 20) {
+                    System.out.println("x: " + clampedMousePos.x + " y: " + clampedMousePos.y);
+                    tickCounter = 0;
+                }
+                tickCounter++;
             }
         }
     }

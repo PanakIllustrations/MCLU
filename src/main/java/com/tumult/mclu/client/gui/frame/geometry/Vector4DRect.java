@@ -1,8 +1,11 @@
-package com.tumult.mclu.client.gui.geometry;
+package com.tumult.mclu.client.gui.frame.geometry;
 
 public class Vector4DRect {
     public Vector2DPoint ul;
     public Vector2DPoint wh;
+
+    public boolean nearX = false;
+    public boolean nearY = false;
 
     // Constructors
     public Vector4DRect(double x, double y, double w, double h) {
@@ -55,9 +58,11 @@ public class Vector4DRect {
     public void setUl(Vector2DPoint ul) {
         this.ul = ul;
     }
+    public void setUl(double x, double y) {this.ul.set(x, y);}
     public void setWh(Vector2DPoint wh) {
         this.wh = wh;
     }
+    public void setWh(double x, double y) {this.wh.set(x, y);}
     public void setCenter(Vector2DPoint p){
         this.ul = p.sub(wh.div(2, 2));
     }
@@ -69,4 +74,25 @@ public class Vector4DRect {
     public boolean contains(double x, double y) {
         return x > left() && x < right() && y > top() && y < bottom();
     }
+    public boolean near(double mouseX, double mouseY, double threshold) {
+        nearX = Math.abs(mouseX - ul.x()) <= threshold;
+        nearY = Math.abs(mouseY - ul.y()) <= threshold;
+        return nearX && nearY;
+    }
+    /*
+    public double get(int component) throws IllegalArgumentException {
+        switch (component) {
+            case 0:
+                return this.x;
+            case 1:
+                return this.y;
+            case 2:
+                return this.z;
+            case 3:
+                return this.w;
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+     */
 }

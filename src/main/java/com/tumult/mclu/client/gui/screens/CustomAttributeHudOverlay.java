@@ -189,17 +189,11 @@ public class CustomAttributeHudOverlay {
             guiGraphics.blitNineSliced(MOD_ICONS, xPosition, yPosition, frameWidth, frameHeight + 2,
                     leftPadding, topPadding, rightPadding, bottomPadding,
                     textureWidth, textureHeight, textureX, textureY);
-            guiGraphics.blitNineSliced(MOD_ICONS, xPosition, yPosition + 20, frameWidth, frameHeight + 4,
-                    leftPadding, topPadding, rightPadding, bottomPadding,
-                    textureWidth, textureHeight, textureX, textureY);
             //color
             RenderSystem.setShaderColor(187f / 255, 19f / 255, 19f / 255, 1f);
             guiGraphics.blitNineSliced(MOD_ICONS, xPosition, yPosition, frameWidth - 10, frameHeight + 2,
                     leftPadding, topPadding, rightPadding, bottomPadding,
                     textureWidth, textureHeight, textureX, textureY);
-            guiGraphics.blitNineSliced(MOD_ICONS, xPosition, yPosition + 20, frameWidth - 40, frameHeight + 4,
-                    leftPadding, topPadding, rightPadding, bottomPadding,
-                    textureWidth, textureHeight, textureX, textureY + 7);
         }
     };
 

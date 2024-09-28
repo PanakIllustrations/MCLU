@@ -1,36 +1,46 @@
 package com.tumult.mclu.client.gui.screens;
 
-import com.tumult.mclu.client.gui.frame.DrawableRect;
+import com.tumult.mclu.client.gui.frame.geometry.DrawableRect;
+import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
+import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
 import com.tumult.mclu.client.gui.icons.GuiCursor;
 import com.tumult.mclu.client.gui.icons.IconUtils;
+import com.tumult.mclu.client.gui.icons.UIComponent;
+import com.tumult.mclu.client.gui.icons.UIWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import org.joml.Vector2d;
 
 public class GuiHUD {
-    private static Vector2d position;
+    private static final ResourceLocation resourceLocation = new ResourceLocation("mclu", "textures/gui/rounded.png");
+    private static final Vector2DPoint iconDimensions = new Vector2DPoint(9, 9);
+    private static final Vector2DPoint textureDimensions = new Vector2DPoint(16, 16);
+    private static boolean initialized = false;
+
     public static final IGuiOverlay GUI_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
 
         if (player != null) {
-            position = new Vector2d((double) screenWidth / 2 + 94, (double) screenHeight - (2 + 16));
-            DrawableRect backpack = IconUtils.getIcon().backpack;
-            DrawableRect map = IconUtils.getIcon().map;
-            DrawableRect passport = IconUtils.getIcon().passport;
+            UIComponent backpack = IconUtils.getIcon().backpack;
             DrawableRect cursor = IconUtils.getIcon().mouse_cursor;
 
-            //backpack.setRightOfThis(map);
-            //map.setRightOfThis(passport);
+            if (!initialized) {
+                backpack.setUl(new Vector2DPoint((double) screenWidth / 2 + 94, (double) screenHeight - (2 + 16)));
+                initialized = true;
+            }
 
-            backpack.draw(guiGraphics, position);
-            passport.draw(guiGraphics, position.add(18, 0));
-            map.draw(guiGraphics, position.add(16, 0));
+            backpack.update(cursor.getUl().x, cursor.getUl().y, Minecraft.getInstance().mouseHandler.isLeftPressed() ? 1 : 0);
+            backpack.draw(guiGraphics);
+            //passport.draw(guiGraphics, position.add(18, 0));
+            //map.draw(guiGraphics, position.add(16, 0));
 
             if (GuiCursor.isCursorVisible()) {
                 cursor.draw(guiGraphics, GuiCursor.getMousePos()); // Draw the cursor at the clamped mouse position
             }
+
         }
 
 
@@ -38,6 +48,7 @@ public class GuiHUD {
         // Only draw the cursor if the player exists and the cursor is set to be visible
 
     };
+
 }
 /*
 blit(ResourceLocation location, int screenPosX, int screenPosY, int zLevel, float iconPosX, float iconPosY, int iconWidth, int iconHeight, int textureWidth, int textureHeight);
