@@ -14,8 +14,8 @@ public class DrawableRect extends Vector4DRect {
     private final Vector2DPoint textureDimensions;
     private Vector2DPoint textureOffset;
 
-    private float zLevel = 0;
-    private Color color = Color.WHITE;
+    public float zLevel = 0;
+    public Color color = Color.WHITE;
 
     public DrawableRect(ResourceLocation resourceLocation, Vector2DPoint iconDimensions, Vector2DPoint textureDimensions) {
         super(new Vector2DPoint(), iconDimensions);
