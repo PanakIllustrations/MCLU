@@ -62,10 +62,13 @@ public class Vector2DPoint {
     public Vector2DPoint mid(Vector2DPoint v) {
         return new Vector2DPoint((this.x() + v.x()) / 2, (this.y() + v.y()) / 2);
     }
-    public boolean isNearX(double x, double threshold) {
-        return false;
+    public boolean isNearX(double mouseX, double threshold) {
+        return Math.abs(mouseX - this.x()) <= threshold;
     }
-    public boolean isNearY(double y, double threshold) {
-        return false;
+    public boolean isNearY(double mouseY, double threshold) {
+        return Math.abs(mouseY - this.x()) <= threshold;
+    }
+    public boolean isNear(Vector2DPoint v, double threshold) {
+        return isNearX(v.x(), threshold) && isNearY(v.y(), threshold);
     }
 }

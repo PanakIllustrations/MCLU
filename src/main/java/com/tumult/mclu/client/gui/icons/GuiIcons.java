@@ -1,16 +1,16 @@
 package com.tumult.mclu.client.gui.icons;
 
 import com.tumult.mclu.McluConstants;
-import com.tumult.mclu.client.gui.frame.geometry.DrawableRect;
+import com.tumult.mclu.client.gui.frame.core.DrawableRect;
+import com.tumult.mclu.client.gui.frame.core.UIElement;
 import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Vector2d;
 
 
 public class GuiIcons {
-    public final UIComponent backpack;
-    public final UIComponent map;
-    public final UIComponent passport;
+    public final DrawableRect backpack;
+    public final DrawableRect map;
+    public final DrawableRect passport;
     public final DrawableRect mouse_cursor;
 
     public GuiIcons() {
@@ -21,7 +21,7 @@ public class GuiIcons {
 
     }
     public UIComponent registerUIComponent(String name, int width, int height, int textureWidth, int textureHeight) {
-        return new UIComponent(
+        return new UIElement(
                 new ResourceLocation(McluConstants.MOD_ID, "/textures/gui/" + name + ".png"),
                 new Vector2DPoint(width, height),
                 new Vector2DPoint(textureWidth, textureHeight)

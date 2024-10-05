@@ -1,5 +1,6 @@
 package com.tumult.mclu.client.gui.icons;
 
+import com.tumult.mclu.client.gui.frame.core.UIElement;
 import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
 import net.minecraft.client.Minecraft;
 import org.joml.Vector2d;
@@ -7,8 +8,9 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.DoubleBuffer;
+import java.util.List;
 
-public class GuiCursor {
+public class GuiCursor extends UIElement {
     private static boolean isCursorVisible;
     private static Vector2DPoint clampedMousePos;
     private static int tickCounter = 0;

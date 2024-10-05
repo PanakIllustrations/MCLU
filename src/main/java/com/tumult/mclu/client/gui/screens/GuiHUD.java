@@ -1,25 +1,19 @@
 package com.tumult.mclu.client.gui.screens;
 
-import com.tumult.mclu.client.gui.frame.geometry.DrawableRect;
-import com.tumult.mclu.client.gui.frame.geometry.ScalableRect;
+import com.tumult.mclu.client.gui.frame.core.DrawableRect;
 import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
-import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
 import com.tumult.mclu.client.gui.icons.GuiCursor;
 import com.tumult.mclu.client.gui.icons.IconUtils;
-import com.tumult.mclu.client.gui.icons.UIComponent;
-import com.tumult.mclu.client.gui.icons.UIWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import org.joml.Vector2d;
 
 public class GuiHUD {
     private static final ResourceLocation resourceLocation = new ResourceLocation("mclu", "textures/gui/rounded.png");
     private static final Vector2DPoint iconDimensions = new Vector2DPoint(9, 9);
     private static final Vector2DPoint textureDimensions = new Vector2DPoint(16, 16);
     private static boolean initialized = false;
-    private static ScalableRect rect = new ScalableRect(50, 20, 30, 40, 3);
     public static final IGuiOverlay GUI_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
@@ -37,11 +31,11 @@ public class GuiHUD {
             double mouseX = cursor.getUl().x;
             double mouseY = cursor.getUl().y;
             boolean mousePressed = Minecraft.getInstance().mouseHandler.isLeftPressed();
-            backpack.update(mouseX, mouseY, mousePressed ? 1 : 0);
+            backpack.update(mouseX, mouseY, mousePressed ? 1 : 0, screenWidth, screenHeight);
             backpack.draw(guiGraphics);
             rect.draw(guiGraphics);
             rect.move(mouseX, mouseY, screenWidth, screenHeight, mousePressed);
-            rect.scale(mouseX, mouseY, Minecraft.getInstance().mouseHandler.isRightPressed());
+            //rect.scale(mouseX, mouseY, screenWidth, screenHeight, Minecraft.getInstance().mouseHandler.isRightPressed());
             //passport.draw(guiGraphics, position.add(18, 0));
             //map.draw(guiGraphics, position.add(16, 0));
 

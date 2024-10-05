@@ -1,12 +1,11 @@
 package com.tumult.mclu.client.gui.frame.geometry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Vector4DRect {
     public Vector2DPoint ul;
     public Vector2DPoint wh;
-
-    public boolean nearX = false;
-    public boolean nearY = false;
-
     // Constructors
     public Vector4DRect(double x, double y, double w, double h) {
         this.ul = new Vector2DPoint(x, y);
@@ -71,28 +70,7 @@ public class Vector4DRect {
         return new Vector4DRect(ul.div(scalar), wh.div(scalar));
     }
     // geographic
-    public boolean contains(double x, double y) {
-        return x > left() && x < right() && y > top() && y < bottom();
+    public boolean contains(Vector2DPoint v) {
+        return v.x() > left() && v.x() < right() && v.y() > top() && v.y() < bottom();
     }
-    public boolean near(double mouseX, double mouseY, double threshold) {
-        nearX = Math.abs(mouseX - ul.x()) <= threshold;
-        nearY = Math.abs(mouseY - ul.y()) <= threshold;
-        return nearX && nearY;
-    }
-    /*
-    public double get(int component) throws IllegalArgumentException {
-        switch (component) {
-            case 0:
-                return this.x;
-            case 1:
-                return this.y;
-            case 2:
-                return this.z;
-            case 3:
-                return this.w;
-            default:
-                throw new IllegalArgumentException();
-        }
-    }
-     */
 }
