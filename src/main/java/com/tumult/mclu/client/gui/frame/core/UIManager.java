@@ -17,14 +17,14 @@ import java.util.List;
 public class UIManager {
     public static double SCREEN_WIDTH;
     public static double SCREEN_HEIGHT;
-    Minecraft mc = Minecraft.getInstance();
+
 
     public static void init(double width, double height) {
         SCREEN_WIDTH = width;
         SCREEN_HEIGHT = height;
     }
 
-    public void drawAll(GuiGraphics guiGraphics, List<UIElement> elements) {
+    public static void drawAll(GuiGraphics guiGraphics, List<UIElement> elements) {
         elements.sort(Comparator.comparingDouble(e -> e.zLevel));
         for (UIElement element : elements) {
             if (!element.isHidden) {
@@ -32,14 +32,15 @@ public class UIManager {
             }
         }
     }
-    public void updateAll(List<UIElement> elements) {
+    public static void updateAll(List<UIElement> elements) {
         for (UIElement element : elements) {
             if (!element.isHidden) {
                 element.update(getMousePosition(), getMouseButtons());
             }
         }
     }
-    public List<Integer> getMouseButtons() {
+    public static List<Integer> getMouseButtons() {
+        Minecraft mc = Minecraft.getInstance();
         List<Integer> pressedButtons = new ArrayList<>();
         if (mc.mouseHandler.isLeftPressed()) pressedButtons.add(0);
         if (mc.mouseHandler.isRightPressed()) pressedButtons.add(1);
@@ -47,7 +48,8 @@ public class UIManager {
         return pressedButtons;
     }
 
-    public Vector2DPoint getMousePosition() {
+    public static Vector2DPoint getMousePosition() {
+        Minecraft mc = Minecraft.getInstance();
         double mouseX = mc.mouseHandler.xpos(); // or however you get the mouse X position
         double mouseY = mc.mouseHandler.ypos(); // or however you get the mouse Y position
         return new Vector2DPoint(mouseX, mouseY);

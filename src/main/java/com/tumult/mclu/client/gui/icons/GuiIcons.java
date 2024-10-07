@@ -4,13 +4,14 @@ import com.tumult.mclu.McluConstants;
 import com.tumult.mclu.client.gui.frame.core.DrawableRect;
 import com.tumult.mclu.client.gui.frame.core.UIElement;
 import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
+import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
 import net.minecraft.resources.ResourceLocation;
 
 
 public class GuiIcons {
-    public final DrawableRect backpack;
-    public final DrawableRect map;
-    public final DrawableRect passport;
+    public final UIElement backpack;
+    public final UIElement map;
+    public final UIElement passport;
     public final DrawableRect mouse_cursor;
 
     public GuiIcons() {
@@ -20,19 +21,23 @@ public class GuiIcons {
         this.mouse_cursor = registerDrawableIcon("mouse_cursor", 9, 17, 32, 32);
 
     }
-    public UIComponent registerUIComponent(String name, int width, int height, int textureWidth, int textureHeight) {
+    public UIElement registerUIComponent(String name, double width, double height, double textureWidth, double textureHeight) {
         return new UIElement(
-                new ResourceLocation(McluConstants.MOD_ID, "/textures/gui/" + name + ".png"),
-                new Vector2DPoint(width, height),
-                new Vector2DPoint(textureWidth, textureHeight)
+                getResource(name),
+                new Vector4DRect(0, 0, width, height),
+                new Vector4DRect(0, 0, textureWidth, textureHeight).normalize(new Vector2DPoint(textureWidth, textureHeight))
         );
     }
-    public DrawableRect registerDrawableIcon(String name, int width, int height, int textureWidth, int textureHeight) {
+    public DrawableRect registerDrawableIcon(String name, double width, double height, double textureWidth, double textureHeight) {
         return new DrawableRect(
-                new ResourceLocation(McluConstants.MOD_ID, "/textures/gui/" + name + ".png"),
-                new Vector2DPoint(width, height),
-                new Vector2DPoint(textureWidth, textureHeight)
+                getResource(name),
+                new Vector4DRect(0, 0, width, height),
+                new Vector4DRect(0, 0, textureWidth, textureHeight).normalize(new Vector2DPoint(textureWidth, textureHeight))
         );
+    }
+
+    private ResourceLocation getResource(String name) {
+        return new ResourceLocation(McluConstants.MOD_ID, "/textures/gui/" + name + ".png");
     }
 }
 

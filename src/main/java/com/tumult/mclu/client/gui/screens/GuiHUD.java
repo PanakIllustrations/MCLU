@@ -1,7 +1,10 @@
 package com.tumult.mclu.client.gui.screens;
 
 import com.tumult.mclu.client.gui.frame.core.DrawableRect;
+import com.tumult.mclu.client.gui.frame.core.UIElement;
+import com.tumult.mclu.client.gui.frame.core.UIManager;
 import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
+import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
 import com.tumult.mclu.client.gui.icons.GuiCursor;
 import com.tumult.mclu.client.gui.icons.IconUtils;
 import net.minecraft.client.Minecraft;
@@ -9,40 +12,31 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
+import java.awt.*;
+import java.util.ArrayList;
+
 public class GuiHUD {
-    private static final ResourceLocation resourceLocation = new ResourceLocation("mclu", "textures/gui/rounded.png");
-    private static final Vector2DPoint iconDimensions = new Vector2DPoint(9, 9);
-    private static final Vector2DPoint textureDimensions = new Vector2DPoint(16, 16);
-    private static boolean initialized = false;
+
+    private static final Color color = new Color(1, 0, 0, 0);
+    private static final GuiCursor cursor = new GuiCursor();
+    //private static final UIElement rect = new UIElement(new Vector4DRect(0, 0, 50, 30), color, 7);
     public static final IGuiOverlay GUI_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
 
+        Vector2DPoint position = UIManager.getMousePosition();
+        java.util.List<Integer> pressedButtons = UIManager.getMouseButtons();
+
+        UIElement backpack = IconUtils.getIcon().backpack;
+        DrawableRect cursor = IconUtils.getIcon().mouse_cursor;
+
         if (player != null) {
-            UIComponent backpack = IconUtils.getIcon().backpack;
-            DrawableRect cursor = IconUtils.getIcon().mouse_cursor;
-
-
-            if (!initialized) {
-                backpack.setUl(new Vector2DPoint((double) screenWidth / 2 + 94, (double) screenHeight - (2 + 16)));
-                initialized = true;
-            }
-
-            double mouseX = cursor.getUl().x;
-            double mouseY = cursor.getUl().y;
-            boolean mousePressed = Minecraft.getInstance().mouseHandler.isLeftPressed();
-            backpack.update(mouseX, mouseY, mousePressed ? 1 : 0, screenWidth, screenHeight);
+            cursor.bounds.setUl(UIManager.getMousePosition());
+            cursor.draw(guiGraphics);
+            backpack.update(position, pressedButtons);
             backpack.draw(guiGraphics);
-            rect.draw(guiGraphics);
-            rect.move(mouseX, mouseY, screenWidth, screenHeight, mousePressed);
-            //rect.scale(mouseX, mouseY, screenWidth, screenHeight, Minecraft.getInstance().mouseHandler.isRightPressed());
-            //passport.draw(guiGraphics, position.add(18, 0));
-            //map.draw(guiGraphics, position.add(16, 0));
-
-            if (GuiCursor.isCursorVisible()) {
-                cursor.draw(guiGraphics, GuiCursor.getMousePos()); // Draw the cursor at the clamped mouse position
-            }
-
+            //rect.update(position, pressedButtons);
+            //rect.draw(guiGraphics);
         }
 
 

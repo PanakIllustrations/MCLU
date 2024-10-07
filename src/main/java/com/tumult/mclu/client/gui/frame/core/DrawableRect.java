@@ -14,21 +14,30 @@ import java.awt.*;
 import java.nio.FloatBuffer;
 import java.util.List;
 
-public abstract class DrawableRect  {
+public class DrawableRect  {
     private final Vector2DPoint TOP_LEFT = new Vector2DPoint(0, -1);
     private final Vector2DPoint BOTTOM_LEFT = new Vector2DPoint(-1, 0);
     private final Vector2DPoint BOTTOM_RIGHT = new Vector2DPoint(0, 1);
     private final Vector2DPoint TOP_RIGHT = new Vector2DPoint(1, 0);
     private final int numVertices = 10;
+    float zLevel = 0;
 
-    public DrawableRect(Vector4DRect bounds, ResourceLocation resource, Vector4DRect texture) {
-        super(bounds, resource, texture);
+    protected ResourceLocation resource = null;
+    public Vector4DRect bounds, uvMap = null;
+    protected Color color = null;
+    protected float radius = 0;
+
+    public DrawableRect( ResourceLocation resource, Vector4DRect bounds,  Vector4DRect texture) {
+        this.resource = resource;
+        this.bounds = bounds;
+        this.uvMap = texture;
     }
     public DrawableRect(Vector4DRect bounds, Color color, float radius) {
-        super(bounds, color, radius);
+        this.bounds = bounds;
+        this.color = color;
+        this.radius = radius;
     }
 
-    @Override
     public void draw(GuiGraphics guiGraphics) {
         FloatBuffer vertices;
         if (this.resource != null) {
@@ -77,6 +86,16 @@ public abstract class DrawableRect  {
             x *= radial_factor;
             y *= radial_factor;
         }
+    }
+
+    public float getColor(String color) {
+        return switch (color) {
+            case "r" -> (float) (this.color.getRed() / 255);
+            case "g" -> (float) (this.color.getGreen() / 255);
+            case "b" -> (float) (this.color.getBlue() / 255);
+            case "a" -> (float) (this.color.getAlpha() / 255);
+            default -> 0;
+        };
     }
 
     public void preDrawRectColor() {

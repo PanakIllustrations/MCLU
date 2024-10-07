@@ -12,12 +12,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UIElement {
+public class UIElement extends DrawableRect {
     protected List<UIElement> children = new ArrayList<>();
-    // Geometry
-    protected Vector4DRect bounds, uvMap = null;
-    protected double zLevel = 0;
-    protected float radius = 0;
 
     // State flags
     protected boolean isHidden, isDisabled = false;
@@ -33,7 +29,6 @@ public abstract class UIElement {
     private final float cornerProximityThreshold = 5.0f;
 
     // Visual configurations
-    protected ResourceLocation resource = null;
     protected Color color = Color.WHITE;
 
     protected enum State {
@@ -46,16 +41,12 @@ public abstract class UIElement {
     protected boolean isGrabbed = false;
     protected boolean wasGrabbed = false;
 
-    public UIElement(Vector4DRect bounds, ResourceLocation resource, Vector4DRect uvMap) {
-        this.bounds = bounds;
-        this.resource = resource;
-        this.uvMap = uvMap;
+    public UIElement( ResourceLocation resource, Vector4DRect bounds, Vector4DRect uvMap) {
+        super(resource, bounds, uvMap);
     }
 
     public UIElement(Vector4DRect bounds, Color color, float radius) {
-        this.bounds = bounds;
-        this.radius = radius;
-        this.color = color;
+        super(bounds, color, radius);
     }
 
     public void setFlagState(boolean isDisabled, boolean isHidden, boolean isResizable, boolean isMovable){
@@ -86,16 +77,6 @@ public abstract class UIElement {
     }
     public void toggleHidden() {
         isHidden = !isHidden;
-    }
-
-    public float getColor(String color) {
-        return switch (color) {
-            case "r" -> (float) (this.color.getRed() / 255);
-            case "g" -> (float) (this.color.getGreen() / 255);
-            case "b" -> (float) (this.color.getBlue() / 255);
-            case "a" -> (float) (this.color.getAlpha() / 255);
-            default -> 0;
-        };
     }
 
     public void update(Vector2DPoint position, List<Integer> buttons) {
@@ -234,6 +215,4 @@ public abstract class UIElement {
         System.out.println("Component scaling started!");
     }
     protected void onResizing() { System.out.println("Component is resizing!"); }
-    public abstract void draw(GuiGraphics guiGraphics);
-
 }
