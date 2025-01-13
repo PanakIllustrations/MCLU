@@ -1,11 +1,8 @@
 package com.tumult.mclu.client.gui.frame.core;
 
-import com.tumult.mclu.McluConstants;
 import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
-import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.MemoryStack;
 
@@ -18,40 +15,66 @@ public class UIManager {
     public static double SCREEN_WIDTH;
     public static double SCREEN_HEIGHT;
 
+    public static List<Integer> pressedButtons = new ArrayList<>();
+    private static Vector2DPoint clampedMousePos = new Vector2DPoint();
+    private static boolean isCursorVisible;
+
+    protected static final int LEFT_BUTTON = 0;
+    protected static final int RIGHT_BUTTON = 1;
+    protected static final int MIDDLE_BUTTON = 2;
+
+    private static int tickCounter = 0;
 
     public static void init(double width, double height) {
         SCREEN_WIDTH = width;
         SCREEN_HEIGHT = height;
     }
 
-    public static void drawAll(GuiGraphics guiGraphics, List<UIElement> elements) {
-        elements.sort(Comparator.comparingDouble(e -> e.zLevel));
-        for (UIElement element : elements) {
-            if (!element.isHidden) {
-                element.draw(guiGraphics);
-            }
-        }
-    }
-    public static void updateAll(List<UIElement> elements) {
-        for (UIElement element : elements) {
-            if (!element.isHidden) {
-                element.update(getMousePosition(), getMouseButtons());
-            }
-        }
-    }
-    public static List<Integer> getMouseButtons() {
-        Minecraft mc = Minecraft.getInstance();
-        List<Integer> pressedButtons = new ArrayList<>();
-        if (mc.mouseHandler.isLeftPressed()) pressedButtons.add(0);
-        if (mc.mouseHandler.isRightPressed()) pressedButtons.add(1);
-        if (mc.mouseHandler.isMiddlePressed()) pressedButtons.add(2);
-        return pressedButtons;
+    public static void toggleCursor() {
+        isCursorVisible = !isCursorVisible;
     }
 
-    public static Vector2DPoint getMousePosition() {
+    public static boolean isCursorVisible() {
+        return isCursorVisible;
+    }
+
+    public static void updateMouseButtons() {
         Minecraft mc = Minecraft.getInstance();
-        double mouseX = mc.mouseHandler.xpos(); // or however you get the mouse X position
-        double mouseY = mc.mouseHandler.ypos(); // or however you get the mouse Y position
-        return new Vector2DPoint(mouseX, mouseY);
+
+        pressedButtons.clear();
+        if (mc.mouseHandler.isLeftPressed()) pressedButtons.add(LEFT_BUTTON);
+        if (mc.mouseHandler.isRightPressed()) pressedButtons.add(RIGHT_BUTTON);
+        if (mc.mouseHandler.isMiddlePressed()) pressedButtons.add(MIDDLE_BUTTON);
+    }
+
+    public static Vector2DPoint getMousePos() {
+        if (isCursorVisible) {
+            Minecraft mc = Minecraft.getInstance();
+            long window = mc.getWindow().getWindow();
+            double guiScaleFactor = mc.getWindow().getGuiScale() / 2;
+            try (MemoryStack stack = MemoryStack.stackPush()) {
+                DoubleBuffer xPos = stack.mallocDouble(1);
+                DoubleBuffer yPos = stack.mallocDouble(1);
+                GLFW.glfwGetCursorPos(window, xPos, yPos);
+
+                // Update screenMousePos and clampedMousePos based on current mouse position
+                double screenMouseX = xPos.get(0) / guiScaleFactor;
+                double screenMouseY = yPos.get(0) / guiScaleFactor;
+
+                Vector2DPoint windowDimensions = new Vector2DPoint(mc.getWindow().getWidth(), mc.getWindow().getHeight());
+
+                // Clamp the mouse position within the window bounds
+                clampedMousePos = new Vector2DPoint(
+                        Math.max(0, Math.min(screenMouseX, windowDimensions.x / guiScaleFactor - 1)),
+                        Math.max(0, Math.min(screenMouseY, windowDimensions.y / guiScaleFactor - 1))
+                );
+                if (tickCounter > 20) {
+                    System.out.println("x: " + clampedMousePos.x + " y: " + clampedMousePos.y);
+                    tickCounter = 0;
+                }
+                tickCounter++;
+            }
+        }
+        return clampedMousePos;
     }
 }

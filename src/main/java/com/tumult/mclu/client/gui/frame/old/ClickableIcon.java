@@ -1,4 +1,4 @@
-package com.tumult.mclu.client.gui.icons;
+package com.tumult.mclu.client.gui.frame.old;
 
 public class ClickableIcon {
     /*private final GuiIcon guiIcon;
