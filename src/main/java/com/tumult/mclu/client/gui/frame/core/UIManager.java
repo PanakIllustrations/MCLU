@@ -38,13 +38,14 @@ public class UIManager {
         return isCursorVisible;
     }
 
-    public static void updateMouseButtons() {
+    public static List<Integer> getMouseButtons() {
         Minecraft mc = Minecraft.getInstance();
 
         pressedButtons.clear();
         if (mc.mouseHandler.isLeftPressed()) pressedButtons.add(LEFT_BUTTON);
         if (mc.mouseHandler.isRightPressed()) pressedButtons.add(RIGHT_BUTTON);
         if (mc.mouseHandler.isMiddlePressed()) pressedButtons.add(MIDDLE_BUTTON);
+        return pressedButtons;
     }
 
     public static Vector2DPoint getMousePos() {

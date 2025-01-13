@@ -12,7 +12,7 @@ import org.joml.Matrix4f;
 import java.awt.*;
 import java.nio.FloatBuffer;
 
-public class DrawableSprite {
+public class DrawableSprite extends Node {
     private final ResourceLocation texture;
     private final Vector4DRect textureUV;
     protected Vector4DRect rectBounds;
@@ -28,12 +28,18 @@ public class DrawableSprite {
         this.rectBounds.setUl(ul);
     }
     public void draw(GuiGraphics guiGraphics, Vector2DPoint screenXY) {
+        if (!this.isVisible) {
+            return;
+        }
         setUL(screenXY);
         preDrawSprite();
         draw(guiGraphics);
     }
 
     public void draw(GuiGraphics guiGraphics) {
+        if (!this.isVisible) {
+            return;
+        }
         preDrawSprite();
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(0f, 0f, zLevel);

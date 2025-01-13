@@ -2,6 +2,7 @@ package com.tumult.mclu.client.gui.screens;
 
 import com.tumult.mclu.client.gui.frame.core.DrawableRect;
 import com.tumult.mclu.client.gui.frame.core.DrawableSprite;
+import com.tumult.mclu.client.gui.frame.core.EventHandler;
 import com.tumult.mclu.client.gui.frame.core.UIManager;
 import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
 import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
@@ -11,6 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 import java.awt.*;
+
+import static com.tumult.mclu.client.gui.frame.core.UIManager.getMouseButtons;
 
 public class GuiHUD {
 
@@ -23,10 +26,14 @@ public class GuiHUD {
 
         final DrawableSprite backpack = IconUtils.getIcon().backpack;
         final DrawableSprite cursor = IconUtils.getIcon().mouse_cursor;
-        final DrawableRect rect = new DrawableRect(Color.ORANGE, new Vector4DRect(30, 30, 10, 50), 5);
+        final EventHandler rect = new EventHandler(Color.ORANGE, new Vector4DRect(30, 30, 10, 50), 5);
 
         if (player != null) {
-            cursor.draw(guiGraphics, UIManager.getMousePos());
+            if (UIManager.isCursorVisible()) {
+                Vector2DPoint cursorPos = new Vector2DPoint(UIManager.getMousePos());
+                cursor.draw(guiGraphics,cursorPos);
+                rect.update(cursorPos, getMouseButtons());
+            }
             backpack.draw(guiGraphics, new Vector2DPoint(30, 10));
             rect.draw(guiGraphics);
         }

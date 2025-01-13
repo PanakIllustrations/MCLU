@@ -12,7 +12,7 @@ import org.lwjgl.BufferUtils;
 import java.awt.*;
 import java.nio.FloatBuffer;
 
-public class DrawableRect {
+public class DrawableRect extends Node {
 
     private final Vector2DPoint TOP_LEFT = new Vector2DPoint(0, -1);
     private final Vector2DPoint BOTTOM_LEFT = new Vector2DPoint(-1, 0);
@@ -34,6 +34,9 @@ public class DrawableRect {
         this.rectBounds.setUl(ul);
     }
     public void draw(GuiGraphics guiGraphics) {
+        if (!this.isVisible) {
+            return;
+        }
         FloatBuffer vertices;
         vertices = preDrawRect(BufferUtils.createFloatBuffer(numVertices * 4 * 3)); // curve resolution * 4 corners * 3 dimensions
         preDrawRectColor();
