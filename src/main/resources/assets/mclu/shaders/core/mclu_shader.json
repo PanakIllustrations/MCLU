@@ -1,0 +1,4 @@
+{
+  "vertex": "mclu:vert_shader",
+  "fragment": "mclu:frag_shader"
+}

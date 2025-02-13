@@ -1,16 +1,5 @@
 package com.tumult.mclu.client.gui.frame.old;
 
-import com.tumult.mclu.client.gui.frame.core.DrawableRect;
-import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
-import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.client.sounds.SoundManager;
-import net.minecraft.sounds.SoundEvents;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class UIElementOld {
 //
 //    protected List<UIElementOld> children = new ArrayList<>();

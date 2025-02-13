@@ -1,16 +1,15 @@
-package com.tumult.mclu.client.gui.frame.core;
+package com.tumult.mclu.client.gui.frame.old;
 
-import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
-import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
-import com.tumult.mclu.client.gui.frame.core.UIManager;
+import com.tumult.mclu.client.gui.frame.core.geometry.Rect;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundEvents;
+import org.joml.Vector2d;
+import org.joml.Vector2f;
 
-import java.awt.*;
 import java.util.List;
 
-public class EventHandler extends DrawableRect {
+public class EventHandler extends Rect {
 
     private enum State {
         IDLE,     // Button is not being interacted with
@@ -24,21 +23,21 @@ public class EventHandler extends DrawableRect {
         LONG      // click and hold
     }
 
-    public EventHandler(Color color, Vector4DRect rect, float radius ) {
-        super(color, rect, radius);
+    public EventHandler(Rect rect) {
+        super(rect);
     }
 
     private State currentState = State.IDLE;
     private ClickDuration clickDuration = ClickDuration.NONE;
     private long clickStartTime;
 
-    public void update(Vector2DPoint mousePosition, List<Integer> mouseButtons) {
+    public void update(float[] mousePosition, List<Integer> mouseButtons) {
         updateState(mousePosition, mouseButtons);
         handleState();
     }
 
-    private void updateState(Vector2DPoint mousePosition,  List<Integer> mouseButtons) {
-        if (this.rectBounds.contains(mousePosition)) {
+    private void updateState(float[] mousePosition, List<Integer> mouseButtons) {
+        if (this.contains(mousePosition)) {
             if (mouseButtons.contains(UIManager.LEFT_BUTTON)) {
                 this.currentState = State.CLICKED;
             } else {

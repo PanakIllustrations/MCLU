@@ -1,4 +1,4 @@
-package com.tumult.mclu.client.gui.icons;
+package com.tumult.mclu.client.gui.frame.core;
 
 public enum IconUtils { // thread-safe singleton
     INSTANCE;

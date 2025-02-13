@@ -1,13 +1,11 @@
 package com.tumult.mclu.events;
 
 import com.tumult.mclu.McluConstants;
-import com.tumult.mclu.client.gui.frame.core.DrawableSprite;
-import com.tumult.mclu.client.gui.frame.core.UIManager;
-import com.tumult.mclu.client.gui.icons.IconUtils;
+import com.tumult.mclu.client.gui.frame.old.UIManager;
 import com.tumult.mclu.client.gui.screens.CustomAttributeHud;
 import com.tumult.mclu.client.gui.screens.CustomAttributeHudOverlay;
 import com.tumult.mclu.client.gui.Keybindings;
-import com.tumult.mclu.client.gui.screens.GuiHUD;
+import com.tumult.mclu.client.gui.frame.core.GuiHUD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -17,6 +15,8 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.awt.*;
 
 public class ClientEvents {
     private static boolean wasKeyPressedLastTick = false;
@@ -29,18 +29,19 @@ public class ClientEvents {
             ResourceLocation overlayId = event.getOverlay().id();
             // Compare the overlay with vanilla overlays like health, armor, and food
             if (overlayId.equals(VanillaGuiOverlay.PLAYER_HEALTH.id()) ||
-                overlayId.equals(VanillaGuiOverlay.ARMOR_LEVEL.id()) ||
-                overlayId.equals(VanillaGuiOverlay.FOOD_LEVEL.id()) ||
-                overlayId.equals(VanillaGuiOverlay.AIR_LEVEL.id()) ||
-                overlayId.equals(VanillaGuiOverlay.CHAT_PANEL.id()) ||
-                overlayId.equals(VanillaGuiOverlay.HELMET.id()) ||
-                overlayId.equals(VanillaGuiOverlay.JUMP_BAR.id())) {
+                    overlayId.equals(VanillaGuiOverlay.ARMOR_LEVEL.id()) ||
+                    overlayId.equals(VanillaGuiOverlay.FOOD_LEVEL.id()) ||
+                    overlayId.equals(VanillaGuiOverlay.AIR_LEVEL.id()) ||
+                    overlayId.equals(VanillaGuiOverlay.CHAT_PANEL.id()) ||
+                    overlayId.equals(VanillaGuiOverlay.HELMET.id()) ||
+                    overlayId.equals(VanillaGuiOverlay.JUMP_BAR.id())) {
                 event.setCanceled(true); // Cancel the event to prevent rendering
             }
             if (overlayId.equals(VanillaGuiOverlay.HOTBAR.id())) {
 
             }
         }
+
         private static float yaw = 0.0F;
         private static float pitch = 0.0F;
 
@@ -51,7 +52,7 @@ public class ClientEvents {
             if (player != null) {
                 boolean isKeyPressed = Keybindings.INSTANCE.RELEASE_MOUSE.isDown();
 
-                if (isKeyPressed && !wasKeyPressedLastTick){
+                if (isKeyPressed && !wasKeyPressedLastTick) {
                     Keybindings.INSTANCE.RELEASE_MOUSE.consumeClick();
                     UIManager.toggleCursor();
                 }
@@ -74,23 +75,40 @@ public class ClientEvents {
                 event.getCamera().getEntity().setXRot(yaw);
             }
         }
-    }
 
     @Mod.EventBusSubscriber(modid = McluConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
             event.registerAboveAll("gui_hud", GuiHUD.GUI_HUD);
-            event.registerAboveAll("armor", CustomAttributeHudOverlay.CUSTOM_ARMOR_HUD);
-            //event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
-            event.registerAboveAll("health", CustomAttributeHud.CUSTOM_HUD);
-            event.registerAboveAll("imagination", CustomAttributeHudOverlay.IMAGINATION_HUD);
-            event.registerAboveAll("u_level", CustomAttributeHudOverlay.U_LEVEL_HUD);
+//            event.registerAboveAll("armor", CustomAttributeHudOverlay.CUSTOM_ARMOR_HUD);
+//            //event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
+//            event.registerAboveAll("health", CustomAttributeHud.CUSTOM_HUD);
+//            event.registerAboveAll("imagination", CustomAttributeHudOverlay.IMAGINATION_HUD);
+//            event.registerAboveAll("u_level", CustomAttributeHudOverlay.U_LEVEL_HUD);
         }
 
         @SubscribeEvent
         public static void registerKeys(RegisterKeyMappingsEvent event) {
             event.register(Keybindings.INSTANCE.RELEASE_MOUSE);
+        }
+
+//        private static ShaderInstance mcluShaderInstance;
+//        @SubscribeEvent
+//        public static void registerShaders(RegisterShadersEvent event) throws IOException {
+//            event.registerShader(
+//                    new ShaderInstance(
+//                        event.getResourceProvider(),
+//                        new ResourceLocation(McluConstants.MOD_ID, "mclu_shader"),
+//                        DefaultVertexFormat.POSITION_COLOR
+//                    ),
+//                    shader -> mcluShaderInstance = shader
+//            );
+//        }
+//
+//        public static ShaderInstance getShaderInstance() {
+//            return mcluShaderInstance;
+//        }
         }
     }
 }

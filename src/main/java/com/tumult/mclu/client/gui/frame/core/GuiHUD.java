@@ -1,41 +1,45 @@
-package com.tumult.mclu.client.gui.screens;
+package com.tumult.mclu.client.gui.frame.core;
 
-import com.tumult.mclu.client.gui.frame.core.DrawableRect;
-import com.tumult.mclu.client.gui.frame.core.DrawableSprite;
-import com.tumult.mclu.client.gui.frame.core.EventHandler;
-import com.tumult.mclu.client.gui.frame.core.UIManager;
-import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
-import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
-import com.tumult.mclu.client.gui.icons.IconUtils;
+import com.tumult.mclu.client.gui.frame.core.geometry.IRect;
+import com.tumult.mclu.client.gui.frame.old.UIManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-
-import java.awt.*;
-
-import static com.tumult.mclu.client.gui.frame.core.UIManager.getMouseButtons;
+import org.joml.Vector2f;
 
 public class GuiHUD {
 
+    private static final GuiSprite<IRect> mouse_cursor = IconUtils.getIcon().mouse_cursor;
+    private static final GuiSprite<IRect> backpack = IconUtils.getIcon().backpack;
+    private static final GuiSprite<IRect> map = IconUtils.getIcon().map;
+    private static final GuiSprite<IRect> passport = IconUtils.getIcon().passport;
+    private static final boolean setup = false;
 
     public static final IGuiOverlay GUI_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
 
         UIManager.init(screenWidth, screenHeight);
-
-        final DrawableSprite backpack = IconUtils.getIcon().backpack;
-        final DrawableSprite cursor = IconUtils.getIcon().mouse_cursor;
-        final EventHandler rect = new EventHandler(Color.ORANGE, new Vector4DRect(30, 30, 10, 50), 5);
+        if (!setup) {
+            backpack.rect.setUL((float) screenWidth / 2 + 92,(float) screenHeight - 40);
+        }
 
         if (player != null) {
+
+            backpack.render(guiGraphics);
+
             if (UIManager.isCursorVisible()) {
-                Vector2DPoint cursorPos = new Vector2DPoint(UIManager.getMousePos());
-                cursor.draw(guiGraphics,cursorPos);
-                rect.update(cursorPos, getMouseButtons());
+                float[] cursorPos = UIManager.getMousePos();
+                boolean[] buttons = UIManager.getMouseButtons();
+                mouse_cursor.rect.setUL(cursorPos);
+                mouse_cursor.render(guiGraphics);
+                backpack.rect.dragTo(cursorPos, buttons[0]);
             }
-            backpack.draw(guiGraphics, new Vector2DPoint(30, 10));
-            rect.draw(guiGraphics);
+            //roundRect.render(guiGraphics);
+            //rect.render(guiGraphics);
+
+            map.render(guiGraphics);
+            passport.render(guiGraphics);
         }
     };
 }
