@@ -7,13 +7,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import org.joml.Vector2f;
 
+
 public class GuiHUD {
 
     private static final GuiSprite<IRect> mouse_cursor = IconUtils.getIcon().mouse_cursor;
     private static final GuiSprite<IRect> backpack = IconUtils.getIcon().backpack;
     private static final GuiSprite<IRect> map = IconUtils.getIcon().map;
     private static final GuiSprite<IRect> passport = IconUtils.getIcon().passport;
-    private static final boolean setup = false;
+    private static boolean setup = false;
 
     public static final IGuiOverlay GUI_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Minecraft mc = Minecraft.getInstance();
@@ -22,6 +23,7 @@ public class GuiHUD {
         UIManager.init(screenWidth, screenHeight);
         if (!setup) {
             backpack.rect.setUL((float) screenWidth / 2 + 92,(float) screenHeight - 40);
+            setup = true;
         }
 
         if (player != null) {
@@ -34,6 +36,7 @@ public class GuiHUD {
                 mouse_cursor.rect.setUL(cursorPos);
                 mouse_cursor.render(guiGraphics);
                 backpack.rect.dragTo(cursorPos, buttons[0]);
+
             }
             //roundRect.render(guiGraphics);
             //rect.render(guiGraphics);

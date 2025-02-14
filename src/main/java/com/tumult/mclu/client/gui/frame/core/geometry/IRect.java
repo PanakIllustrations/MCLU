@@ -9,7 +9,6 @@ public interface IRect {
     float height();
     float zLevel();
     int resolution();
-
     VertexFormat.Mode format();
 
     void setUL(float x, float y);
@@ -53,10 +52,7 @@ public interface IRect {
     default void moveBy(float x, float y) {
         setUL(left() + x, top() + y);
     }
-    default void dragTo(float x, float y, boolean button) {
-        if (!button || !contains(x, y)) return;
-        moveBy(x - left(), y - top());
-    }
+    void dragTo(float x, float y, boolean button);
     default boolean contains(float x, float y) {
         return x >= left() && y >= top() && x <= right() && y <= bottom();
     }

@@ -4,6 +4,9 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 
 public class Rect implements IRect {
     private float x, y, w, h, z;
+    private boolean isDragging = false;
+    private float initialClickX = 0;
+    private float initialClickY = 0;
 
     public Rect(float w, float h) {this(0,0,w,h,1);}
     public Rect(float x, float y, float w, float h, float z) {
@@ -55,6 +58,24 @@ public class Rect implements IRect {
     @Override public void setUL(float[] in) {x = in[0]; y = in[1];}
     @Override public void setWH(float[] in) {w = in[0]; h = in[1];}
     @Override public void setZ(float z) {this.z = z;}
+
+    @Override
+    public void dragTo(float x, float y, boolean button){
+        if (button && contains(x, y) && !isDragging) {
+            isDragging = true;
+            initialClickX = x - left();
+            initialClickY = y - top();
+        }
+        if (isDragging) {
+            moveBy(
+                x - initialClickX - left(),
+                y - initialClickY - top()
+            );
+        }
+        if (!button && isDragging) {
+            isDragging = false;
+        }
+    }
 
     @Override
     public void setUL(float x, float y) {
