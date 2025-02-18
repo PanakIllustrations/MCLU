@@ -1,14 +1,14 @@
-package com.tumult.mclu.client.gui.frame.old;
+package com.tumult.mclu.client.gui.frame.core.review;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
-import org.joml.Vector2d;
-import org.joml.Vector2f;
+import net.minecraft.client.renderer.ShaderInstance;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.DoubleBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UIManager {
     public static double SCREEN_WIDTH;
@@ -23,6 +23,7 @@ public class UIManager {
     protected static final int MIDDLE_BUTTON = 2;
 
     private static int tickCounter = 0;
+    private static ShaderInstance shader;
 
     public static void init(double width, double height) {
         SCREEN_WIDTH = width;
@@ -74,5 +75,22 @@ public class UIManager {
             }
         }
         return clampedMousePos;
+    }
+
+    public static void preRender() {
+        ShaderInstance shader = RenderSystem.getShader();
+        RenderSystem.enableBlend();
+        RenderSystem.enableDepthTest();
+    }
+
+    public static void postRender() {
+        RenderSystem.disableBlend();
+        RenderSystem.enableDepthTest();
+        RenderSystem.setShader(() -> shader);
+    }
+
+    public static void render() {
+        BufferBuilder builder = Tesselator.getInstance().getBuilder();
+
     }
 }

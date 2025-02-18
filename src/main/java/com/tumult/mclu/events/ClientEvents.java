@@ -1,11 +1,9 @@
 package com.tumult.mclu.events;
 
 import com.tumult.mclu.McluConstants;
-import com.tumult.mclu.client.gui.frame.old.UIManager;
-import com.tumult.mclu.client.gui.screens.CustomAttributeHud;
-import com.tumult.mclu.client.gui.screens.CustomAttributeHudOverlay;
+import com.tumult.mclu.client.gui.frame.core.review.UIManager;
 import com.tumult.mclu.client.gui.Keybindings;
-import com.tumult.mclu.client.gui.frame.core.GuiHUD;
+import com.tumult.mclu.client.gui.frame.core.review.GuiHUD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -15,8 +13,6 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.awt.*;
 
 public class ClientEvents {
     private static boolean wasKeyPressedLastTick = false;

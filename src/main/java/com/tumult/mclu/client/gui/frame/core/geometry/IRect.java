@@ -18,12 +18,12 @@ public interface IRect {
 
     void copy(float[] out);
 
-    default void normalize(float[] out, float divisor) {
+    default void normalize(float divisor, float[] out) {
         float invDiv = 1.0f / divisor;
         out[0] = left() * invDiv;
         out[1] = top() * invDiv;
-        out[2] = width() * invDiv;
-        out[3] = height() * invDiv;
+        out[2] = right() * invDiv;
+        out[3] = bottom() * invDiv;
         out[4] = zLevel();
     }
     default void getUL(float[] out) {
@@ -45,18 +45,15 @@ public interface IRect {
         out[0] = centerX();
         out[1] = centerY();
     }
-
     default void setCenter(float x, float y) {
         setUL(x - (width() * 0.5f), y - (height() * 0.5f));
     }
     default void moveBy(float x, float y) {
         setUL(left() + x, top() + y);
     }
-    void dragTo(float x, float y, boolean button);
     default boolean contains(float x, float y) {
         return x >= left() && y >= top() && x <= right() && y <= bottom();
     }
-    default int len(){return resolution() * 8;}
     default float right() {return left() + width();}
     default float bottom() {return top() + height();}
     default float centerX() {return left() + (width() * 0.5f);}
@@ -68,7 +65,6 @@ public interface IRect {
 
     default void setCenter(float[] v) {setCenter(v[0], v[1]);}
     default void moveBy(float[] v) {moveBy(v[0], v[1]);}
-    default void dragTo(float[] v, boolean button) {dragTo(v[0], v[1], button);}
     default boolean contains(float[] v) {return contains(v[0], v[1]);}
 
 }

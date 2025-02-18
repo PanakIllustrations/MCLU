@@ -4,8 +4,6 @@ import com.tumult.mclu.client.gui.frame.core.geometry.Rect;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundEvents;
-import org.joml.Vector2d;
-import org.joml.Vector2f;
 
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class EventHandler extends Rect {
 
     private void updateState(float[] mousePosition, List<Integer> mouseButtons) {
         if (this.contains(mousePosition)) {
-            if (mouseButtons.contains(UIManager.LEFT_BUTTON)) {
+            if (mouseButtons.contains(1)) {
                 this.currentState = State.CLICKED;
             } else {
                 this.currentState = State.HOVERED;

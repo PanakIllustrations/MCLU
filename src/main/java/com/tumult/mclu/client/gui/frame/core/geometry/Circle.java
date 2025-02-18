@@ -1,8 +1,6 @@
 package com.tumult.mclu.client.gui.frame.core.geometry;
 
-import com.mojang.blaze3d.vertex.VertexFormat;
-
-public class Circle<T extends IRect> extends Stadium {
+public class Circle<T extends IRect> extends RoundRect {
     Circle(float x, float y, float z, float r) {
         super(x, y, r * 2f, r * 2f, z, r, r);
     }
