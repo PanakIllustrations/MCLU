@@ -13,11 +13,11 @@ private static boolean setup = false;
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
 
-        final Node backpack = Registry.icon.get().backpack;
-        final Node mouse_cursor = Registry.icon.get().mouse_cursor;
-        final Node passport = Registry.icon.get().passport;
-        final Node map = Registry.icon.get().map;
-        final Node hud = Registry.icon.get().hud;
+        final GuiSprite backpack = Registry.icon.get().backpack;
+        final GuiSprite mouse_cursor = Registry.icon.get().mouse_cursor;
+        final GuiSprite passport = Registry.icon.get().passport;
+        final GuiSprite map = Registry.icon.get().map;
+        final GuiShape rect = Registry.icon.get().rect;
 
         UIManager.init(screenWidth, screenHeight);
         if (!setup) {
@@ -32,11 +32,16 @@ private static boolean setup = false;
                 boolean[] buttons = UIManager.getMouseButtons();
                 mouse_cursor.rect.setUL(cursorPos);
                 mouse_cursor.render();
-                backpack.dragTo(cursorPos, buttons[0]);
-                passport.dragTo(cursorPos, buttons[0]);
-                map.dragTo(cursorPos, buttons[0]);
+
+                passport.handleDragging(cursorPos, buttons);
+                backpack.handleDragging(cursorPos, buttons);
+                map.handleDragging(cursorPos, buttons);
+                rect.handleDragging(cursorPos, buttons);
             }
-            hud.render();
+            backpack.render();
+            passport.render();
+            map.render();
+            rect.render();
         }
     };
 }

@@ -1,67 +1,50 @@
 package com.tumult.mclu.client.gui.frame.core.geometry;
 
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.tumult.mclu.client.gui.frame.core.BufferProvider;
 
 public class RoundRect extends Rect implements IRect {
-    private float rx, ry;
-    private int res = 10;
+    protected float r;
+    protected int res = 10;
 
-    public RoundRect(float x, float y, float w, float h, float z, float rx, float ry) {
+    public RoundRect(float x, float y, float w, float h, float z, float r) {
         super(x, y, w, h, z);
-        this.rx = rx;
-        this.ry = ry;
+        this.r = r;
     }
-    RoundRect(float[] in) {
-        this(in[0], in[1], in[2], in[3], in[4], in[5], in[6]);
-    }
-    RoundRect(RoundRect st) {
-        super(st);
-        this.rx = st.rx;
-        this.ry = st.ry;
-        this.res = st.res;
-    }
-    public float radiusX() {return rx;}
-    public float radiusY() {return ry;}
-    public void setRX(float rx) {this.rx = rx;}
-    public void setRY(float ry) {this.ry = ry;}
-    public void setResolution(int res) {this.res = res;}
+
+    public float radius(){return r;}
+    public void setR(float r) {this.r = r;}
+    public void setRes(int res) {this.res = res;}
 
     @Override
-    public int resolution(){return res;}
+    public int res(){return res;}
+    @Override
+    public VertexFormat.Mode mode() {return VertexFormat.Mode.TRIANGLE_FAN;}
 
     @Override
-    public VertexFormat.Mode format() {return VertexFormat.Mode.TRIANGLE_FAN;}
-
-    @Override
-    public void copy(float[] out){
-        out[0] = left();
-        out[1] = top();
-        out[2] = width();
-        out[3] = height();
-        out[4] = zLevel();
-        out[5] = radiusX();
-        out[6] = radiusY();
+    public void copyTo(float[] out){
+        out[X] = x;
+        out[Y] = y;
+        out[W] = w;
+        out[H] = h;
+        out[Z] = z;
+        out[R] = r;
     }
-    public void copyInner(float[] out){
-        out[5] = radiusX();
-        out[6] = radiusY();
-
-        out[0] = left() + out[5];
-        out[1] = top() + out[6];
-        out[2] = width() - out[5];
-        out[3] = height() - out[6];
-        out[4] = zLevel();
+    public void copyInnerTo(float[] out){
+        out[0] = r; out[1] = r; // top left
+        out[2] = r; out[3] = height() - r; // bottom left
+        out[4] = width() - r; out[5] = height() - r; // bottom right
+        out[6] = width() - r; out[7] = r; // top right
     }
 
     @Override
     public void normalize(float divisor, float[] out) {
         float invDiv = 1.0f / divisor;
-        out[0] = left() * invDiv;
-        out[1] = top() * invDiv;
-        out[2] = width() * invDiv;
-        out[3] = height() * invDiv;
-        out[4] = zLevel();
-        out[5] = radiusX() * invDiv * (out[2] / width());
-        out[6] = radiusY() * invDiv * (out[3] / height());
+        out[X] = x * invDiv;
+        out[Y] = y * invDiv;
+        out[W] = w * invDiv;
+        out[H] = h * invDiv;
+        out[Z] = z;
+        out[R] = r * invDiv * (out[2] / w);
     }
 }

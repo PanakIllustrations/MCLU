@@ -2,20 +2,20 @@ package com.tumult.mclu.client.gui.frame.core.geometry;
 
 public class Circle<T extends IRect> extends RoundRect {
     Circle(float x, float y, float z, float r) {
-        super(x, y, r * 2f, r * 2f, z, r, r);
+        super(x, y, r * 2f, r * 2f, z, r);
     }
     Circle(float[] in) {
         this(in[0], in[1], in[2], in[3]);
     }
-    @Override public void copy(float[] out){
+    @Override public void copyTo(float[] out){
         out[0] = left();
         out[1] = top();
         out[2] = zLevel();
-        out[3] = radiusX();
+        out[3] = radius();
     }
     @Override
     public boolean contains(float x, float y) {
-        return squareDistanceToCenter(x, y) <= radiusX() * radiusX();
+        return squareDistanceToCenter(x, y) <= radius() * radius();
     }
 
     public float squareDistanceToCenter(float x, float y) {

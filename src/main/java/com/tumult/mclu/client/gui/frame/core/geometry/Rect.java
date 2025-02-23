@@ -3,8 +3,8 @@ package com.tumult.mclu.client.gui.frame.core.geometry;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
 public class Rect implements IRect {
-    private float x, y, w, h, z;
-
+    protected float x, y, w, h, z;
+    public Rect(Rect r){this(r.x, r.y, r.w, r.h, r.z);}
     public Rect(float w, float h, float z) {this(0,0,w,h,z);}
     public Rect(float x, float y, float w, float h, float z) {
         this.x = x;
@@ -13,32 +13,23 @@ public class Rect implements IRect {
         this.h = h;
         this.z = z;
     }
-    public Rect(Rect r){
-        this(
-            r.left(),
-            r.top(),
-            r.width(),
-            r.height(),
-            r.zLevel()
-        );
-    }
 
     public Rect(float[] in){
         this(
-            in[0],
-            in[1],
-            in[2],
-            in[3],
-            in[4]
+            in[X],
+            in[Y],
+            in[W],
+            in[H],
+            in[Z]
         );
     }
     @Override
-    public void copy(float[] out) {
-        out[0] = left();
-        out[1] = top();
-        out[2] = width();
-        out[3] = height();
-        out[4] = zLevel();
+    public void copyTo(float[] out) {
+        out[X] = x;
+        out[Y] = y;
+        out[W] = w;
+        out[H] = h;
+        out[Z] = z;
     }
     // basic rect parameters
     @Override public float left() {return x;}
@@ -47,13 +38,10 @@ public class Rect implements IRect {
     @Override public float width() {return w;}
     @Override public float height() {return h;}
     @Override public float zLevel() {return z;}
-    @Override public int resolution() {return 1;}
-    @Override public VertexFormat.Mode format() {return VertexFormat.Mode.QUADS;}
+    @Override public int res() {return 1;}
+    @Override public VertexFormat.Mode mode() {return VertexFormat.Mode.QUADS;}
     // position and dimensions
-    @Override public void getUL(float[] out) {out[0] = x; out[1] = y;}
-    @Override public void getWH(float[] out) {out[0] = w; out[1] = h;}
-    @Override public void setUL(float[] in) {x = in[0]; y = in[1];}
-    @Override public void setWH(float[] in) {w = in[0]; h = in[1];}
+    @Override public void setUL(float[] in) {setUL(in[X],in[Y]);}
     @Override public void setZ(float z) {this.z = z;}
 
     @Override
@@ -70,6 +58,9 @@ public class Rect implements IRect {
     public void setBR(float b, float r) {
         x = b - w;
         y = r - h;
+    }
+    public Rect copy(){
+        return new Rect(this);
     }
 
 }

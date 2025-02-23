@@ -29,11 +29,9 @@ public class UIManager {
         SCREEN_WIDTH = width;
         SCREEN_HEIGHT = height;
     }
-
     public static void toggleCursor() {
         isCursorVisible = !isCursorVisible;
     }
-
     public static boolean isCursorVisible() {
         return isCursorVisible;
     }
@@ -77,20 +75,5 @@ public class UIManager {
         return clampedMousePos;
     }
 
-    public static void preRender() {
-        ShaderInstance shader = RenderSystem.getShader();
-        RenderSystem.enableBlend();
-        RenderSystem.enableDepthTest();
-    }
 
-    public static void postRender() {
-        RenderSystem.disableBlend();
-        RenderSystem.enableDepthTest();
-        RenderSystem.setShader(() -> shader);
-    }
-
-    public static void render() {
-        BufferBuilder builder = Tesselator.getInstance().getBuilder();
-
-    }
 }

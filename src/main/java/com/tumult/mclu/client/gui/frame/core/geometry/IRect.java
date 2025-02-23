@@ -3,21 +3,27 @@ package com.tumult.mclu.client.gui.frame.core.geometry;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
 public interface IRect {
+    int X = 0;
+    int Y = 1;
+    int W = 2;
+    int H = 3;
+    int Z = 4;
+    int R = 5;
+
     float left();
     float top();
     float width();
     float height();
     float zLevel();
-    int resolution();
-    VertexFormat.Mode format();
+    int res();
+    VertexFormat.Mode mode();
 
     void setUL(float x, float y);
     void setWH(float w, float h);
     void setBR(float b, float r);
     void setZ(float zLevel);
 
-    void copy(float[] out);
-
+    void copyTo(float[] out);
     default void normalize(float divisor, float[] out) {
         float invDiv = 1.0f / divisor;
         out[0] = left() * invDiv;
@@ -61,10 +67,9 @@ public interface IRect {
 
     default void setUL(float[] v) {setUL(v[0], v[1]);}
     default void setBR(float[] v) {setBR(v[0], v[1]);}
-    default void setWH(float[] v) {setWH(v[0], v[1]);}
 
     default void setCenter(float[] v) {setCenter(v[0], v[1]);}
     default void moveBy(float[] v) {moveBy(v[0], v[1]);}
+    default void dragTo(float[] v) {setUL(v[0] - left(), v[1] - top());}
     default boolean contains(float[] v) {return contains(v[0], v[1]);}
-
 }
