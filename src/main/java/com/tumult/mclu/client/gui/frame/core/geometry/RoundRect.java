@@ -17,18 +17,18 @@ public class RoundRect extends Rect implements IRect {
     public void setRes(int res) {this.res = res;}
 
     @Override
-    public int res(){return res;}
+    public int resolution(){return res;}
     @Override
     public VertexFormat.Mode mode() {return VertexFormat.Mode.TRIANGLE_FAN;}
 
     @Override
     public void copyTo(float[] out){
-        out[X] = x;
-        out[Y] = y;
-        out[W] = w;
-        out[H] = h;
-        out[Z] = z;
-        out[R] = r;
+        out[0] = x;
+        out[1] = y;
+        out[2] = w;
+        out[3] = h;
+        out[4] = z;
+        out[5] = r;
     }
     public void copyInnerTo(float[] out){
         out[0] = r; out[1] = r; // top left
@@ -40,11 +40,11 @@ public class RoundRect extends Rect implements IRect {
     @Override
     public void normalize(float divisor, float[] out) {
         float invDiv = 1.0f / divisor;
-        out[X] = x * invDiv;
-        out[Y] = y * invDiv;
-        out[W] = w * invDiv;
-        out[H] = h * invDiv;
-        out[Z] = z;
-        out[R] = r * invDiv * (out[2] / w);
+        out[0] = x * invDiv;
+        out[1] = y * invDiv;
+        out[2] = w * invDiv;
+        out[3] = h * invDiv;
+        out[4] = z;
+        out[5] = r * invDiv * (out[2] / w);
     }
 }

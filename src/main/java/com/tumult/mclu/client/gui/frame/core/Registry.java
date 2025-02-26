@@ -22,7 +22,7 @@ public class Registry {
 
     Registry(){
         // Create cursor
-        mouse_cursor = registerGuiSprite(new Rect(9,17, 1), "mouse_cursor", 32);
+        mouse_cursor = registerGuiSprite(new Rect(9,17), "mouse_cursor", 32);
 
         // Create a main container with grid layout
         mainContainer = new GuiContainer(
@@ -43,9 +43,9 @@ public class Registry {
         ));
 
         // Create icons
-        backpack = registerGuiSprite(new Rect(16, 16, 2), "backpack", 16);
-        map = registerGuiSprite(new Rect(16, 16, 2), "map", 16);
-        passport = registerGuiSprite(new Rect(16,16, 2), "passport", Color.RED, 16);
+        backpack = registerGuiSprite(new Rect(16, 16), "backpack", 16);
+        map = registerGuiSprite(new Rect(16, 16), "map", 16);
+        passport = registerGuiSprite(new Rect(16,16), "passport", Color.RED, 16);
         rect = registerGuiShape(new RoundRect(20, 20, 30, 30, 2, 5), Color.RED);
         circle = registerGuiShape(new Circle(40, 20, 1, 20), Color.CYAN);
 
@@ -62,11 +62,11 @@ public class Registry {
         // mainContainer.addChild(toolbar.rect); // Uncomment if you want nested containers
     }
 
-    public GuiSprite registerGuiSprite(IRect rect, String name, Color color, int size) {
+    public GuiSprite registerGuiSprite(Rect rect, String name, Color color, int size) {
         return new GuiSprite(rect, name, size, color);
     }
 
-    public GuiSprite registerGuiSprite(IRect rect, String name, int size) {
+    public GuiSprite registerGuiSprite(Rect rect, String name, int size) {
         return new GuiSprite(rect, name, size, Color.WHITE);
     }
 

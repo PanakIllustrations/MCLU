@@ -3,10 +3,11 @@ package com.tumult.mclu.client.gui.frame.core;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.tumult.mclu.client.gui.frame.core.geometry.IRect;
+import com.tumult.mclu.client.gui.frame.core.geometry.Rect;
 import com.tumult.mclu.client.gui.frame.core.util.PointArrayPool;
 import com.tumult.mclu.client.gui.frame.core.util.UIProfiler;
 
-public abstract class AbstractGuiElement<T extends IRect> {
+public abstract class AbstractGuiElement<T extends Rect> {
     protected VertexFormat format;
     protected float[] points;
     protected float[] color;
@@ -26,7 +27,7 @@ public abstract class AbstractGuiElement<T extends IRect> {
         this.id = getClass().getSimpleName() + "_" + (nextId++);
         this.profileName = "render_" + id;
 
-        points = PointArrayPool.obtain(rect.res() * 8);
+        points = PointArrayPool.obtain(rect.resolution() * 8);
         BufferProvider.updatePoints(rect, points);
     }
 

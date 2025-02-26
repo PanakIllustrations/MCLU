@@ -10,7 +10,7 @@ public class Circle extends RoundRect implements IRect {
     @Override public void copyTo(float[] out){
         out[0] = left();
         out[1] = top();
-        out[2] = zLevel();
+        out[2] = depth();
         out[3] = radius();
     }
     @Override

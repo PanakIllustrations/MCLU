@@ -50,6 +50,7 @@ public class Style {
 
     // Property setters (fluent API)
     public Style display(Display value) { this.display = value; markDirty(); return this; }
+    public Style rect(float w, float h) {rect[WIDTH] = w; rect[HEIGHT] = h; markDirty(); return this; }
     public Style rect(float x, float y, float w, float h) { rect[LEFT] = x; rect[TOP] = y; rect[WIDTH] = w; rect[HEIGHT] = h; markDirty(); return this; }
     public Style width(float w) { rect[WIDTH] = w; markDirty(); return this; }
     public Style height(float h) { rect[HEIGHT] = h; markDirty(); return this; }

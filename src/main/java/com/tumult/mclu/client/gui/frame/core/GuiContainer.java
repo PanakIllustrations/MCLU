@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.tumult.mclu.client.gui.frame.core.geometry.IContainer;
 import com.tumult.mclu.client.gui.frame.core.geometry.IRect;
+import com.tumult.mclu.client.gui.frame.core.geometry.Rect;
 import com.tumult.mclu.client.gui.frame.core.geometry.RoundRect;
 
 import com.tumult.mclu.client.gui.frame.core.layout.LayoutStrategy;
@@ -17,7 +18,7 @@ import java.util.List;
 
 import com.tumult.mclu.client.gui.frame.core.util.UIProfiler;
 
-public class GuiContainer extends AbstractGuiElement<IRect> implements IContainer {
+public class GuiContainer extends AbstractGuiElement<Rect> implements IContainer {
     private final List<AbstractGuiElement<?>> children = new ArrayList<>();
     private LayoutStrategy layoutStrategy;
     private boolean layoutDirty = true;
@@ -114,8 +115,8 @@ public class GuiContainer extends AbstractGuiElement<IRect> implements IContaine
     }
 
     @Override
-    public float zLevel() {
-        return rect.zLevel();
+    public float depth() {
+        return rect.depth();
     }
 
     @Override
@@ -129,8 +130,8 @@ public class GuiContainer extends AbstractGuiElement<IRect> implements IContaine
     }
 
     @Override
-    public int res() {
-        return rect.res();
+    public int resolution() {
+        return rect.resolution();
     }
 
     @Override
@@ -154,8 +155,8 @@ public class GuiContainer extends AbstractGuiElement<IRect> implements IContaine
     }
 
     @Override
-    public void setZ(float zLevel) {
-        rect.setZ(zLevel);
+    public void setDepth(float zLevel) {
+        rect.setDepth(zLevel);
     }
 
     @Override
@@ -187,7 +188,7 @@ public class GuiContainer extends AbstractGuiElement<IRect> implements IContaine
         // Render this container's background
         ShaderInstance oldShader = RenderSystem.getShader();
         updateShaderInstance();
-        BufferProvider.drawPointsCol(rect, rect.mode(), format, points, color, rect.zLevel());
+        BufferProvider.drawPointsCol(rect, rect.mode(), format, points, color, rect.depth());
         RenderSystem.setShader(() -> oldShader);
 
         // Then render all children
@@ -209,7 +210,7 @@ public class GuiContainer extends AbstractGuiElement<IRect> implements IContaine
 
         for (int i = 0; i < points.length; i += 2){
             builder
-                    .vertex(points[i] + x, points[i+1] + y, rect.zLevel())
+                    .vertex(points[i] + x, points[i+1] + y, rect.depth())
                     .color(color[0], color[1], color[2], color[3])
                     .endVertex();
         }

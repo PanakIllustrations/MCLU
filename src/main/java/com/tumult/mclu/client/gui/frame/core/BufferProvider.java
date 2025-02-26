@@ -33,7 +33,7 @@ public class BufferProvider {
 
     private static void updatePoints(RoundRect rect, float[] out) {
         float[] inner = new float[8]; rect.copyInnerTo(inner);
-        getArcPoints(rect.res(), rect.radius(), inner, out);
+        getArcPoints(rect.resolution(), rect.radius(), inner, out);
     }
 
     public static void getQuadPoints(float[] r, float[] out) {
@@ -66,7 +66,7 @@ public class BufferProvider {
         }
     }
 
-    public static void drawPointsCol(IRect rect, VertexFormat.Mode mode, VertexFormat format, float[] points, float[] col, float zLevel){
+    public static void drawPointsCol(Rect rect, VertexFormat.Mode mode, VertexFormat format, float[] points, float[] col, float zLevel){
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(mode, format);
 
@@ -83,7 +83,7 @@ public class BufferProvider {
     }
 
 
-    public static void drawPointsTex(IRect rect, VertexFormat.Mode mode, VertexFormat format, float[] points, float[] uv, float zLevel){
+    public static void drawPointsTex(Rect rect, VertexFormat.Mode mode, VertexFormat format, float[] points, float[] uv, float zLevel){
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(mode, format);
 

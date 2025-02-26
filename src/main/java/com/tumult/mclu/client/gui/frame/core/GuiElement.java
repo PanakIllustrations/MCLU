@@ -30,7 +30,7 @@ public class GuiElement extends AbstractGuiElement<RoundRect> {
         // Apply geometry properties
         rect.setWH(style.getRect()[Style.WIDTH], style.getRect()[Style.HEIGHT]);
         rect.setR(style.getRadius());
-        rect.setZ(style.getDepth());
+        rect.setDepth(style.getDepth());
 
         // Apply color
         colorArray = new float[]{
@@ -61,7 +61,7 @@ public class GuiElement extends AbstractGuiElement<RoundRect> {
         // Perform the actual rendering
         ShaderInstance oldShader = RenderSystem.getShader();
         updateShaderInstance();
-        BufferProvider.drawPointsCol(rect, rect.mode(), format, points, colorArray, rect.zLevel());
+        BufferProvider.drawPointsCol(rect, rect.mode(), format, points, colorArray, rect.depth());
         RenderSystem.setShader(() -> oldShader);
     }
 
@@ -78,7 +78,7 @@ public class GuiElement extends AbstractGuiElement<RoundRect> {
 
         for (int i = 0; i < points.length; i += 2){
             builder
-                    .vertex(points[i] + x, points[i+1] + y, rect.zLevel())
+                    .vertex(points[i] + x, points[i+1] + y, rect.depth())
                     .color(colorArray[0], colorArray[1], colorArray[2], colorArray[3])
                     .endVertex();
         }

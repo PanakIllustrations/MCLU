@@ -5,7 +5,7 @@ import com.tumult.mclu.client.gui.frame.core.layout.LayoutStrategy;
 
 import java.util.List;
 
-public interface IContainer extends IRect {
+public interface IContainer extends IRect, IDrawable, IDirtyable, IParentable {
     List<AbstractGuiElement<?>> getChildren();
     void addChild(AbstractGuiElement<?> child);
     void removeChild(AbstractGuiElement<?> child);
