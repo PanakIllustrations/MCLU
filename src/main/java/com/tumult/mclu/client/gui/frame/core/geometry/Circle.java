@@ -1,7 +1,7 @@
 package com.tumult.mclu.client.gui.frame.core.geometry;
 
-public class Circle<T extends IRect> extends RoundRect {
-    Circle(float x, float y, float z, float r) {
+public class Circle extends RoundRect implements IRect {
+    public Circle(float x, float y, float z, float r) {
         super(x, y, r * 2f, r * 2f, z, r);
     }
     Circle(float[] in) {

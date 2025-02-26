@@ -1,9 +1,9 @@
 package com.tumult.mclu.events;
 
 import com.tumult.mclu.McluConstants;
-import com.tumult.mclu.client.gui.frame.core.review.UIManager;
+import com.tumult.mclu.client.gui.frame.core.UIManager;
 import com.tumult.mclu.client.gui.Keybindings;
-import com.tumult.mclu.client.gui.frame.core.review.GuiHUD;
+import com.tumult.mclu.client.gui.frame.core.GuiHUD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;

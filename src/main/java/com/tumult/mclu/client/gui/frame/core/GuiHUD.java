@@ -1,9 +1,8 @@
-package com.tumult.mclu.client.gui.frame.core.review;
+package com.tumult.mclu.client.gui.frame.core;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-
 
 public class GuiHUD {
 

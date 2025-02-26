@@ -1,12 +1,12 @@
-package com.tumult.mclu.client.gui.frame.core.review;
+package com.tumult.mclu.client.gui.frame.core;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.tumult.mclu.client.gui.frame.core.BufferProvider;
 import com.tumult.mclu.client.gui.frame.core.geometry.IRect;
 import com.tumult.mclu.client.gui.frame.core.geometry.RoundRect;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
+
 import java.awt.*;
 
 public class GuiShape extends AbstractGuiElement<IRect> {

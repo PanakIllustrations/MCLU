@@ -15,6 +15,8 @@ public interface IRect {
     float width();
     float height();
     float zLevel();
+    IRect getParent();
+
     int res();
     VertexFormat.Mode mode();
 
@@ -50,6 +52,22 @@ public interface IRect {
     default void center(float[] out) {
         out[0] = centerX();
         out[1] = centerY();
+    }
+
+    default float getAbsoluteLeft() {
+        return (getParent() != this) ? getParent().getAbsoluteLeft() : left();
+    }
+    default float getAbsoluteTop() {
+        return (getParent() != this) ? getParent().getAbsoluteTop() : top();
+    }
+    default float getAbsoluteWidth() {
+        return (getParent() != this) ? getParent().getAbsoluteWidth() : width();
+    }
+    default float getAbsoluteHeight() {
+        return (getParent() != this) ? getParent().getAbsoluteHeight() : height();
+    }
+    default float getAbsoluteZ() {
+        return (getParent() != this) ? getParent().getAbsoluteZ() : zLevel();
     }
     default void setCenter(float x, float y) {
         setUL(x - (width() * 0.5f), y - (height() * 0.5f));

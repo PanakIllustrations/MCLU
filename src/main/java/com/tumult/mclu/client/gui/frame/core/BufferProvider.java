@@ -35,13 +35,6 @@ public class BufferProvider {
         getArcPoints(rect.res(), rect.radius(), inner, out);
     }
 
-    private static void moveVertices(float[] vertices, float dx, float dy) {
-        for (int i = 0; i < vertices.length; i += 2) {
-            vertices[i] += dx;     // Move X
-            vertices[i + 1] += dy; // Move Y
-        }
-    }
-
     public static void getQuadPoints(float[] r, float[] out) {
         float width = r[2];
         float height = r[3];
@@ -98,12 +91,5 @@ public class BufferProvider {
                 .endVertex();
         }
         BufferUploader.drawWithShader(builder.end());
-    }
-
-    public static void displacePoints(float[] displaceBy, float[] rect){
-        for (int i = 0; i < rect.length; i += 2){
-            rect[i] += displaceBy[0];
-            rect[i + 1] += displaceBy[1];
-        }
     }
 }

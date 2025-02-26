@@ -1,9 +1,9 @@
-package com.tumult.mclu.client.gui.frame.core.review;
+package com.tumult.mclu.client.gui.frame.core;
 
+import com.tumult.mclu.client.gui.frame.core.geometry.Circle;
 import com.tumult.mclu.client.gui.frame.core.geometry.IRect;
 import com.tumult.mclu.client.gui.frame.core.geometry.Rect;
 import com.tumult.mclu.client.gui.frame.core.geometry.RoundRect;
-import net.minecraft.client.Minecraft;
 
 import java.awt.*;
 
@@ -14,6 +14,7 @@ public class Registry {
     public final GuiSprite passport;
     public final GuiSprite mouse_cursor;
     public final GuiShape rect;
+    public final GuiShape circle;
 
     Registry(){
         mouse_cursor = registerGuiSprite(new Rect(9,17, 1), "mouse_cursor", 32);
@@ -21,6 +22,7 @@ public class Registry {
         map = registerGuiSprite( new Rect(16, 16, 2), "map", 16);
         passport = registerGuiSprite( new Rect(16,16, 2), "passport", Color.RED, 16);
         rect = registerGuiShape( new RoundRect(20, 40 ,30, 70, 2,5), Color.RED);
+        circle = registerGuiShape(new Circle(40, 20, 1, 30), Color.CYAN);
     }
 
     public GuiSprite registerGuiSprite(IRect rect, String name, Color color, int size) {

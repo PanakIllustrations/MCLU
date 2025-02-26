@@ -1,16 +1,13 @@
-package com.tumult.mclu.client.gui.frame.core.review;
+package com.tumult.mclu.client.gui.frame.core;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.tumult.mclu.McluConstants;
-import com.tumult.mclu.client.gui.frame.core.BufferProvider;
 import com.tumult.mclu.client.gui.frame.core.geometry.IRect;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 
 import java.awt.*;
-import java.util.function.Supplier;
 
 public class GuiSprite extends AbstractGuiElement<IRect> {
     private final ResourceLocation loc;
@@ -36,6 +33,7 @@ public class GuiSprite extends AbstractGuiElement<IRect> {
     public void render() {
         ShaderInstance oldShader = RenderSystem.getShader();
         updateShaderInstance();
+        RenderSystem.enableDepthTest();
         BufferProvider.drawPointsTex(rect, rect.mode(), format, points, uv, rect.zLevel());
         RenderSystem.setShader(() -> oldShader);
     }

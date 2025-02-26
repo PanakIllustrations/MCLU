@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 
 public class Rect implements IRect {
     protected float x, y, w, h, z;
+    protected IRect parent = this;
+    public Rect() {this(0,0,0,0,0);}
     public Rect(Rect r){this(r.x, r.y, r.w, r.h, r.z);}
     public Rect(float w, float h, float z) {this(0,0,w,h,z);}
     public Rect(float x, float y, float w, float h, float z) {
@@ -38,6 +40,7 @@ public class Rect implements IRect {
     @Override public float width() {return w;}
     @Override public float height() {return h;}
     @Override public float zLevel() {return z;}
+    @Override public IRect getParent() {return parent;}
     @Override public int res() {return 1;}
     @Override public VertexFormat.Mode mode() {return VertexFormat.Mode.QUADS;}
     // position and dimensions

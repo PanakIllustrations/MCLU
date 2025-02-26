@@ -1,8 +1,5 @@
-package com.tumult.mclu.client.gui.frame.core.review;
+package com.tumult.mclu.client.gui.frame.core;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
 import org.lwjgl.glfw.GLFW;

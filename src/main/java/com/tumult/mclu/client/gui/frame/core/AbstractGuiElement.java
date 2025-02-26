@@ -1,7 +1,6 @@
-package com.tumult.mclu.client.gui.frame.core.review;
+package com.tumult.mclu.client.gui.frame.core;
 
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.tumult.mclu.client.gui.frame.core.BufferProvider;
 import com.tumult.mclu.client.gui.frame.core.geometry.IRect;
 
 public abstract class AbstractGuiElement<T extends IRect> {
@@ -31,7 +30,6 @@ public abstract class AbstractGuiElement<T extends IRect> {
         if (isDragging & !buttons[0]) {
             isDragging = false;
         }
-
     }
 
     abstract void updateShaderInstance();
