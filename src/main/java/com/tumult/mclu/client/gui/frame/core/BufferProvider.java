@@ -4,9 +4,10 @@ import com.mojang.blaze3d.vertex.*;
 import com.tumult.mclu.client.gui.frame.core.geometry.IRect;
 import com.tumult.mclu.client.gui.frame.core.geometry.Rect;
 import com.tumult.mclu.client.gui.frame.core.geometry.RoundRect;
+import com.tumult.mclu.client.gui.frame.core.util.RenderingConfig;
 
 public class BufferProvider {
-    private static final float theta = (float) (Math.PI / 20);
+    private static final float theta = (float) (Math.PI / RenderingConfig.ARC_SEGMENTS);
     private static final float tangent_factor = (float) Math.tan(theta);
     private static final float radial_factor = (float) Math.cos(theta);
 
@@ -68,28 +69,41 @@ public class BufferProvider {
     public static void drawPointsCol(IRect rect, VertexFormat.Mode mode, VertexFormat format, float[] points, float[] col, float zLevel){
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(mode, format);
-        float x = rect.left();
-        float y = rect.top();
+
+        float x = rect.getAbsoluteLeft();
+        float y = rect.getAbsoluteTop();
+
         for (int i = 0; i < points.length; i += 2){
             builder
-                .vertex(points[i] + x, points[i+1] + y, zLevel)
-                .color(col[0], col[1], col[2], col[3])
-                .endVertex();
+                    .vertex(points[i] + x, points[i+1] + y, zLevel)
+                    .color(col[0], col[1], col[2], col[3])
+                    .endVertex();
         }
         BufferUploader.drawWithShader(builder.end());
     }
 
+
     public static void drawPointsTex(IRect rect, VertexFormat.Mode mode, VertexFormat format, float[] points, float[] uv, float zLevel){
         BufferBuilder builder = Tesselator.getInstance().getBuilder();
         builder.begin(mode, format);
-        float x = rect.left();
-        float y = rect.top();
+
+        float x = rect.getAbsoluteLeft();
+        float y = rect.getAbsoluteTop();
+
         for (int i = 0; i < points.length; i += 2){
             builder
-                .vertex(points[i] + x, points[i+1] + y, zLevel)
-                .uv(uv[i], uv[i+1])
-                .endVertex();
+                    .vertex(points[i] + x, points[i+1] + y, zLevel)
+                    .uv(uv[i], uv[i+1])
+                    .endVertex();
         }
         BufferUploader.drawWithShader(builder.end());
+    }
+
+    public static float[] unpackColor(int packed, float[] out) {
+        out[0] = ((packed >> 16) & 0xFF) / 255f; // R
+        out[1] = ((packed >> 8) & 0xFF) / 255f;  // G
+        out[2] = (packed & 0xFF) / 255f;         // B
+        out[3] = ((packed >> 24) & 0xFF) / 255f; // A
+        return out;
     }
 }

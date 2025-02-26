@@ -15,17 +15,22 @@ public interface IRect {
     float width();
     float height();
     float zLevel();
-    IRect getParent();
+
+    IContainer getParent();
+    void setParent(IContainer parent);
 
     int res();
     VertexFormat.Mode mode();
-
     void setUL(float x, float y);
     void setWH(float w, float h);
     void setBR(float b, float r);
     void setZ(float zLevel);
-
     void copyTo(float[] out);
+
+    boolean isDirty();
+    void markDirty();
+    void clearDirty();
+
     default void normalize(float divisor, float[] out) {
         float invDiv = 1.0f / divisor;
         out[0] = left() * invDiv;
@@ -34,6 +39,15 @@ public interface IRect {
         out[3] = bottom() * invDiv;
         out[4] = zLevel();
     }
+
+    default float getAbsoluteLeft() {
+        return (getParent() != null) ? getParent().getAbsoluteLeft() + left() : left();
+    }
+
+    default float getAbsoluteTop() {
+        return (getParent() != null) ? getParent().getAbsoluteTop() + top() : top();
+    }
+
     default void getUL(float[] out) {
         out[0] = left();
         out[1] = top();
@@ -52,22 +66,6 @@ public interface IRect {
     default void center(float[] out) {
         out[0] = centerX();
         out[1] = centerY();
-    }
-
-    default float getAbsoluteLeft() {
-        return (getParent() != this) ? getParent().getAbsoluteLeft() : left();
-    }
-    default float getAbsoluteTop() {
-        return (getParent() != this) ? getParent().getAbsoluteTop() : top();
-    }
-    default float getAbsoluteWidth() {
-        return (getParent() != this) ? getParent().getAbsoluteWidth() : width();
-    }
-    default float getAbsoluteHeight() {
-        return (getParent() != this) ? getParent().getAbsoluteHeight() : height();
-    }
-    default float getAbsoluteZ() {
-        return (getParent() != this) ? getParent().getAbsoluteZ() : zLevel();
     }
     default void setCenter(float x, float y) {
         setUL(x - (width() * 0.5f), y - (height() * 0.5f));

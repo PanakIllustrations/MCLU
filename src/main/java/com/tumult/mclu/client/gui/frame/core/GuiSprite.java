@@ -19,10 +19,10 @@ public class GuiSprite extends AbstractGuiElement<IRect> {
         format = DefaultVertexFormat.POSITION_TEX;
         loc = new ResourceLocation(McluConstants.MOD_ID, "gui/textures/" + name + ".png");
         color = new float[]{
-            rgba.getRed() / 255f,
-            rgba.getGreen() / 255f,
-            rgba.getBlue() / 255f,
-            rgba.getAlpha() / 255f
+                rgba.getRed() / 255f,
+                rgba.getGreen() / 255f,
+                rgba.getBlue() / 255f,
+                rgba.getAlpha() / 255f
         };
         uv = new float[rect.res() * 8];
         rect.normalize(canvasSize, uv);
@@ -30,16 +30,30 @@ public class GuiSprite extends AbstractGuiElement<IRect> {
     }
 
     @Override
-    public void render() {
+    protected void doRender() {
         ShaderInstance oldShader = RenderSystem.getShader();
         updateShaderInstance();
-        RenderSystem.enableDepthTest();
+
         BufferProvider.drawPointsTex(rect, rect.mode(), format, points, uv, rect.zLevel());
         RenderSystem.setShader(() -> oldShader);
     }
+
     @Override
     void updateShaderInstance() {
         RenderSystem.setShaderTexture(0, loc);
         RenderSystem.setShaderColor(color[0], color[1], color[2], color[3]);
+    }
+
+    @Override
+    public void addToBuffer(BufferBuilder builder) {
+        float x = rect.getAbsoluteLeft();
+        float y = rect.getAbsoluteTop();
+
+        for (int i = 0; i < points.length; i += 2){
+            builder
+                    .vertex(points[i] + x, points[i+1] + y, rect.zLevel())
+                    .uv(uv[i], uv[i+1])
+                    .endVertex();
+        }
     }
 }
