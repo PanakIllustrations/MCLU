@@ -1,46 +1,60 @@
 package com.tumult.mclu.client.gui.frame.core;
 
+import com.tumult.mclu.client.gui.frame.core.css.Style;
+import com.tumult.mclu.client.gui.frame.core.css.StyleSheet;
+import com.tumult.mclu.client.gui.frame.core.layout.FlexLayout;
+import com.tumult.mclu.client.gui.frame.core.layout.GridLayout;
+import com.tumult.mclu.client.gui.frame.core.geometry.Rect;
+import com.tumult.mclu.client.gui.frame.core.geometry.RoundRect;
+import com.tumult.mclu.client.gui.frame.core.GuiContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
+import java.awt.*;
 public class GuiHUD {
-
-private static boolean setup = false;
+    private static boolean setup = false;
+    private static GuiContainer UICanvas;
+    private static GuiContainer inventory;
+    private static GuiElement inventorySlot;
+    private static GuiSprite mouseCursor;
+    private static GuiContainer toolbar;
+    private static GuiElement toolbarSlot;
+    private static GuiContainer scrollContainer;
 
     public static final IGuiOverlay GUI_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
 
-        final GuiSprite backpack = Registry.icon.get().backpack;
-        final GuiSprite mouse_cursor = Registry.icon.get().mouse_cursor;
-        final GuiSprite passport = Registry.icon.get().passport;
-        final GuiSprite map = Registry.icon.get().map;
-        final GuiShape rect = Registry.icon.get().rect;
-
+        // Initialize the UI manager with screen dimensions
         UIManager.init(screenWidth, screenHeight);
+
+
         if (!setup) {
-            backpack.rect.setUL((float) screenWidth / 2 + 92,(float) screenHeight - 40);
-            passport.rect.setUL((float) screenWidth / 2 + 92 + 20,(float) screenHeight - 40);
-            setup = true;
+//            inventory = new GuiContainer(
+//                    new RoundRect(0,0,0,0,1,0),
+//                    StyleSheet.getStyle("inventory").getBackgroundColor());
+//
+//            for (int i = 0; i < 20; i++) {
+//                inventorySlot = new GuiElement(
+//                        new RoundRect(0,0,0,0,1,0),
+//                        StyleSheet.getStyle("inventory_slot"));
+//                inventory.addChild(inventorySlot);
+//            }
+//            UICanvas = new GuiContainer(
+//                    new RoundRect(0, 0, screenWidth, screenHeight, 1, 15),
+//                    new Color(33, 33, 33, 200) // Dark semi-transparent background
+//            );
+//            UICanvas.addChild(inventory);
+//            UIManager.setRootContainer(UICanvas);
+//            mouseCursor = Registry.icon.get().mouse_cursor;
+//            setup = true;
         }
 
-        if (player != null) {
-            if (UIManager.isCursorVisible()) {
-                float[] cursorPos = UIManager.getMousePos();
-                boolean[] buttons = UIManager.getMouseButtons();
-                mouse_cursor.rect.setUL(cursorPos);
-                mouse_cursor.render();
-
-                passport.handleDragging(cursorPos, buttons);
-                backpack.handleDragging(cursorPos, buttons);
-                map.handleDragging(cursorPos, buttons);
-                rect.handleDragging(cursorPos, buttons);
-            }
-            backpack.render();
-            passport.render();
-            map.render();
-            rect.render();
+        if (UIManager.isCursorVisible()) {
+            float[] mousePos = UIManager.getMousePos();
+            mouseCursor.rect.setUL(mousePos);
+            mouseCursor.render();
         }
     };
 }
