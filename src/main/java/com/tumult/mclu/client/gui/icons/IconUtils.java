@@ -4,6 +4,7 @@ public enum IconUtils {
     INSTANCE;
 
     private static GuiIcons icon;
+    private static Clickable clickable;
 
     public static GuiIcons getIcon() {
         if (icon == null) {
@@ -12,10 +13,10 @@ public enum IconUtils {
         return icon;
     }
 
-    public static GuiIcons getClickableIcon(Runnable onClick) {
-        if (icon == null) {
-            icon = new GuiIcons();
+    public Clickable getClickable() {
+        if (clickable == null) {
+            clickable = new Clickable();
         }
-        return icon;
+        return clickable;
     }
 }
