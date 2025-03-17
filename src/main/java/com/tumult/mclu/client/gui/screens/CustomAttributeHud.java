@@ -19,7 +19,7 @@ public class CustomAttributeHud {
     }
 
     private int tickDelay = 5;
-    //private static final DrawableRect rect = new DrawableRect(new Vector4DRect(160 / 2f - 92, 46, 4 * 8, 7), new Color(0xbb1313), 3.5f);
+    //private static final DrawableIcon rect = new DrawableIcon(new Vector4DRect(160 / 2f - 92, 46, 4 * 8, 7), new Color(0xbb1313), 3.5f);
 
     public static final IGuiOverlay CUSTOM_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Minecraft mc = Minecraft.getInstance();

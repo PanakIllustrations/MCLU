@@ -1,11 +1,12 @@
 package com.tumult.mclu.events;
 
 import com.tumult.mclu.McluConstants;
-import com.tumult.mclu.client.gui.frame.core.UIManager;
+import com.tumult.mclu.client.gui.core.UIManager;
 import com.tumult.mclu.client.gui.Keybindings;
-import com.tumult.mclu.client.gui.frame.core.GuiHUD;
+import com.tumult.mclu.client.gui.screens.GuiHud;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
@@ -76,7 +77,7 @@ public class ClientEvents {
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAboveAll("gui_hud", GuiHUD.GUI_HUD);
+              event.registerAboveAll("gui_hud", GuiHud.GUI_HUD);
 //            event.registerAboveAll("armor", CustomAttributeHudOverlay.CUSTOM_ARMOR_HUD);
 //            //event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
 //            event.registerAboveAll("health", CustomAttributeHud.CUSTOM_HUD);

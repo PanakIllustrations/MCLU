@@ -126,6 +126,11 @@ repositories {
         name = "Illusive Soulworks maven"
         url = "https://maven.theillusivec4.top/"
     }
+    maven {
+        name = "steadystate"
+        url = "https://repo1.maven.org/maven2/"
+    }
+    mavenCentral()
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
     // flatDir {
@@ -147,6 +152,7 @@ dependencies {
     // Mixin AP
     annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
     implementation("org.spongepowered:mixin:${mixin_version}:processor")
+    implementation 'net.sourceforge.cssparser:cssparser:0.9.29'
     // clientAnnotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

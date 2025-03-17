@@ -3,14 +3,21 @@ package com.tumult.mclu.events;
 import com.tumult.mclu.McluConstants;
 import com.tumult.mclu.client.gui.CustomAttributes;
 import com.tumult.mclu.client.gui.ModifyPlayerHealth;
+import com.tumult.mclu.client.gui.core.util.UIRenderSystem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.GameRules;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.level.LevelEvent;
@@ -20,7 +27,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import com.tumult.mclu.MCLU;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -119,5 +128,28 @@ public class ModEvents {
             });
         }
 
+    }
+
+    @Mod.EventBusSubscriber(modid = McluConstants.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientModEvents {
+        @SubscribeEvent
+        public static void onRegisterReloadListeners(RegisterClientReloadListenersEvent event) {
+            event.registerReloadListener(new SimplePreparableReloadListener<Void>() {
+                @Override
+                protected @NotNull Void prepare(@NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profilerFiller) {
+                    return null;
+                }
+
+                @Override
+                protected void apply(@NotNull Void pObject, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profilerFiller) {
+                    try {
+                        UIRenderSystem.disposeShaders();
+                        UIRenderSystem.initShaders(resourceManager);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 }

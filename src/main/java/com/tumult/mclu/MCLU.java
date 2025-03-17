@@ -38,4 +38,5 @@ public class MCLU
     public void commonSetup(FMLClientSetupEvent event) {
         // Common setup code
     }
+
 }
