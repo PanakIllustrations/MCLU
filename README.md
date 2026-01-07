@@ -8,7 +8,7 @@ A Minecraft mod featuring a custom-built UI framework and real-time HUD system, 
 ## Technical Highlights
 
 ### State Machine Architecture
-Implemented finite state machines for multiple systems, demonstrating patterns applicable to autonomous systems and robotics:
+Implemented finite state machines for multiple systems
 
 - **Interactive Event Handler** (`EventHandler.java`, `DraggableRect.java`): 6-state FSM managing UI interaction states (IDLE, HOVERED, PRESSED, HOLDING, PRESSED_OUTSIDE, HOLDING_OUTSIDE) with transition logic and event propagation
 
@@ -17,6 +17,8 @@ https://github.com/user-attachments/assets/0749ae26-a5d2-4269-b79b-349d171bcb13
 - **Animation State Controller** (`CustomAttributeHudOverlay.java`): 5-state FSM orchestrating UI animations (IDLE, FLASH_DELAY, ANTICIPATION, INTERPOLATION, FOLLOW_THROUGH) with tick-based timing and interpolation
 
 https://github.com/user-attachments/assets/5e808242-b3ce-4644-ba76-63205cd16e69
+
+- **Optomized data structures and algorithms for real-time simulation** (`Vector4DRect,Java`, `DrawableRectjava`): limited object instantiation, bached rendering, and geometric aproximations based on standard incremental rotation methods used in computer graphics (inspired by [this algorithm](https://web.archive.org/web/20210113024333/http://www.java2s.com/example/java/javax.media.opengl/draw-sphere-with-opengl.html) from javax.media.opengl)
 
 ### Hierarchical Communication System
 Designed a tree-based component architecture with parent-child relationships and message passing:
@@ -34,8 +36,6 @@ Components use a capture flag to implement mutual exclusion for concurrent input
 | Drag resize handle  | N                 | Y                        |    BLOCKED      |
 | Drag empty area     | N                 | N                        |    ACTIVE       |
 
-This demonstrates conflict resolution patterns applicable to multi-agent systems where competing processes need coordinated resource access.
-
 ### Real-Time System Design
 Implemented tick-based update loops with frame-perfect rendering:
 
@@ -48,20 +48,12 @@ Implemented tick-based update loops with frame-perfect rendering:
 **Custom Geometry Library:**
 - `Vector2DPoint`: 2D point operations (arithmetic, geographic calculations)
 - `Vector4DRect`: Rectangle representation with drag tracking and bounds testing
-- Efficient containment checks for hit testing
 
-**Design Patterns:**
+**Patterns Used:**
 - Singleton pattern for icon management (`IconUtils`)
 - Template method pattern for drawable components
 - Observer pattern in event handling
-- Strategy pattern for different interactive behaviors
-
-### Software Engineering Practices
-
-- **Modular Architecture**: Separation of concerns (geometry, rendering, interaction, state management)
-- **Interface-Driven Design**: `IInteractive` interface enables polymorphic event handling
-- **Code Reusability**: Base classes (`DrawableRect`, `DrawableSprite`, `InteractiveRect`) extended for specific behaviors
-- **Resource Management**: Centralized texture loading and sprite registration
+- Strategy pattern for interactive behaviors
 
 ## Project Structure
 
@@ -75,20 +67,6 @@ src/main/java/com/tumult/mclu/
 │   └── screens/           # HUD overlays and gameplay UI
 └── CustomAttributes.java  # Entity attribute system using Forge events
 ```
-
-## Key Components
-
-- **Event System**: Multi-state interactive components with transition logic
-- **Animation Controller**: FSM-based animation sequencing with timing control
-- **Rendering Pipeline**: Custom vertex buffer management with OpenGL integration
-- **Attribute System**: Player stat management using Minecraft Forge event bus
-
-## Development Practices
-
-- Object-oriented design with clear inheritance hierarchies
-- Event-driven architecture for decoupled components
-- Real-time constraint handling (frame-rate independent updates)
-- Efficient memory management (buffer reuse, lazy initialization)
 
 ## Links
 
