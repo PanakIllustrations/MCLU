@@ -39,13 +39,13 @@ public class Vector4DRect {
         return ul.x();
     }
     public double right() {
-        return getBr().x();
+        return ul.x + wh.x;
     }
     public double top() {
         return ul.y();
     }
     public double bottom() {
-        return getBr().y();
+        return ul.y + wh.y;
     }
     public double width() {
         return wh.x();
@@ -71,6 +71,24 @@ public class Vector4DRect {
     }
     // geographic
     public boolean contains(Vector2DPoint v) {
-        return v.x() > left() && v.x() < right() && v.y() > top() && v.y() < bottom();
+        return v.x >= left() && v.x < right() && v.y >= top() && v.y < bottom();
     }
+    private Vector2DPoint dragOffset = null;
+
+    public void startDrag(Vector2DPoint mouseCursor) {
+        // Store where on the rect we grabbed it
+        dragOffset = mouseCursor.sub(this.ul);
+    }
+
+    public void drag(Vector2DPoint mouseCursor) {
+        if (dragOffset != null) {
+            this.ul = mouseCursor.sub(dragOffset);
+        }
+    }
+
+    public void endDrag() {
+        dragOffset = null;
+    }
+
+
 }

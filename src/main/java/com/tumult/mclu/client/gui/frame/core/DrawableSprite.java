@@ -10,13 +10,15 @@ import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.nio.FloatBuffer;
 
-public class DrawableSprite extends Node {
+public class DrawableSprite extends Node implements Serializable {
     private final ResourceLocation texture;
     private final Vector4DRect textureUV;
     protected Vector4DRect rectBounds;
     protected float zLevel;
+    protected boolean debugPrinted = false;
 
     public DrawableSprite(ResourceLocation icon, Vector4DRect rect, Vector4DRect uv, float z) {
         this.rectBounds = rect;
@@ -27,6 +29,13 @@ public class DrawableSprite extends Node {
     public void setUL(Vector2DPoint ul) {
         this.rectBounds.setUl(ul);
     }
+
+    @Override
+    public Vector4DRect getBounds() {
+        return rectBounds;
+    }
+
+
     public void draw(GuiGraphics guiGraphics, Vector2DPoint screenXY) {
         if (!this.isVisible) {
             return;
@@ -36,9 +45,14 @@ public class DrawableSprite extends Node {
         draw(guiGraphics);
     }
 
+    @Override
     public void draw(GuiGraphics guiGraphics) {
         if (!this.isVisible) {
             return;
+        }
+        if (!debugPrinted) {
+            printDebugInfo();
+            debugPrinted = true;
         }
         preDrawSprite();
         guiGraphics.pose().pushPose();
@@ -74,5 +88,16 @@ public class DrawableSprite extends Node {
         BufferUploader.drawWithShader(bufferBuilder.end());
         RenderSystem.disableBlend();
         RenderSystem.enableDepthTest();
+    }
+
+    public void printDebugInfo() {
+        System.out.printf(
+                "DrawableRect[ul=(%.1f,%.1f), br=(%.1f,%.1f), wh=(%.1f,%.1f), path=(%s), visible=%b]%n",
+                rectBounds.left(), rectBounds.top(),
+                rectBounds.right(), rectBounds.bottom(),
+                rectBounds.width(), rectBounds.height(),
+                texture.getPath(),
+                isVisible
+        );
     }
 }

@@ -24,6 +24,7 @@ public class DrawableRect extends Node {
     protected float zLevel = 0;
     protected float radius = 0;
     protected Vector4DRect rectBounds;
+    protected boolean debugPrinted = false;
 
     public DrawableRect(Color color, Vector4DRect rect, float radius ) {
         this.rectBounds = rect;
@@ -33,10 +34,22 @@ public class DrawableRect extends Node {
     public void setUL(Vector2DPoint ul) {
         this.rectBounds.setUl(ul);
     }
+
+    @Override
+    public Vector4DRect getBounds() {
+        return rectBounds;
+    }
+
+    @Override
     public void draw(GuiGraphics guiGraphics) {
         if (!this.isVisible) {
             return;
         }
+        if (!debugPrinted) {
+            printDebugInfo();
+            debugPrinted = true;
+        }
+
         FloatBuffer vertices;
         vertices = preDrawRect(BufferUtils.createFloatBuffer(numVertices * 4 * 3)); // curve resolution * 4 corners * 3 dimensions
         preDrawRectColor();
@@ -47,14 +60,14 @@ public class DrawableRect extends Node {
         Vector4DRect inner = new Vector4DRect(
             this.rectBounds.left() + radius,
             this.rectBounds.top() + radius,
-            this.rectBounds.right() - radius,
-            this.rectBounds.bottom() - radius
+            this.rectBounds.width(),
+            this.rectBounds.height()
         );
 
         addArcPoints(vertices, TOP_LEFT, radius, inner.left(), inner.top());
-        addArcPoints(vertices, BOTTOM_LEFT, radius, inner.left(), inner.bottom());
-        addArcPoints(vertices, BOTTOM_RIGHT, radius, inner.right(), inner.bottom());
-        addArcPoints(vertices, TOP_RIGHT, radius, inner.right(), inner.top());
+        addArcPoints(vertices, BOTTOM_LEFT, radius, inner.left(), inner.bottom() - radius);
+        addArcPoints(vertices, BOTTOM_RIGHT, radius, inner.right() - radius, inner.bottom() - radius);
+        addArcPoints(vertices, TOP_RIGHT, radius, inner.right() - radius, inner.top());
 
         vertices.flip();
         return vertices;
@@ -70,7 +83,7 @@ public class DrawableRect extends Node {
         for (int i = 0; i < numVertices; i++) {
             buffer.put((float) (x + xOffset));
             buffer.put((float) (y + yOffset));
-            buffer.put( this.zLevel);
+            buffer.put(this.zLevel);
             double tx = y;
             double ty = -x;
             x += tx * tangent_factor;
@@ -124,5 +137,17 @@ public class DrawableRect extends Node {
                     getColor("a"))
                 .endVertex();
         }
+    }
+
+    public void printDebugInfo() {
+        System.out.printf(
+                "DrawableRect[ul=(%.1f,%.1f), br=(%.1f,%.1f), wh=(%.1f,%.1f), radius=%.1f, color=(%d,%d,%d,%d), visible=%b]%n",
+                rectBounds.left(), rectBounds.top(),
+                rectBounds.right(), rectBounds.bottom(),
+                rectBounds.width(), rectBounds.height(),
+                radius,
+                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
+                isVisible
+        );
     }
 }

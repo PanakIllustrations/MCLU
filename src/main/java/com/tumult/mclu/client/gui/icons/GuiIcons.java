@@ -13,12 +13,16 @@ public class GuiIcons {
     public final DrawableSprite map;
     public final DrawableSprite passport;
     public final DrawableSprite mouse_cursor;
+    public final DrawableSprite bankResize;
+    public final DrawableSprite bankCross;
 
     public GuiIcons() {
         this.backpack = registerDrawableSprite("backpack", 16, 16);
         this.map = registerDrawableSprite("map", 16, 16);
         this.passport = registerDrawableSprite("passport", 16, 16);
         this.mouse_cursor = registerDrawableSprite("mouse_cursor", 9, 17, 32, 32, 0f);
+        this.bankCross = registerDrawableSprite("bank_cross", 32, 32, 32, 32, 0f);
+        this.bankResize = registerDrawableSprite("bank_resize", 32, 32, 32, 32, 0f);
     }
     private ResourceLocation getResource(String name) {
         return new ResourceLocation(McluConstants.MOD_ID, "/textures/gui/" + name + ".png");

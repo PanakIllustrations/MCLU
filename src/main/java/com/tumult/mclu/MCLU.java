@@ -3,6 +3,7 @@ package com.tumult.mclu;
 import com.tumult.mclu.client.gui.CustomAttributes;
 import com.tumult.mclu.client.gui.icons.GuiIcons;
 import com.tumult.mclu.events.ModEvents;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -10,8 +11,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.eventbus.api.IEventBus;
 
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import static top.theillusivec4.curios.api.CuriosApi.MODID;
 
 
 @Mod(McluConstants.MOD_ID)
@@ -19,13 +25,13 @@ public class MCLU
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    //public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, MODID);
-    //public static final RegistryObject<Attribute> MCLU_ARMOR_ATTRIBUTE = ATTRIBUTES.register("mclu_armor_attribute", () -> new Attribute("attribute.name.mclu.mclu_armor_attribute", 0.0D) {
-        //@Override
-        //public double getDefaultValue() {
-            //return 0.0D;
-        //}
-    //});
+    public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, MODID);
+    public static final RegistryObject<Attribute> MCLU_ARMOR_ATTRIBUTE = ATTRIBUTES.register("mclu_armor_attribute", () -> new Attribute("attribute.name.mclu.mclu_armor_attribute", 0.0D) {
+        @Override
+        public double getDefaultValue() {
+            return 0.0D;
+        }
+    });
     public MCLU() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         CustomAttributes.ATTRIBUTES.register(modEventBus);

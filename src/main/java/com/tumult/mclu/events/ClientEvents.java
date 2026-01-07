@@ -82,8 +82,8 @@ public class ClientEvents {
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
             event.registerAboveAll("gui_hud", GuiHUD.GUI_HUD);
             event.registerAboveAll("armor", CustomAttributeHudOverlay.CUSTOM_ARMOR_HUD);
-            //event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
-            event.registerAboveAll("health", CustomAttributeHud.CUSTOM_HUD);
+            event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
+            //event.registerAboveAll("health", CustomAttributeHud.CUSTOM_HUD);
             event.registerAboveAll("imagination", CustomAttributeHudOverlay.IMAGINATION_HUD);
             event.registerAboveAll("u_level", CustomAttributeHudOverlay.U_LEVEL_HUD);
         }

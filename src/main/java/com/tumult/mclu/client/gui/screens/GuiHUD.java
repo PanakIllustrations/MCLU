@@ -16,7 +16,16 @@ import java.awt.*;
 import static com.tumult.mclu.client.gui.frame.core.UIManager.getMouseButtons;
 
 public class GuiHUD {
+    static final DrawableSprite cursor = IconUtils.getIcon().mouse_cursor;
+    static final EventHandler rect = new EventHandler(Color.ORANGE, new Vector4DRect(30, 30, 50, 100), 5);
+    //static final DrawableSprite backpack = IconUtils.getIcon().backpack;
+    static final DrawableSprite bankCross = IconUtils.getIcon().bankCross;
+    static final DrawableSprite bankResize = IconUtils.getIcon().bankResize;
 
+    GuiHUD(){
+        bankCross.setParent(rect);
+        bankResize.setParent(rect);
+    }
 
     public static final IGuiOverlay GUI_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Minecraft mc = Minecraft.getInstance();
@@ -24,18 +33,14 @@ public class GuiHUD {
 
         UIManager.init(screenWidth, screenHeight);
 
-        final DrawableSprite backpack = IconUtils.getIcon().backpack;
-        final DrawableSprite cursor = IconUtils.getIcon().mouse_cursor;
-        final EventHandler rect = new EventHandler(Color.ORANGE, new Vector4DRect(30, 30, 10, 50), 5);
-
         if (player != null) {
+            rect.drawTree(guiGraphics);
             if (UIManager.isCursorVisible()) {
                 Vector2DPoint cursorPos = new Vector2DPoint(UIManager.getMousePos());
                 cursor.draw(guiGraphics,cursorPos);
                 rect.update(cursorPos, getMouseButtons());
             }
-            backpack.draw(guiGraphics, new Vector2DPoint(30, 10));
-            rect.draw(guiGraphics);
+            //backpack.draw(guiGraphics, new Vector2DPoint(30, 10));
         }
     };
 }
