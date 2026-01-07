@@ -1,8 +1,8 @@
 package com.tumult.mclu.client.gui.frame.core;
 
+import com.tumult.mclu.client.gui.frame.geometry.DrawableRect;
 import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
 import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
-import com.tumult.mclu.client.gui.frame.core.UIManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;

@@ -1,18 +1,8 @@
 package com.tumult.mclu.client.gui.screens;
 
-import com.tumult.mclu.client.gui.frame.core.DrawableRect;
-import com.tumult.mclu.client.gui.frame.core.DrawableSprite;
-import com.tumult.mclu.client.gui.frame.core.UIManager;
-import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
-import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
-import com.tumult.mclu.client.gui.icons.IconUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-
-import java.awt.*;
-import java.util.Objects;
 
 public class CustomAttributeHud {
     public enum AnimationState {

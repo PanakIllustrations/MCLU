@@ -1,9 +1,8 @@
-package com.tumult.mclu.client.gui.frame.core;
+package com.tumult.mclu.client.gui.frame.geometry;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
-import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
+import com.tumult.mclu.client.gui.frame.core.Node;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import org.joml.Matrix4f;
@@ -35,6 +34,10 @@ public class DrawableRect extends Node {
         this.rectBounds.setUl(ul);
     }
 
+    public float getRadius(){
+        return radius;
+    }
+
     @Override
     public Vector4DRect getBounds() {
         return rectBounds;
@@ -60,14 +63,14 @@ public class DrawableRect extends Node {
         Vector4DRect inner = new Vector4DRect(
             this.rectBounds.left() + radius,
             this.rectBounds.top() + radius,
-            this.rectBounds.width(),
-            this.rectBounds.height()
+            this.rectBounds.width() - 2 * radius,
+            this.rectBounds.height() - 2 * radius
         );
 
         addArcPoints(vertices, TOP_LEFT, radius, inner.left(), inner.top());
         addArcPoints(vertices, BOTTOM_LEFT, radius, inner.left(), inner.bottom() - radius);
-        addArcPoints(vertices, BOTTOM_RIGHT, radius, inner.right() - radius, inner.bottom() - radius);
-        addArcPoints(vertices, TOP_RIGHT, radius, inner.right() - radius, inner.top());
+        addArcPoints(vertices, BOTTOM_RIGHT, radius, inner.right(), inner.bottom() - radius);
+        addArcPoints(vertices, TOP_RIGHT, radius, inner.right(), inner.top());
 
         vertices.flip();
         return vertices;

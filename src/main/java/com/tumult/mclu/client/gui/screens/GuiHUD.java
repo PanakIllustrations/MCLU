@@ -1,9 +1,7 @@
 package com.tumult.mclu.client.gui.screens;
 
-import com.tumult.mclu.client.gui.frame.core.DrawableRect;
-import com.tumult.mclu.client.gui.frame.core.DrawableSprite;
-import com.tumult.mclu.client.gui.frame.core.EventHandler;
-import com.tumult.mclu.client.gui.frame.core.UIManager;
+import com.tumult.mclu.client.gui.frame.core.*;
+import com.tumult.mclu.client.gui.frame.geometry.DrawableSprite;
 import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
 import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
 import com.tumult.mclu.client.gui.icons.IconUtils;
@@ -17,14 +15,48 @@ import static com.tumult.mclu.client.gui.frame.core.UIManager.getMouseButtons;
 
 public class GuiHUD {
     static final DrawableSprite cursor = IconUtils.getIcon().mouse_cursor;
-    static final EventHandler rect = new EventHandler(Color.ORANGE, new Vector4DRect(30, 30, 50, 100), 5);
-    //static final DrawableSprite backpack = IconUtils.getIcon().backpack;
-    static final DrawableSprite bankCross = IconUtils.getIcon().bankCross;
-    static final DrawableSprite bankResize = IconUtils.getIcon().bankResize;
+    static final DraggableRect rect = new DraggableRect(Color.BLACK, new Vector4DRect(30, 30, 128, 160), 10);
+    static final CloseButton bankCross = IconUtils.getIcon().bankCross;
+    static final ResizeHandle bankResize = IconUtils.getIcon().bankResize;
 
-    GuiHUD(){
-        bankCross.setParent(rect);
-        bankResize.setParent(rect);
+    static final ToggleButton backpack = IconUtils.getIcon().backpack;
+    static final DrawableSprite backpackReflection = IconUtils.getIcon().backpack_reflection;
+
+
+    static Vector2DPoint mouseCursor = new Vector2DPoint();
+
+    // Static initializer to set up the hierarchy
+    static {
+        // Add children to rect
+        rect.addChild(bankCross);
+        rect.addChild(bankResize);
+
+        // Set minimum resize dimensions
+        bankResize.setMinSize(32, 40);
+
+        // Set up toggle button
+        backpack.setTarget(rect);
+        backpack.setUL(new Vector2DPoint(315, 200));
+        backpackReflection.setUL(new Vector2DPoint(315, 215));
+
+        // Position controls
+        updateControlPositions();
+    }
+
+    private static void updateControlPositions() {
+        Vector4DRect rectBounds = rect.getBounds();
+
+        // Position bankCross at top-right corner
+        bankCross.setUL(new Vector2DPoint(
+                rectBounds.right() - (bankCross.getBounds().width() + 2),
+                rectBounds.top() + 2
+        ));
+
+        // Position bankResize at bottom-right corner
+        bankResize.setUL(new Vector2DPoint(
+                rectBounds.right() - (bankResize.getBounds().width() + 1),
+                rectBounds.bottom() - (bankResize.getBounds().height() + 11)
+        ));
     }
 
     public static final IGuiOverlay GUI_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
@@ -32,22 +64,47 @@ public class GuiHUD {
         Player player = mc.player;
 
         UIManager.init(screenWidth, screenHeight);
+        mouseCursor = UIManager.getMousePos();
 
         if (player != null) {
-            rect.drawTree(guiGraphics);
             if (UIManager.isCursorVisible()) {
-                Vector2DPoint cursorPos = new Vector2DPoint(UIManager.getMousePos());
-                cursor.draw(guiGraphics,cursorPos);
-                rect.update(cursorPos, getMouseButtons());
+
+                // Update toggle button FIRST (always active)
+                backpack.update(mouseCursor, getMouseButtons());
+
+                // Only update window controls if window is visible
+                if (rect.isVisible) {
+                    bankCross.update(mouseCursor, getMouseButtons());
+                    bankResize.update(mouseCursor, getMouseButtons());
+                    rect.update(mouseCursor, getMouseButtons());
+
+                    // Update control positions after any drag/resize
+                    updateControlPositions();
+                }
             }
-            //backpack.draw(guiGraphics, new Vector2DPoint(30, 10));
+
+            // Draw toggle button (always visible)
+            backpack.draw(guiGraphics);
+            backpackReflection.draw(guiGraphics);
+
+            // Draw rect and all children (only if visible)
+            if (rect.isVisible) {
+                rect.drawTree(guiGraphics);
+            }
+        }
+    };
+
+    public static final IGuiOverlay CURSOR = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
+        Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+
+        UIManager.init(screenWidth, screenHeight);
+
+        if (player != null) {
+            if (UIManager.isCursorVisible()) {
+                // Draw cursor on top
+                cursor.draw(guiGraphics, UIManager.getMousePos());
+            }
         }
     };
 }
-/*
-blit(ResourceLocation location, int screenPosX, int screenPosY, int zLevel, float iconPosX, float iconPosY, int iconWidth, int iconHeight, int textureWidth, int textureHeight);
-blit(ResourceLocation location, int screenPosX, int screenPosY, int iconPosX, int iconPosY, int iconWidth, int iconHeight);
-blit(ResourceLocation location, int screenPosX, int screenPosY, int iconWidth1, int iconHeight1, float iconPosX, float iconPosY, int iconWidth2, int iconHeight2, int textureWidth, int textureHeight);
-blit(ResourceLocation location, int left, int right, int top, int bottom, int zLevel, int iconWidth2, int iconHeight2, float iconPosX, float iconPosY, int textureWidth, int textureHeight);
-blit(ResourceLocation location, int screenPosX, int screenPosY, float iconPosX, float iconPosY, int iconWidth, int iconHeight, int textureWidth, int textureHeight);
-*/

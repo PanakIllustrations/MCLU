@@ -88,7 +88,7 @@ public class CustomAttributeHudOverlay {
     private static final HudState armorHudState = new HudState();
     private static final HudState imaginationHudState = new HudState();
     private static final HudState uLevelHudState = new HudState();
-    private static final int tickDelay = 5;
+    private static final int tickDelay = 4;
 
     public static final IGuiOverlay CUSTOM_HEALTH_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Player player = Minecraft.getInstance().player;

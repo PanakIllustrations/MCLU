@@ -14,7 +14,7 @@ public abstract class Node {
 
     protected Color shade = null;
     protected float zLevel = 1.0f;
-    protected boolean isVisible = true;
+    public boolean isVisible = true;
 
     // Abstract method for bounds - all UI elements need bounds for hit testing
     public abstract Vector4DRect getBounds();

@@ -1,10 +1,7 @@
 package com.tumult.mclu.events;
 
 import com.tumult.mclu.McluConstants;
-import com.tumult.mclu.client.gui.frame.core.DrawableSprite;
 import com.tumult.mclu.client.gui.frame.core.UIManager;
-import com.tumult.mclu.client.gui.icons.IconUtils;
-import com.tumult.mclu.client.gui.screens.CustomAttributeHud;
 import com.tumult.mclu.client.gui.screens.CustomAttributeHudOverlay;
 import com.tumult.mclu.client.gui.Keybindings;
 import com.tumult.mclu.client.gui.screens.GuiHUD;
@@ -81,11 +78,12 @@ public class ClientEvents {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
             event.registerAboveAll("gui_hud", GuiHUD.GUI_HUD);
-            event.registerAboveAll("armor", CustomAttributeHudOverlay.CUSTOM_ARMOR_HUD);
-            event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
+            //event.registerAboveAll("armor", CustomAttributeHudOverlay.CUSTOM_ARMOR_HUD);
+            //event.registerAboveAll("health", CustomAttributeHudOverlay.CUSTOM_HEALTH_HUD);
             //event.registerAboveAll("health", CustomAttributeHud.CUSTOM_HUD);
-            event.registerAboveAll("imagination", CustomAttributeHudOverlay.IMAGINATION_HUD);
-            event.registerAboveAll("u_level", CustomAttributeHudOverlay.U_LEVEL_HUD);
+            //event.registerAboveAll("imagination", CustomAttributeHudOverlay.IMAGINATION_HUD);
+            //event.registerAboveAll("u_level", CustomAttributeHudOverlay.U_LEVEL_HUD);
+            event.registerAboveAll("cursor", GuiHUD.CURSOR);
         }
 
         @SubscribeEvent

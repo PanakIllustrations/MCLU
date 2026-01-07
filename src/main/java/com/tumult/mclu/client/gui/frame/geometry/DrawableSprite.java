@@ -1,21 +1,18 @@
-package com.tumult.mclu.client.gui.frame.core;
+package com.tumult.mclu.client.gui.frame.geometry;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.tumult.mclu.client.gui.frame.geometry.Vector2DPoint;
-import com.tumult.mclu.client.gui.frame.geometry.Vector4DRect;
+import com.tumult.mclu.client.gui.frame.core.Node;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 
-import java.awt.*;
 import java.io.Serializable;
-import java.nio.FloatBuffer;
 
 public class DrawableSprite extends Node implements Serializable {
-    private final ResourceLocation texture;
-    private final Vector4DRect textureUV;
+    protected final ResourceLocation texture;      // Changed to protected!
+    protected final Vector4DRect textureUV;        // Changed to protected!
     protected Vector4DRect rectBounds;
     protected float zLevel;
     protected boolean debugPrinted = false;
@@ -26,6 +23,7 @@ public class DrawableSprite extends Node implements Serializable {
         this.texture = icon;
         this.zLevel = z;
     }
+
     public void setUL(Vector2DPoint ul) {
         this.rectBounds.setUl(ul);
     }
@@ -35,6 +33,17 @@ public class DrawableSprite extends Node implements Serializable {
         return rectBounds;
     }
 
+    public Vector4DRect getTextureUV(){
+        return textureUV;
+    }
+
+    public ResourceLocation getTexture(){
+        return texture;
+    }
+
+    public float getzLevel() {
+        return zLevel;
+    }
 
     public void draw(GuiGraphics guiGraphics, Vector2DPoint screenXY) {
         if (!this.isVisible) {
@@ -58,24 +67,27 @@ public class DrawableSprite extends Node implements Serializable {
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(0f, 0f, zLevel);
         innerBlit(guiGraphics.pose().last().pose(),
-            (float) rectBounds.left(), // screen x offset
-            (float) rectBounds.right(), // screen x offset + bounds width
-            (float) rectBounds.top(), // screen y offset
-            (float) rectBounds.bottom(), // screen y offset + bounds height
+                (float) rectBounds.left(),
+                (float) rectBounds.right(),
+                (float) rectBounds.top(),
+                (float) rectBounds.bottom(),
                 zLevel,
-            (float) textureUV.left(), // minU: x texture offset
-            (float) textureUV.getWh().x(), // maxU: x texture offset + icon width
-            (float) textureUV.top(),  // minV: y texture offset
-            (float) textureUV.getWh().y()); // maxV: y texture offset + icon height
+                (float) textureUV.left(),
+                (float) textureUV.getWh().x(),
+                (float) textureUV.top(),
+                (float) textureUV.getWh().y());
         guiGraphics.pose().popPose();
     }
+
     private void preDrawSprite() {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
     }
-    private void innerBlit(Matrix4f matrix4f, float left, float right, float top, float bottom, float zLevel, float minU, float maxU, float minV, float maxV) {
+
+    private void innerBlit(Matrix4f matrix4f, float left, float right, float top, float bottom,
+                           float zLevel, float minU, float maxU, float minV, float maxV) {
         BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferBuilder.vertex(matrix4f, left, bottom, zLevel).uv(minU, maxV).endVertex();
@@ -84,6 +96,7 @@ public class DrawableSprite extends Node implements Serializable {
         bufferBuilder.vertex(matrix4f, left, top, zLevel).uv(minU, minV).endVertex();
         postDrawSprite(bufferBuilder);
     }
+
     private void postDrawSprite(BufferBuilder bufferBuilder) {
         BufferUploader.drawWithShader(bufferBuilder.end());
         RenderSystem.disableBlend();
@@ -92,7 +105,7 @@ public class DrawableSprite extends Node implements Serializable {
 
     public void printDebugInfo() {
         System.out.printf(
-                "DrawableRect[ul=(%.1f,%.1f), br=(%.1f,%.1f), wh=(%.1f,%.1f), path=(%s), visible=%b]%n",
+                "DrawableSprite[ul=(%.1f,%.1f), br=(%.1f,%.1f), wh=(%.1f,%.1f), path=(%s), visible=%b]%n",
                 rectBounds.left(), rectBounds.top(),
                 rectBounds.right(), rectBounds.bottom(),
                 rectBounds.width(), rectBounds.height(),
